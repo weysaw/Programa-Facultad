@@ -4,7 +4,8 @@ package conexion;
 import java.io.Serializable;
 
 /**
- *
+ * Describe el curso de la facultad
+ * 
  * @author Ornelas Munguía Axel Leonardo
  * @version 27.11.2020
  */

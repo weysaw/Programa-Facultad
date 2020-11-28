@@ -22,11 +22,16 @@ public class CursoDAO extends ConexionBD {
     public CursoDAO() {
         super();
     }
-    
-    public ArrayList readAll() throws Exception {
+    /**
+     * Devuelve un arreglo de los datos
+     * 
+     * @return
+     * @throws Exception 
+     */
+    public ArrayList<CursoDTO> readAll() throws Exception {
         PreparedStatement ps = null;
         ResultSet rs = null;
-        ArrayList result = new ArrayList();
+        ArrayList<CursoDTO> result = new ArrayList();
         ps = conexion.prepareStatement(SQL_SELECT_ALL);
         rs = ps.executeQuery();
         while (rs.next()) 
