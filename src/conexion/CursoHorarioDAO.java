@@ -9,9 +9,9 @@ import java.sql.*;
  * @author Ornelas Munguía Axel Leonardo
  * @version 27.11.2020
  */
-public class CursoDAO extends ConexionBD {
+public class CursoHorarioDAO extends ConexionBD {
     
-     private static final String TABLA = "PROFESOR";
+    private static final String TABLA = "PROFESOR";
     private static final String NUM_EMPLEADO = "numEmpleado";
     private static final String NOM = "nom";
     private static final String SQL_SELECT_ALL = "SELECT * FROM " + TABLA;
@@ -23,7 +23,7 @@ public class CursoDAO extends ConexionBD {
     /**
      * Constructor de la clase
      */
-    public CursoDAO() {
+    public CursoHorarioDAO() {
         super();
     }
     /**

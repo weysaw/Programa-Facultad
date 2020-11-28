@@ -4,26 +4,26 @@ import java.util.*;
 import java.sql.*;
 
 /**
- * Es la clase curso que se comunica con la base de datos
+ * Es la profesor que se comunica con la base de datos
  * 
  * @author Ornelas Munguía Axel Leonardo
- * @version 27.11.2020
+ * @version 28.11.2020
  */
-public class CursoDAO extends ConexionBD {
+public class ProfesorDAO extends ConexionBD {
     
-     private static final String TABLA = "PROFESOR";
+    private static final String TABLA = "PROFESOR";
     private static final String NUM_EMPLEADO = "numEmpleado";
     private static final String NOM = "nom";
     private static final String SQL_SELECT_ALL = "SELECT * FROM " + TABLA;
     private static final String SQL_INSERT = "INSERT INTO "+TABLA+"("+NUM_EMPLEADO+","+NOM+") VALUES(?,?)";
     private static final String SQL_READ = "SELECT*FROM "+ TABLA +" WHERE " + NUM_EMPLEADO + " = ?;";
     private static final String SQL_DELETE = "DELETE  FROM "+ TABLA +" WHERE " + NUM_EMPLEADO + " = ?";
-    private static final String SQL_UPDATE = "UPDATE alumno SET " + NOM + " = ? WHERE " + NUM_EMPLEADO + " = ?" ;
+    private static final String SQL_UPDATE = "UPDATE "+ TABLA +" SET " + NOM + " = ? WHERE " + NUM_EMPLEADO + " = ?" ;
 
     /**
      * Constructor de la clase
      */
-    public CursoDAO() {
+    public ProfesorDAO() {
         super();
     }
     /**
