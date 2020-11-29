@@ -68,11 +68,10 @@ public class HorarioDAO extends ConexionBD {
         //Manda al comando
         ps = conexion.prepareStatement(SQL_INSERT);
         //Les asigna los valores que deben tener los ?
-        ps.setString(1, dto.getClaveHorario()+ "");
-        ps.setString(2, dto.getDia());
-        ps.setString(3, dto.getTurno());
-        ps.setTime(4, dto.getHrInicio());
-        ps.setTime(5, dto.getHrFin());
+        ps.setString(1, dto.getDia());
+        ps.setString(2, dto.getTurno());
+        ps.setTime(3, dto.getHrInicio());
+        ps.setTime(4, dto.getHrFin());
         //Ejecuta el comando y acutaliza
         ps.executeUpdate();
         //Cierra la conexión
@@ -90,11 +89,11 @@ public class HorarioDAO extends ConexionBD {
         //Manda el comando
         ps = conexion.prepareStatement(SQL_UPDATE);
         //Les asigna los valores que deben tener los ?
-        ps.setString(1, dto.getClaveHorario()+ "");
-        ps.setString(2, dto.getDia());
-        ps.setString(3, dto.getTurno());
-        ps.setTime(4, dto.getHrInicio());
-        ps.setTime(5, dto.getHrFin());
+        ps.setString(1, dto.getDia());
+        ps.setString(2, dto.getTurno());
+        ps.setTime(3, dto.getHrInicio());
+        ps.setTime(4, dto.getHrFin());
+        ps.setInt(5, dto.getClaveHorario());
         //Ejecuta el comando y actualiza
         ps.executeUpdate();
         //Cierra la conexión

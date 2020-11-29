@@ -59,7 +59,7 @@ public class ProfesorDAO extends ConexionBD {
         PreparedStatement ps = null;
         //Manda al comando
         ps = conexion.prepareStatement(SQL_INSERT);
-        ps.setString(1, dto.getNumEmpleado() + "");
+        ps.setInt(1, dto.getNumEmpleado());
         ps.setString(2, dto.getNom());
         //Ejecuta el comando y acutaliza
         ps.executeUpdate();
@@ -78,8 +78,8 @@ public class ProfesorDAO extends ConexionBD {
         //Manda el comando
         ps = conexion.prepareStatement(SQL_UPDATE);
         //Les asigna los valores que deben tener los ?
-        ps.setString(1, dto.getNumEmpleado()+"");
-        ps.setString(2, dto.getNom());
+        ps.setString(1, dto.getNom());
+        ps.setInt(2, dto.getNumEmpleado());
         //Ejecuta el comando y actualiza
         ps.executeUpdate();
         //Cierra la conexión
@@ -119,7 +119,7 @@ public class ProfesorDAO extends ConexionBD {
         //Manda el comando
         ps = conexion.prepareStatement(SQL_READ);
         //Les asigna los valores que deben tener los ?
-        ps.setString(1, dto.getNumEmpleado() + "");
+        ps.setInt(1, dto.getNumEmpleado());
         //Ejecuta el comando y devuelve el resultado del comando
         rs = ps.executeQuery();
         //Recorre por todos los resultados

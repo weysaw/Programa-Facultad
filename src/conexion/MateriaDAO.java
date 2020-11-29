@@ -85,9 +85,9 @@ public class MateriaDAO extends ConexionBD {
         //Manda el comando
         ps = conexion.prepareStatement(SQL_UPDATE);
         //Les asigna los valores que deben tener los ?
-        ps.setString(1, dto.getClaveMateria()+ "");
-        ps.setString(2, dto.getNom());
-        ps.setString(3, dto.getPlanDeEstudio());
+        ps.setString(1, dto.getNom());
+        ps.setString(2, dto.getPlanDeEstudio());
+        ps.setInt(3, dto.getClaveMateria());
         //Ejecuta el comando y actualiza
         ps.executeUpdate();
         //Cierra la conexión

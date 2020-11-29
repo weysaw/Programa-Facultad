@@ -11,14 +11,23 @@ import java.sql.*;
  */
 public class CursoDAO extends ConexionBD {
     
-     private static final String TABLA = "PROFESOR";
+    private static final String TABLA = "CURSO";
     private static final String NUM_EMPLEADO = "numEmpleado";
-    private static final String NOM = "nom";
+    private static final String CLAVE_MATERIA = "claveMateria";
+    private static final String GRUPO = "grupo";
+    private static final String TIPO = "tipo";
+    private static final String HRS_TC = "hrsTC";
+    private static final String HRS_ASIG = "hrsAsig";
     private static final String SQL_SELECT_ALL = "SELECT * FROM " + TABLA;
-    private static final String SQL_INSERT = "INSERT INTO "+TABLA+"("+NUM_EMPLEADO+","+NOM+") VALUES(?,?)";
-    private static final String SQL_READ = "SELECT*FROM "+ TABLA +" WHERE " + NUM_EMPLEADO + " = ?;";
-    private static final String SQL_DELETE = "DELETE  FROM "+ TABLA +" WHERE " + NUM_EMPLEADO + " = ?";
-    private static final String SQL_UPDATE = "UPDATE alumno SET " + NOM + " = ? WHERE " + NUM_EMPLEADO + " = ?" ;
+    private static final String SQL_INSERT = "INSERT INTO "+TABLA+"("+NUM_EMPLEADO+","+CLAVE_MATERIA+","
+            + GRUPO + ", "+ TIPO +", "+ HRS_TC +", "+ HRS_ASIG +") VALUES(?,?,?,?,?,?);";
+    private static final String SQL_READ = "SELECT*FROM "+ TABLA +" WHERE " + NUM_EMPLEADO + " = ? AND "
+            + CLAVE_MATERIA +"= ? AND"+ GRUPO +"= ? AND"+ TIPO +"= ?;";
+    private static final String SQL_DELETE = "DELETE  FROM "+ TABLA +"WHERE "+ NUM_EMPLEADO + " = ? AND"  
+            + CLAVE_MATERIA + "= ? AND"+ GRUPO +"= ? AND"+ TIPO +"= ?;";
+    private static final String SQL_UPDATE = "UPDATE "+ TABLA +" SET " + HRS_TC + " = ?, "
+            + HRS_ASIG +" = ? WHERE " + NUM_EMPLEADO + " = ? AND" 
+            + CLAVE_MATERIA + "= ? AND"+ GRUPO +"= ? AND"+ TIPO +"= ?;";
 
     /**
      * Constructor de la clase
@@ -32,11 +41,11 @@ public class CursoDAO extends ConexionBD {
      * @return El arreglo de objetos
      * @throws Exception Devuelve error
      */
-    public ArrayList<Profesor> readAll() throws Exception {
+    public ArrayList<Curso> readAll() throws Exception {
         PreparedStatement ps = null;
         ResultSet rs = null;
         //Se utilza para almacenar los objetos
-        ArrayList<Profesor> result = new ArrayList();
+        ArrayList<Curso> result = new ArrayList();
         //Manda al comando
         ps = conexion.prepareStatement(SQL_SELECT_ALL);
         //Ejecuta el comando y devuelve el resultado del comando
@@ -55,12 +64,16 @@ public class CursoDAO extends ConexionBD {
      * @param dto Es el objeto a ingresar
      * @throws Exception Devuelve un error
      */
-    public void append(Profesor dto) throws Exception {
+    public void append(Curso dto) throws Exception {
         PreparedStatement ps = null;
         //Manda al comando
         ps = conexion.prepareStatement(SQL_INSERT);
-        ps.setString(1, dto.getNumEmpleado() + "");
-        ps.setString(2, dto.getNom());
+        ps.setInt(1, dto.getProfesor().getNumEmpleado());
+        ps.setInt(2, dto.getMateria().getClaveMateria());
+        ps.setInt(3, dto.getGrupo());
+        ps.setString(4, dto.getTipo());
+        ps.setInt(5, dto.getHrsTC());
+        ps.setInt(6, dto.getHrsAsig());
         //Ejecuta el comando y acutaliza
         ps.executeUpdate();
         //Cierra la conexión
@@ -73,13 +86,17 @@ public class CursoDAO extends ConexionBD {
      * @param dto Son los nuevos datos a actualizar
      * @throws Exception Devuelve un error
      */
-    public void update(Profesor dto) throws Exception {
+    public void update(Curso dto) throws Exception {
         PreparedStatement ps = null;
         //Manda el comando
         ps = conexion.prepareStatement(SQL_UPDATE);
         //Les asigna los valores que deben tener los ?
-        ps.setString(1, dto.getNumEmpleado()+"");
-        ps.setString(2, dto.getNom());
+        ps.setInt(1, dto.getHrsTC());
+        ps.setInt(2, dto.getHrsAsig());
+        ps.setInt(3, dto.getProfesor().getNumEmpleado());
+        ps.setInt(4, dto.getMateria().getClaveMateria());
+        ps.setInt(5, dto.getGrupo());
+        ps.setString(6, dto.getTipo());
         //Ejecuta el comando y actualiza
         ps.executeUpdate();
         //Cierra la conexión
@@ -93,12 +110,15 @@ public class CursoDAO extends ConexionBD {
      * @param dto Es el dto que se borra
      * @throws Exception Devuelve error
      */
-    public void delete(Profesor dto) throws Exception {
+    public void delete(Curso dto) throws Exception {
         PreparedStatement ps = null;
         //Manda el comando
         ps = conexion.prepareStatement(SQL_DELETE);
         //Les asigna los valores que deben tener los ?
-        ps.setString(1, dto.getNumEmpleado() + "");
+        ps.setInt(1, dto.getProfesor().getNumEmpleado());
+        ps.setInt(2, dto.getMateria().getClaveMateria());
+        ps.setInt(3, dto.getGrupo());
+        ps.setString(4, dto.getTipo());
         //Ejecuta el comando y actualiza
         ps.executeUpdate();
         //Cierra la conexión
@@ -112,14 +132,17 @@ public class CursoDAO extends ConexionBD {
      * @return Devuelve el objeto dto si lo encuentra
      * @throws Exception Devuelve un error
      */
-    public Profesor read(Profesor dto) throws Exception {
+    public Curso read(Curso dto) throws Exception {
         PreparedStatement ps = null;
         ResultSet rs = null;
-        Profesor result = null;
+        Curso result = null;
         //Manda el comando
         ps = conexion.prepareStatement(SQL_READ);
         //Les asigna los valores que deben tener los ?
-        ps.setString(1, dto.getNumEmpleado() + "");
+        ps.setInt(1, dto.getProfesor().getNumEmpleado());
+        ps.setInt(2, dto.getMateria().getClaveMateria());
+        ps.setInt(3, dto.getGrupo());
+        ps.setString(4, dto.getTipo());
         //Ejecuta el comando y devuelve el resultado del comando
         rs = ps.executeQuery();
         //Recorre por todos los resultados
@@ -140,7 +163,16 @@ public class CursoDAO extends ConexionBD {
      * @return Devuelve el objeto dto
      * @throws Exception Devuelve un error
      */
-    private Profesor getObject(ResultSet rs) throws Exception {
-        return new Profesor(Integer.parseInt(rs.getString(NUM_EMPLEADO)), rs.getString(NOM));
+    private Curso getObject(ResultSet rs) throws Exception {
+        int grupo = Integer.parseInt(rs.getString(GRUPO));
+        String tipo = rs.getString(TIPO);
+        int hrsTc = Integer.parseInt(rs.getString(HRS_TC));
+        int hrsAsig = Integer.parseInt(rs.getString(HRS_ASIG));
+        int numEmpleado = Integer.parseInt(NUM_EMPLEADO);
+        Profesor profesor = new ProfesorDAO().read(new Profesor(numEmpleado, null));
+        int claveMateria = Integer.parseInt(rs.getString(CLAVE_MATERIA));
+        Materia materia = new MateriaDAO().read(new Materia(claveMateria, null,null));
+        
+        return new Curso(profesor, materia, grupo, tipo, hrsTc, hrsAsig);
     }
  }
