@@ -66,8 +66,8 @@ public class CursoHorarioDAO extends ConexionBD {
         PreparedStatement ps = null;
         //Manda al comando
         ps = conexion.prepareStatement(SQL_INSERT);
-        ps.setInt(1, dto.getProfesor().getNumEmpleado());
-        ps.setInt(2, dto.getMateria().getClaveMateria());
+        ps.setInt(1, dto.getCurso().getProfesor().getNumEmpleado());
+        ps.setInt(2, dto.getCurso().getMateria().getClaveMateria());
         ps.setInt(3, dto.getCurso().getGrupo());
         ps.setString(4, dto.getCurso().getTipo());
         ps.setInt(5, dto.getHorario().getClaveHorario());
@@ -88,8 +88,8 @@ public class CursoHorarioDAO extends ConexionBD {
         //Manda el comando
         ps = conexion.prepareStatement(SQL_DELETE);
         //Les asigna los valores que deben tener los ?
-        ps.setInt(1, dto.getProfesor().getNumEmpleado());
-        ps.setInt(2, dto.getMateria().getClaveMateria());
+        ps.setInt(1, dto.getCurso().getProfesor().getNumEmpleado());
+        ps.setInt(2, dto.getCurso().getMateria().getClaveMateria());
         ps.setInt(3, dto.getCurso().getGrupo());
         ps.setString(4, dto.getCurso().getTipo());
         ps.setInt(5, dto.getHorario().getClaveHorario());
@@ -113,8 +113,8 @@ public class CursoHorarioDAO extends ConexionBD {
         //Manda el comando
         ps = conexion.prepareStatement(SQL_READ);
         //Les asigna los valores que deben tener los ?
-        ps.setInt(1, dto.getProfesor().getNumEmpleado());
-        ps.setInt(2, dto.getMateria().getClaveMateria());
+        ps.setInt(1, dto.getCurso().getProfesor().getNumEmpleado());
+        ps.setInt(2, dto.getCurso().getMateria().getClaveMateria());
         ps.setInt(3, dto.getCurso().getGrupo());
         ps.setString(4, dto.getCurso().getTipo());
         ps.setInt(5, dto.getHorario().getClaveHorario());
@@ -148,6 +148,6 @@ public class CursoHorarioDAO extends ConexionBD {
         Curso curso = new CursoDAO().read(new Curso(profesor,materia,grupo,tipo,0,0));
         Horario horario = new HorarioDAO().read(new Horario(claveHorario,null,null,null,null));
         
-        return new CursoHorario(profesor, materia, curso, horario);
+        return new CursoHorario(curso, horario);
     }
  }

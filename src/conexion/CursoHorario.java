@@ -11,34 +11,14 @@ import java.io.Serializable;
  */
 public class CursoHorario implements Serializable {
     
-    private Profesor profesor;
-    private Materia materia;
     private Curso curso;
     private Horario horario;
 
-    public CursoHorario(Profesor profesor, Materia materia, Curso curso, Horario horario) {
-        this.profesor = profesor;
-        this.materia = materia;
+    public CursoHorario(Curso curso, Horario horario) {
         this.curso = curso;
         this.horario = horario;
     }
     
-    public Profesor getProfesor() {
-        return profesor;
-    }
-
-    public void setProfesor(Profesor profesor) {
-        this.profesor = profesor;
-    }
-
-    public Materia getMateria() {
-        return materia;
-    }
-
-    public void setMateria(Materia materia) {
-        this.materia = materia;
-    }
-
     public Curso getCurso() {
         return curso;
     }
@@ -57,10 +37,8 @@ public class CursoHorario implements Serializable {
 
     @Override
     public String toString() {
-        return "CursoHorario{" + "profesor=" + profesor + ", materia=" + materia + ", curso=" + curso + ", horario=" + horario + '}';
+        return "CursoHorario{" + "curso=" + curso + ", horario=" + horario + '}';
     }
 
-    
-    
-    
+
 }
