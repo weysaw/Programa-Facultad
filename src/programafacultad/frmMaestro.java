@@ -57,20 +57,17 @@ public class frmMaestro extends javax.swing.JFrame {
 
         datosDocente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "Materia", "Grupo", "Tipo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Total Horas"
             }
         ));
+        datosDocente.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(datosDocente);
 
         jLabel4.setText("Docente:");
 
-        docentes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "VALENZUELA LUGO OSCAR", "DIAZ LOPEZ JOSE HEBERTO", "ALANIZ PLATA RUBEN", "RIVERA HINOJOSA MARIA LAURA", "LIZARRAGA OSUNA NOEMI" }));
         docentes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 docentesActionPerformed(evt);
