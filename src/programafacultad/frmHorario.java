@@ -1,21 +1,30 @@
 package programafacultad;
 
+import conexion.CursoHorario;
+import java.util.ArrayList;
+import registrodeclases.LectorTxt;
+import javax.swing.table.*;
+
 /**
  * Es la ventana que muestra los horarios
- * 
+ *
  * @author Leslie Vidal, Ornelas Munguía Axel Leonardo
  * @version 03.12.2020
  */
 public class frmHorario extends javax.swing.JFrame {
 
     private final Principal principal;
+    private final ArrayList<CursoHorario> cursos;
+
     /**
      * Constructor de la clase horario
      */
     public frmHorario(Principal principal) {
         initComponents();
-        this.principal = principal; 
+        this.principal = principal;
         setLocationRelativeTo(principal);
+        LectorTxt lector = new LectorTxt();
+        cursos = lector.recuperarDatos();
     }
 
     @SuppressWarnings("unchecked")
@@ -58,15 +67,14 @@ public class frmHorario extends javax.swing.JFrame {
 
         datosHorarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "Docente", "Num. Grupo", "Materia"
             }
         ));
+        datosHorarios.setEnabled(false);
+        datosHorarios.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(datosHorarios);
 
         jLabel3.setText("Dia:");
@@ -76,8 +84,18 @@ public class frmHorario extends javax.swing.JFrame {
         jLabel5.setText("Tipo:");
 
         dia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado" }));
+        dia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                diaActionPerformed(evt);
+            }
+        });
 
-        horas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "7:00 - 8:00", "8:00 - 9:00", "9:00 - 10:00", "10:00 - 11:00", "11:00 - 12:00", "12:00 - 13:00", " ", " " }));
+        horas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+        horas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                horasActionPerformed(evt);
+            }
+        });
 
         tipoClase.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Clase", "Taller", "Laboratorio" }));
 
@@ -116,7 +134,7 @@ public class frmHorario extends javax.swing.JFrame {
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(semestre)
-                                .addGap(18, 18, 18)
+                                .addGap(96, 96, 96)
                                 .addComponent(semestreActual, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
@@ -159,12 +177,31 @@ public class frmHorario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void regresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regresarActionPerformed
-       cerrrarVentana();
+        cerrrarVentana();
     }//GEN-LAST:event_regresarActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-       cerrrarVentana();
+        cerrrarVentana();
     }//GEN-LAST:event_formWindowClosing
+
+    private void horasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_horasActionPerformed
+
+    }//GEN-LAST:event_horasActionPerformed
+
+    private void diaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_diaActionPerformed
+        String nombre, materia, nomDia;
+        int grupo;
+        nomDia = dia.getSelectedItem().toString();
+        removerFilas();
+            for (CursoHorario curso : cursos) {
+                if (curso.getHorario().getDia().equalsIgnoreCase(nomDia)) {
+                    nombre = curso.getCurso().getProfesor().getNom();
+                    grupo = curso.getCurso().getGrupo();
+                    materia = curso.getCurso().getMateria().getNom();
+                    agregarFila(nombre, grupo, materia);
+                }
+            }
+    }//GEN-LAST:event_diaActionPerformed
     /**
      * Cierra la ventana y muestra la principal
      */
@@ -172,8 +209,22 @@ public class frmHorario extends javax.swing.JFrame {
         principal.setVisible(true);
         dispose();
     }
-    
-    
+
+    /**
+     *
+     *
+     */
+    private void agregarFila(String nombre, int grupo, String materia) {
+        DefaultTableModel modelo = (DefaultTableModel) datosHorarios.getModel();
+        modelo.addRow(new Object[]{nombre, grupo, materia});
+    }
+    /**
+     * 
+     */
+    private void removerFilas() {
+        DefaultTableModel modelo = (DefaultTableModel) datosHorarios.getModel();
+        modelo.setRowCount(0);
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable datosHorarios;
