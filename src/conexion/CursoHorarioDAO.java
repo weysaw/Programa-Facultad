@@ -7,7 +7,7 @@ import java.sql.*;
  * Es la clase curso que se comunica con la base de datos
  * 
  * @author Ornelas Munguía Axel Leonardo
- * @version 27.11.2020
+ * @version 03.12.2020
  */
 public class CursoHorarioDAO extends ConexionBD {
     
@@ -83,8 +83,9 @@ public class CursoHorarioDAO extends ConexionBD {
      * @param dto Es el dto que se borra
      * @throws Exception Devuelve error
      */
-    public void delete(CursoHorario dto) throws Exception {
+    public boolean delete(CursoHorario dto) throws Exception {
         PreparedStatement ps = null;
+        boolean datosModificados;
         //Manda el comando
         ps = conexion.prepareStatement(SQL_DELETE);
         //Les asigna los valores que deben tener los ?
@@ -94,9 +95,10 @@ public class CursoHorarioDAO extends ConexionBD {
         ps.setString(4, dto.getCurso().getTipo());
         ps.setInt(5, dto.getHorario().getClaveHorario());
         //Ejecuta el comando y actualiza
-        ps.executeUpdate();
+        datosModificados = ps.executeUpdate() > 0;
         //Cierra la conexión
         cerrar(ps);
+        return datosModificados;
     }
     
     /**
