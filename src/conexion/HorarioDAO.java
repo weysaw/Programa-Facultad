@@ -18,7 +18,7 @@ public class HorarioDAO extends ConexionBD {
     private static final String HR_INICIO = "hrInicio";
     private static final String HR_FIN = "hrFin";
     private static final String SQL_SELECT_ALL = "SELECT * FROM " + TABLA;
-    private static final String SQL_INSERT = "INSERT INTO " + TABLA + "(," + DIA + ", "
+    private static final String SQL_INSERT = "INSERT INTO " + TABLA + "(" + DIA + ", "
             + TURNO +", "+ HR_INICIO + ", "+ HR_FIN +",  ) VALUES(?,?,?,?)";
     private static final String SQL_READ = "SELECT*FROM " + TABLA + " WHERE " + CLAVE_HORARIO + " = ?;";
     private static final String SQL_DELETE = "DELETE  FROM " + TABLA + " WHERE " + CLAVE_HORARIO + " = ?";
