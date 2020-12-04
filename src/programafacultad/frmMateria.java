@@ -54,19 +54,15 @@ public class frmMateria extends javax.swing.JFrame {
 
         jLabel1.setText("Materia: ");
 
-        materias.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ecuaciones Diferenciales", "Mecanica Vectorial", "Programacion Estructurada", "Ingles 1", "Quimica" }));
-
         datosMaterias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "Docente", "Grupo", "Tipo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"
             }
         ));
+        datosMaterias.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(datosMaterias);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);

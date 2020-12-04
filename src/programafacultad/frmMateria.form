@@ -130,13 +130,7 @@
         <Component class="javax.swing.JComboBox" name="materias">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="5">
-                <StringItem index="0" value="Ecuaciones Diferenciales"/>
-                <StringItem index="1" value="Mecanica Vectorial"/>
-                <StringItem index="2" value="Programacion Estructurada"/>
-                <StringItem index="3" value="Ingles 1"/>
-                <StringItem index="4" value="Quimica"/>
-              </StringArray>
+              <StringArray count="0"/>
             </Property>
           </Properties>
           <AuxValues>
@@ -150,7 +144,7 @@
             <Component class="javax.swing.JTable" name="datosMaterias">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="9" rowCount="4">
+                  <Table columnCount="9" rowCount="0">
                     <Column editable="true" title="Docente" type="java.lang.Object"/>
                     <Column editable="true" title="Grupo" type="java.lang.Object"/>
                     <Column editable="true" title="Tipo" type="java.lang.Object"/>
@@ -212,7 +206,7 @@
                   </TableColumnModel>
                 </Property>
                 <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
-                  <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
+                  <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
                 </Property>
               </Properties>
             </Component>
