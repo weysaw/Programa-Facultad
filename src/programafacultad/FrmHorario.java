@@ -2,8 +2,10 @@ package programafacultad;
 
 import conexion.CursoHorario;
 import java.util.ArrayList;
+import java.util.Collections;
 import registrodeclases.LectorTxt;
 import javax.swing.table.*;
+import java.util.HashSet;
 
 /**
  * Es la ventana que muestra los horarios
@@ -185,22 +187,29 @@ public class FrmHorario extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void horasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_horasActionPerformed
-
+        
     }//GEN-LAST:event_horasActionPerformed
 
     private void diaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_diaActionPerformed
-        String nombre, materia, nomDia;
+        String docente, materia, nomDia;
         int grupo;
         nomDia = dia.getSelectedItem().toString();
+        HashSet<Integer> datos = new HashSet();
         removerFilas();
-            for (CursoHorario curso : cursos) {
-                if (curso.getHorario().getDia().equalsIgnoreCase(nomDia)) {
-                    nombre = curso.getCurso().getProfesor().getNom();
-                    grupo = curso.getCurso().getGrupo();
-                    materia = curso.getCurso().getMateria().getNom();
-                    agregarFila(nombre, grupo, materia);
-                }
+        for (CursoHorario curso : cursos) {
+            if (curso.getHorario().getDia().equalsIgnoreCase(nomDia)) {
+                docente = curso.getCurso().getProfesor().getNom();//Esto se debe de hacer con quearys
+                grupo = curso.getCurso().getGrupo();
+                materia = curso.getCurso().getMateria().getNom();
+                agregarFila(docente, grupo, materia);
+                datos.add(curso.getHorario().getHrInicio().getHours());
             }
+        }
+        ArrayList<Integer> ordenados = new ArrayList(datos);
+        Collections.sort(ordenados);
+        for (int ordenado : ordenados) 
+            horas.addItem(ordenado + ":00");
+        
     }//GEN-LAST:event_diaActionPerformed
     /**
      * Cierra la ventana y muestra la principal
@@ -211,21 +220,26 @@ public class FrmHorario extends javax.swing.JFrame {
     }
 
     /**
+     * Agrega la fila a la tabla
      *
-     *
+     * @param docente Es el nombre de la materia
+     * @param grupo Es el grupo de la materia
+     * @param materia 
      */
-    private void agregarFila(String nombre, int grupo, String materia) {
+    private void agregarFila(String docente, int grupo, String materia) {
         DefaultTableModel modelo = (DefaultTableModel) datosHorarios.getModel();
-        modelo.addRow(new Object[]{nombre, grupo, materia});
+        modelo.addRow(new Object[]{docente, grupo, materia});
     }
+
     /**
-     * 
+     * Remueve todas las filas de la tabla
      */
     private void removerFilas() {
         DefaultTableModel modelo = (DefaultTableModel) datosHorarios.getModel();
         modelo.setRowCount(0);
+        horas.removeAllItems();
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable datosHorarios;
     private javax.swing.JComboBox<String> dia;
