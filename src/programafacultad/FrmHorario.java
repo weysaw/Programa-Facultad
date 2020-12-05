@@ -11,7 +11,7 @@ import java.util.HashSet;
  * Es la ventana que muestra los horarios
  *
  * @author Leslie Vidal, Ornelas Munguía Axel Leonardo
- * @version 03.12.2020
+ * @version 05.12.2020
  */
 public class FrmHorario extends javax.swing.JFrame {
 
@@ -67,6 +67,7 @@ public class FrmHorario extends javax.swing.JFrame {
 
         semestre.setText("Semestre Actual: ");
 
+        datosHorarios.setAutoCreateRowSorter(true);
         datosHorarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -224,11 +225,11 @@ public class FrmHorario extends javax.swing.JFrame {
      *
      * @param docente Es el nombre de la materia
      * @param grupo Es el grupo de la materia
-     * @param materia 
+     * @param materia Es el nombre de la materia que se agrega
      */
     private void agregarFila(String docente, int grupo, String materia) {
         DefaultTableModel modelo = (DefaultTableModel) datosHorarios.getModel();
-        modelo.addRow(new Object[]{docente, grupo, materia});
+        modelo.addRow(new Object[]{docente, (grupo < 100) ? "0"+grupo:grupo, materia});
     }
 
     /**
