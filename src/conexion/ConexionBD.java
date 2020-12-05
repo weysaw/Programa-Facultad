@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
  * Se encarga de conectar la base de datos con el programa.
  *
  * @author Ornelas Munguía Axel Leonardo
- * @version 03.12.2020
+ * @version 04.12.2020
  */
 public class ConexionBD {
 
@@ -28,7 +28,7 @@ public class ConexionBD {
     //Indicia el usuario
     private static final String USERBD = "ORNELAS.AXEL";
     //Es la contraseña del usuario
-    private static final String PASSWORDBD = "1234";
+    private static final String PASSWORDBD = "62682";
     //Es el usuario de la conexión SSH
     private static final String USERSSH = "ornelas.axel";
     //Es la contraseña de la conexión ssh
@@ -69,9 +69,7 @@ public class ConexionBD {
         } catch (ClassNotFoundException | SQLException ex) {
             //Si hay error le indica porque fue 
             JOptionPane.showMessageDialog(null, "ERROR DE CONEXIÓN BASE DE DATOS:\n" + ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
-            cerrarSSH();
-        } catch (JSchException ex) {
-            cerrarSSH();
+        } catch (JSchException ex) {            
             JOptionPane.showMessageDialog(null, "ERROR DE CONEXIÓN SSH:\n" + ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -112,9 +110,10 @@ public class ConexionBD {
     /**
      * Cierra la conexión SSH
      */
-    protected void cerrarSSH() {
+    public final void cerrarSSH() {
         //Si esta conectado la cierra
         if (session != null && session.isConnected()) {
+            System.out.println("Cerrar SSH...");
             session.disconnect();
         }
     }
