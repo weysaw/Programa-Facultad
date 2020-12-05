@@ -1,7 +1,5 @@
 package programafacultad;
 
-import programafacultad.*;
-
 /**
  * La clase principal del programa
  * 
@@ -16,7 +14,6 @@ public class Principal extends javax.swing.JFrame {
     public Principal() {
         initComponents();
         setLocationRelativeTo(null);
-        
     }
 
     @SuppressWarnings("unchecked")

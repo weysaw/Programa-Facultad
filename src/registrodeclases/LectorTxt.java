@@ -15,7 +15,7 @@ import conexion.*;
  * Dada una carpeta, recupera
  *
  * @author Raymundo Perez
- * @version 03.12.2020
+ * @version 05.12.2020
  */
 public class LectorTxt {
 
@@ -71,7 +71,7 @@ public class LectorTxt {
                                 //compara si existe un maestro con el nombre en la linea
                                 for (Profesor profesor : profesores) {
                                     if (profesor.getNom().equals(empleado[1])) {
-                                        profesor.setNumEmpleado(Integer.parseInt(empleado[0]));
+                                        profesor.setNumEmpleado(empleado[0]);
                                         break;
                                     }
                                 }
@@ -233,7 +233,7 @@ public class LectorTxt {
                             hrsTC = Integer.parseInt(sublinea[3]);
                             hrsAsig = Integer.parseInt(sublinea[4]);
 
-                            Curso curso = new Curso(new Profesor(0, maestro), new Materia(clave, materia, null), grupo, tipo, hrsTC, hrsAsig); //Se crea el curso con los datos que ya se tienen
+                            Curso curso = new Curso(new Profesor(null, maestro), new Materia(clave, materia, null), grupo, tipo, hrsTC, hrsAsig); //Se crea el curso con los datos que ya se tienen
 
                             //procesado de horas
                             //para separar los dias de las horas, se necesita saber en que caracter inician las horas
@@ -303,7 +303,7 @@ public class LectorTxt {
                             hrsTC = Integer.parseInt(sublinea[3]);
                             hrsAsig = Integer.parseInt(sublinea[4]);
 
-                            Curso curso = new Curso(new Profesor(0, maestro), new Materia(clave, materia, null), grupo, tipo, hrsTC, hrsAsig); //Se crea el curso con los datos que ya se tienen
+                            Curso curso = new Curso(new Profesor(null, maestro), new Materia(clave, materia, null), grupo, tipo, hrsTC, hrsAsig); //Se crea el curso con los datos que ya se tienen
 
                             //procesado de horas
                             //para separar los dias de las horas, se necesita saber en que caracter inician las horas

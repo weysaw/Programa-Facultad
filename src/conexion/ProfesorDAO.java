@@ -62,7 +62,7 @@ public class ProfesorDAO extends ConexionBD {
         PreparedStatement ps = null;
         //Manda al comando
         ps = conexion.prepareStatement(SQL_INSERT);
-        ps.setInt(1, dto.getNumEmpleado());
+        ps.setString(1, dto.getNumEmpleado());
         ps.setString(2, dto.getNom());
         //Ejecuta el comando y acutaliza
         ps.executeUpdate();
@@ -83,7 +83,7 @@ public class ProfesorDAO extends ConexionBD {
         ps = conexion.prepareStatement(SQL_UPDATE);
         //Les asigna los valores que deben tener los ?
         ps.setString(1, dto.getNom());
-        ps.setInt(2, dto.getNumEmpleado());
+        ps.setString(2, dto.getNumEmpleado());
         //Ejecuta el comando y actualiza
         datosModificados = ps.executeUpdate() > 0;
         //Cierra la conexión
@@ -125,7 +125,7 @@ public class ProfesorDAO extends ConexionBD {
         //Manda el comando
         ps = conexion.prepareStatement(SQL_READ);
         //Les asigna los valores que deben tener los ?
-        ps.setInt(1, dto.getNumEmpleado());
+        ps.setString(1, dto.getNumEmpleado());
         //Ejecuta el comando y devuelve el resultado del comando
         rs = ps.executeQuery();
         //Recorre por todos los resultados
@@ -147,6 +147,7 @@ public class ProfesorDAO extends ConexionBD {
      * @throws Exception Devuelve un error
      */
     private Profesor getObject(ResultSet rs) throws Exception {
-        return new Profesor(Integer.parseInt(rs.getString(NUM_EMPLEADO)), rs.getString(NOM));
+        return new Profesor(rs.getString(NUM_EMPLEADO), rs.getString(NOM));
     }
+   
 }

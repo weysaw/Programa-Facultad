@@ -20,8 +20,8 @@ public class MateriaDAO extends ConexionBD {
             + "," + NOM + ", " + PLAN_DE_ESTUDIO + " ) VALUES(?,?,?)";
     private static final String SQL_READ = "SELECT*FROM " + TABLA + " WHERE " + CLAVE_MATERIA + " = ?;";
     private static final String SQL_DELETE = "DELETE  FROM " + TABLA + " WHERE " + CLAVE_MATERIA + " = ?";
-    private static final String SQL_UPDATE = "UPDATE "+ TABLA +"SET " + NOM
-            + " = ? ," + PLAN_DE_ESTUDIO + " = ? WHERE " + CLAVE_MATERIA + " = ?";
+    private static final String SQL_UPDATE = "UPDATE "+ TABLA +" SET " + NOM + " = ? ,"+ PLAN_DE_ESTUDIO
+            +"  = ? WHERE " + CLAVE_MATERIA + " = ?;" ;
 
     /**
      * Constructor de la clase
@@ -88,7 +88,7 @@ public class MateriaDAO extends ConexionBD {
         //Les asigna los valores que deben tener los ?
         ps.setString(1, dto.getNom());
         ps.setString(2, dto.getPlanDeEstudio());
-        ps.setInt(3, dto.getClaveMateria());
+        ps.setString(3, dto.getClaveMateria() + "");
         //Ejecuta el comando y actualiza
         datosModificados = ps.executeUpdate() > 0;
         //Cierra la conexión

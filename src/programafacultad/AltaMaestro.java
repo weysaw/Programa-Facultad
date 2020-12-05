@@ -151,7 +151,7 @@ public class AltaMaestro extends javax.swing.JFrame {
         ProfesorDAO profeDAO = new ProfesorDAO();
         //Agrega el profesor agarrando sus datos
         try {
-            Profesor profesor = new Profesor(Integer.parseInt(nombreDocente.getText()), numeroEmpleado.getText());
+            Profesor profesor = new Profesor(nombreDocente.getText(), numeroEmpleado.getText());
             profeDAO.append(profesor);
             JOptionPane.showMessageDialog(this, "Registrado con exito", "EXITO", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
