@@ -35,15 +35,16 @@ public class LectorTxt {
      * @return ArrayList con toda la informacion de los cursos
      */
     public ArrayList<CursoHorario> recuperarDatos() {
-        clases.clear();//se declara/resetea el arrayList
+        clases.clear();//resetea el arrayList
         carpeta = abrirCarpeta();//abre la carpeta donde se ubican los txt
         if (carpeta != null) {
             for (final File archivo : carpeta.listFiles()) { // foreach para cada elemento dentro de la carpeta
-                if (Pattern.matches("^\\d+.+\\.txt$", archivo.getName())) { //Si cumple con la forma "##### XXXXXX XXXXX.txt"
+                if (Pattern.matches("^\\d{5} .*\\.txt$", archivo.getName())) { //Si cumple con la forma "##### XXXXXX.txt"
                     System.out.println("Leyendo: " + archivo.getName());
                     lecturaIndividual(archivo);
                 }
             }
+            recuperarNumeroEmpleado();
         }
         return clases;
     }
@@ -51,10 +52,94 @@ public class LectorTxt {
     /**
      * Si se encuentra disponible el archivo con nombres y numeros de empleado,
      * los agrega al objeto
-     * @param cursos 
      */
-    private void recuperarNumeroEmpleado(ArrayList<Curso> cursos) {
-        
+    private void recuperarNumeroEmpleado() {
+        ArrayList<Profesor> profesores = getProfesor();
+        if (carpeta != null) {
+            for (final File archivo : carpeta.listFiles()) { // foreach para cada elemento dentro de la carpeta
+                if (Pattern.matches(".*[Mm][Aa][Ee][Ss][Tt][Rr][Oo].*", archivo.getName())) { //Si contiene la palabra "maestro"
+                    System.out.println("Leyendo: " + archivo.getName());
+                    BufferedReader reader;
+                    try { //lectura del archivo con maestros
+                        reader = new BufferedReader(new InputStreamReader(new FileInputStream(archivo.getPath()), "UTF-16"));
+                        String line;
+                        String[] empleado;//numero,nombre
+                        //Lectura linea por linea
+                        while ((line = reader.readLine()) != null) {
+                            if (Pattern.matches("^\\d{6}.*", line)) {
+                                empleado = line.split("\t");
+                                //compara si existe un maestro con el nombre en la linea
+                                for (Profesor profesor : profesores) {
+                                    if (profesor.getNom().equals(empleado[1])) {
+                                        profesor.setNumEmpleado(Integer.parseInt(empleado[0]));
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+
+                    }
+
+                }
+            }
+        }
+    }
+
+    /**
+     * Despues de recuperar los datos de los txt, permite obtener los cursos
+     *
+     * @return ArrayList con cursos
+     */
+    public ArrayList<Curso> getCurso() {
+        ArrayList<Curso> cursos = new ArrayList();
+        for (CursoHorario curso : this.clases) {
+            if (!cursos.contains(curso.getCurso())) {
+                cursos.add(curso.getCurso());
+            }
+        }
+        return cursos;
+    }
+
+    /**
+     * Despues de recuperar los datos de los txt, permite obtener las materias
+     *
+     * @return ArrayList con materias
+     */
+    public ArrayList<Materia> getMatera() {
+        ArrayList<Materia> materias = new ArrayList();
+        for (Curso curso : getCurso()) {
+            if (!materias.contains(curso.getMateria())) {
+                materias.add(curso.getMateria());
+            }
+        }
+        return materias;
+    }
+
+    /**
+     * Despues de recuperar los datos de los txt, permite obtener los maestros
+     *
+     * @return ArrayList con profesores
+     */
+    public ArrayList<Profesor> getProfesor() {
+        ArrayList<Profesor> profesores = new ArrayList();
+        for (Curso curso : getCurso()) {
+            if (!profesores.contains(curso.getProfesor())) {
+                profesores.add(curso.getProfesor());
+            }
+        }
+        return profesores;
+    }
+
+    /**
+     * Despues de recuperar los datos de los txt, permite obtener los
+     * CursoHorario
+     *
+     * @return ArrayList con cursosHorario
+     */
+    public ArrayList<CursoHorario> getCursoHorario() {
+        return clases;
     }
 
     /**
@@ -92,7 +177,7 @@ public class LectorTxt {
                     }
                 }
             }
-            return (valido)?semestre + "":"0";
+            return (valido) ? semestre + "" : "0";
         } else {
             System.out.println("No se han seleccionado datos");
             return "0";
