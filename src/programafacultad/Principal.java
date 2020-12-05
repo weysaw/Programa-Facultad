@@ -1,5 +1,7 @@
 package programafacultad;
 
+import programafacultad.*;
+
 /**
  * La clase principal del programa
  * 
@@ -29,6 +31,9 @@ public class Principal extends javax.swing.JFrame {
         ConsultaMateria = new javax.swing.JButton();
         ConsultaMaestro = new javax.swing.JButton();
         ConsultaHoras = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        altaMaestro = new javax.swing.JButton();
+        altaMateria = new javax.swing.JButton();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -74,26 +79,55 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel2.setText("Dar de alta");
+
+        altaMaestro.setText("Alta Maestro");
+        altaMaestro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                altaMaestroActionPerformed(evt);
+            }
+        });
+
+        altaMateria.setText("Alta Materia");
+        altaMateria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                altaMateriaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(87, 87, 87)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(ConsultaHorario)
-                    .addComponent(ConsultaMaestro))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ConsultaMateria)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addComponent(ConsultaHoras)))
-                .addGap(98, 98, 98))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(68, 68, 68))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(68, 68, 68))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(209, 209, 209))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addGap(96, 96, 96)
+                        .addComponent(altaMaestro, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(78, 78, 78)
+                        .addComponent(altaMateria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addGap(87, 87, 87)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(ConsultaHorario)
+                            .addComponent(ConsultaMaestro))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ConsultaMateria)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(32, 32, 32)
+                                .addComponent(ConsultaHoras)))))
+                .addGap(98, 98, 98))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -108,7 +142,13 @@ public class Principal extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ConsultaHoras)
                     .addComponent(ConsultaMaestro))
-                .addContainerGap(76, Short.MAX_VALUE))
+                .addGap(38, 38, 38)
+                .addComponent(jLabel2)
+                .addGap(30, 30, 30)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(altaMaestro)
+                    .addComponent(altaMateria))
+                .addContainerGap(87, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -126,27 +166,40 @@ public class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void ConsultaHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConsultaHorarioActionPerformed
-        frmHorario horario = new frmHorario(this);
+        FrmHorario horario = new FrmHorario(this);
         horario.setVisible(true);
         setVisible(false);
     }//GEN-LAST:event_ConsultaHorarioActionPerformed
 
     private void ConsultaMaestroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConsultaMaestroActionPerformed
-         frmMaestro maestro = new frmMaestro(this);
+         FrmMaestro maestro = new FrmMaestro(this);
          maestro.setVisible(true);
          setVisible(false);
     }//GEN-LAST:event_ConsultaMaestroActionPerformed
 
     private void ConsultaMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConsultaMateriaActionPerformed
-        frmMateria materia = new frmMateria(this);
+        FrmMateria materia = new FrmMateria(this);
         materia.setVisible(true);
         setVisible(false);
     }//GEN-LAST:event_ConsultaMateriaActionPerformed
 
     private void ConsultaHorasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConsultaHorasActionPerformed
-        frmHoras hora = new frmHoras(this, true);
+        FrmHoras hora = new FrmHoras(this, true);
         hora.setVisible(true);
+        setVisible(false);
     }//GEN-LAST:event_ConsultaHorasActionPerformed
+
+    private void altaMaestroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_altaMaestroActionPerformed
+        AltaMaestro alta = new AltaMaestro(this);
+        alta.setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_altaMaestroActionPerformed
+
+    private void altaMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_altaMateriaActionPerformed
+        AltaMateria alta = new AltaMateria(this);
+        alta.setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_altaMateriaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -188,7 +241,10 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton ConsultaHoras;
     private javax.swing.JButton ConsultaMaestro;
     private javax.swing.JButton ConsultaMateria;
+    private javax.swing.JButton altaMaestro;
+    private javax.swing.JButton altaMateria;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
