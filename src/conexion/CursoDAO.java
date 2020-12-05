@@ -68,7 +68,7 @@ public class CursoDAO extends ConexionBD {
         PreparedStatement ps = null;
         //Manda al comando
         ps = conexion.prepareStatement(SQL_INSERT);
-        ps.setInt(1, dto.getProfesor().getNumEmpleado());
+        ps.setString(1, dto.getProfesor().getNumEmpleado());
         ps.setInt(2, dto.getMateria().getClaveMateria());
         ps.setInt(3, dto.getGrupo());
         ps.setString(4, dto.getTipo());
@@ -94,7 +94,7 @@ public class CursoDAO extends ConexionBD {
         //Les asigna los valores que deben tener los ?
         ps.setInt(1, dto.getHrsTC());
         ps.setInt(2, dto.getHrsAsig());
-        ps.setInt(3, dto.getProfesor().getNumEmpleado());
+        ps.setString(3, dto.getProfesor().getNumEmpleado());
         ps.setInt(4, dto.getMateria().getClaveMateria());
         ps.setInt(5, dto.getGrupo());
         ps.setString(6, dto.getTipo());
@@ -118,7 +118,7 @@ public class CursoDAO extends ConexionBD {
         //Manda el comando
         ps = conexion.prepareStatement(SQL_DELETE);
         //Les asigna los valores que deben tener los ?
-        ps.setInt(1, dto.getProfesor().getNumEmpleado());
+        ps.setString(1, dto.getProfesor().getNumEmpleado());
         ps.setInt(2, dto.getMateria().getClaveMateria());
         ps.setInt(3, dto.getGrupo());
         ps.setString(4, dto.getTipo());
@@ -143,7 +143,7 @@ public class CursoDAO extends ConexionBD {
         //Manda el comando
         ps = conexion.prepareStatement(SQL_READ);
         //Les asigna los valores que deben tener los ?
-        ps.setInt(1, dto.getProfesor().getNumEmpleado());
+        ps.setString(1, dto.getProfesor().getNumEmpleado());
         ps.setInt(2, dto.getMateria().getClaveMateria());
         ps.setInt(3, dto.getGrupo());
         ps.setString(4, dto.getTipo());
@@ -172,7 +172,8 @@ public class CursoDAO extends ConexionBD {
         String tipo = rs.getString(TIPO);
         int hrsTc = Integer.parseInt(rs.getString(HRS_TC));
         int hrsAsig = Integer.parseInt(rs.getString(HRS_ASIG));
-        int numEmpleado = Integer.parseInt(NUM_EMPLEADO);
+        String numEmpleado = rs.getString(NUM_EMPLEADO);
+        
         Profesor profesor = new ProfesorDAO().read(new Profesor(numEmpleado, null));
         int claveMateria = Integer.parseInt(rs.getString(CLAVE_MATERIA));
         Materia materia = new MateriaDAO().read(new Materia(claveMateria, null,null));
