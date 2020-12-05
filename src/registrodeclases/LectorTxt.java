@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package registrodeclases;
 
 import java.io.BufferedReader;
@@ -20,14 +15,17 @@ import conexion.*;
  * Dada una carpeta, recupera
  *
  * @author Raymundo Perez
+ * @version 03.12.2020
  */
 public class LectorTxt {
 
-    ArrayList<CursoHorario> clases;
-    File carpeta;
+    private final ArrayList<CursoHorario> clases;
+    private File carpeta;
 
+    //Constructor de la clase
     public LectorTxt() {
-
+        carpeta = null;
+        clases = new ArrayList();
     }
 
     /**
@@ -37,7 +35,7 @@ public class LectorTxt {
      * @return ArrayList con toda la informacion de los cursos
      */
     public ArrayList<CursoHorario> recuperarDatos() {
-        clases = new ArrayList();//se declara/resetea el arrayList
+        clases.clear();//se declara/resetea el arrayList
         carpeta = abrirCarpeta();//abre la carpeta donde se ubican los txt
         if (carpeta != null) {
             for (final File archivo : carpeta.listFiles()) { // foreach para cada elemento dentro de la carpeta
@@ -45,7 +43,6 @@ public class LectorTxt {
                     System.out.println("Leyendo: " + archivo.getName());
                     lecturaIndividual(archivo);
                 }
-
             }
         }
         return clases;
@@ -67,7 +64,7 @@ public class LectorTxt {
      *
      * @return true si coinciden los semestres
      */
-    public boolean validarSemestre() {
+    public String validarSemestre() {
         String semestre = null;
         int n = 0;//contador para saber el numero de iteraciones
         boolean valido = true;
@@ -95,10 +92,10 @@ public class LectorTxt {
                     }
                 }
             }
-            return valido;
+            return (valido)?semestre + "":"0";
         } else {
             System.out.println("No se han seleccionado datos");
-            return false;
+            return "0";
         }
     }
 
@@ -277,8 +274,6 @@ public class LectorTxt {
                             seccion = 4;
                         }
                         break;
-                    default:
-
                 }
             }
             reader.close();

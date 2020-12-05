@@ -7,7 +7,7 @@ import java.sql.*;
  * Es la clase curso que se comunica con la base de datos
  * 
  * @author Ornelas Munguía Axel Leonardo
- * @version 27.11.2020
+ * @version 03.12.2020
  */
 public class CursoDAO extends ConexionBD {
     
@@ -86,8 +86,9 @@ public class CursoDAO extends ConexionBD {
      * @param dto Son los nuevos datos a actualizar
      * @throws Exception Devuelve un error
      */
-    public void update(Curso dto) throws Exception {
+    public boolean update(Curso dto) throws Exception {
         PreparedStatement ps = null;
+        boolean datosModificados;
         //Manda el comando
         ps = conexion.prepareStatement(SQL_UPDATE);
         //Les asigna los valores que deben tener los ?
@@ -98,9 +99,10 @@ public class CursoDAO extends ConexionBD {
         ps.setInt(5, dto.getGrupo());
         ps.setString(6, dto.getTipo());
         //Ejecuta el comando y actualiza
-        ps.executeUpdate();
+        datosModificados = ps.executeUpdate() > 0;
         //Cierra la conexión
         cerrar(ps);
+        return datosModificados;
     }
     
     
@@ -110,8 +112,9 @@ public class CursoDAO extends ConexionBD {
      * @param dto Es el dto que se borra
      * @throws Exception Devuelve error
      */
-    public void delete(Curso dto) throws Exception {
+    public boolean delete(Curso dto) throws Exception {
         PreparedStatement ps = null;
+        boolean datosModificados;
         //Manda el comando
         ps = conexion.prepareStatement(SQL_DELETE);
         //Les asigna los valores que deben tener los ?
@@ -120,9 +123,10 @@ public class CursoDAO extends ConexionBD {
         ps.setInt(3, dto.getGrupo());
         ps.setString(4, dto.getTipo());
         //Ejecuta el comando y actualiza
-        ps.executeUpdate();
+        datosModificados = ps.executeUpdate() > 0;
         //Cierra la conexión
         cerrar(ps);
+        return datosModificados;
     }
     
     /**

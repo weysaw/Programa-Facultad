@@ -12,7 +12,8 @@ import java.sql.Time;
  */
 public class Horario implements Serializable {
     
-    private int claveHorario;
+    //Deprecated
+    private int claveHorario;//No borrar porque se quiebra, se debe optimizar
     private String dia;
     private String turno;
     private Time hrInicio;
