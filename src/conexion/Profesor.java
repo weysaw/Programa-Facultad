@@ -7,19 +7,19 @@ package conexion;
  * @version 28.11.2020
  */
 public class Profesor {
-    private int numEmpleado;
+    private String numEmpleado;
     private String nom;
 
-    public Profesor(int numEmpleado, String nom) {
+    public Profesor(String numEmpleado, String nom) {
         this.numEmpleado = numEmpleado;
         this.nom = nom;
     }
 
-    public int getNumEmpleado() {
+    public String getNumEmpleado() {
         return numEmpleado;
     }
 
-    public void setNumEmpleado(int numEmpleado) {
+    public void setNumEmpleado(String numEmpleado) {
         this.numEmpleado = numEmpleado;
     }
 
