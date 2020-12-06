@@ -24,7 +24,7 @@ public class HorarioDAO extends ConexionBD {
     private static final String SQL_DELETE = "DELETE  FROM " + TABLA + " WHERE " + CLAVE_HORARIO + " = ?";
     private static final String SQL_UPDATE = "UPDATE "+ TABLA +" SET " + DIA + " = ?,"
             + TURNO +" = ?, "+ HR_INICIO +" = ?, "+ HR_FIN +" = ? WHERE " + CLAVE_HORARIO + " = ?";
-
+    private static final String SQL_DELETE_ALL = "DELETE FROM " + TABLA;
     /**
      * Constructor de la clase
      */
@@ -126,6 +126,22 @@ public class HorarioDAO extends ConexionBD {
         return datosModificados;
     }
 
+   /**
+     * Borra un dato de la tabla
+     *
+     * @throws Exception Devuelve error
+     */
+    public void deleteAll() throws Exception {
+        PreparedStatement ps = null;
+        //Manda el comando
+        ps = conexion.prepareStatement(SQL_DELETE_ALL);
+        //Ejecuta el comando y actualiza
+        ps.executeUpdate();
+        //Cierra la conexión
+        cerrar(ps);
+    }
+    
+    
     /**
      * Lee la información de un profesor en especifico
      *
