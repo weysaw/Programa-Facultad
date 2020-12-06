@@ -7,7 +7,7 @@ import java.sql.*;
  * Es la clase curso que se comunica con la base de datos
  * 
  * @author Ornelas Munguía Axel Leonardo
- * @version 27.11.2020
+ * @version 03.12.2020
  */
 public class CursoHorarioDAO extends ConexionBD {
     
@@ -66,7 +66,7 @@ public class CursoHorarioDAO extends ConexionBD {
         PreparedStatement ps = null;
         //Manda al comando
         ps = conexion.prepareStatement(SQL_INSERT);
-        ps.setInt(1, dto.getCurso().getProfesor().getNumEmpleado());
+        ps.setString(1, dto.getCurso().getProfesor().getNumEmpleado());
         ps.setInt(2, dto.getCurso().getMateria().getClaveMateria());
         ps.setInt(3, dto.getCurso().getGrupo());
         ps.setString(4, dto.getCurso().getTipo());
@@ -83,20 +83,22 @@ public class CursoHorarioDAO extends ConexionBD {
      * @param dto Es el dto que se borra
      * @throws Exception Devuelve error
      */
-    public void delete(CursoHorario dto) throws Exception {
+    public boolean delete(CursoHorario dto) throws Exception {
         PreparedStatement ps = null;
+        boolean datosModificados;
         //Manda el comando
         ps = conexion.prepareStatement(SQL_DELETE);
         //Les asigna los valores que deben tener los ?
-        ps.setInt(1, dto.getCurso().getProfesor().getNumEmpleado());
+        ps.setString(1, dto.getCurso().getProfesor().getNumEmpleado());
         ps.setInt(2, dto.getCurso().getMateria().getClaveMateria());
         ps.setInt(3, dto.getCurso().getGrupo());
         ps.setString(4, dto.getCurso().getTipo());
         ps.setInt(5, dto.getHorario().getClaveHorario());
         //Ejecuta el comando y actualiza
-        ps.executeUpdate();
+        datosModificados = ps.executeUpdate() > 0;
         //Cierra la conexión
         cerrar(ps);
+        return datosModificados;
     }
     
     /**
@@ -113,7 +115,7 @@ public class CursoHorarioDAO extends ConexionBD {
         //Manda el comando
         ps = conexion.prepareStatement(SQL_READ);
         //Les asigna los valores que deben tener los ?
-        ps.setInt(1, dto.getCurso().getProfesor().getNumEmpleado());
+        ps.setString(1, dto.getCurso().getProfesor().getNumEmpleado());
         ps.setInt(2, dto.getCurso().getMateria().getClaveMateria());
         ps.setInt(3, dto.getCurso().getGrupo());
         ps.setString(4, dto.getCurso().getTipo());
@@ -138,14 +140,24 @@ public class CursoHorarioDAO extends ConexionBD {
      * @throws Exception Devuelve un error
      */
     private CursoHorario getObject(ResultSet rs) throws Exception {
-        int numEmpleado = Integer.parseInt(rs.getString(NUM_EMPLEADO));
+        String numEmpleado = rs.getString(NUM_EMPLEADO);
         int claveMateria = Integer.parseInt(rs.getString(CLAVE_MATERIA));
         int grupo = Integer.parseInt(rs.getString(GRUPO));
         String tipo = rs.getString(TIPO);
         int claveHorario = Integer.parseInt(rs.getString(CLAVE_HORARIO));
-        Profesor profesor = new ProfesorDAO().read(new Profesor(numEmpleado,null));
-        Materia materia = new MateriaDAO().read(new Materia(claveMateria, null, null));
-        Curso curso = new CursoDAO().read(new Curso(profesor,materia,grupo,tipo,0,0));
+        
+        ProfesorDAO profesorDAO = new ProfesorDAO();
+        Profesor profesor = profesorDAO.read(new Profesor(numEmpleado,null));
+        profesorDAO.cerrarSSH();
+        
+        MateriaDAO materiaDAO = new MateriaDAO();
+        Materia materia = materiaDAO.read(new Materia(claveMateria, null, null));
+        materiaDAO.cerrarSSH();
+        
+        CursoDAO cursoDAO = new CursoDAO();
+        Curso curso = cursoDAO.read(new Curso(profesor,materia,grupo,tipo,0,0));
+        cursoDAO.cerrarSSH();
+        
         Horario horario = new HorarioDAO().read(new Horario(claveHorario,null,null,null,null));
         
         return new CursoHorario(curso, horario);

@@ -7,7 +7,7 @@ import java.sql.*;
  * Es la clase curso que se comunica con la base de datos
  *
  * @author Ornelas Munguía Axel Leonardo
- * @version 28.11.2020
+ * @version 03.12.2020
  */
 public class MateriaDAO extends ConexionBD {
 
@@ -20,8 +20,8 @@ public class MateriaDAO extends ConexionBD {
             + "," + NOM + ", " + PLAN_DE_ESTUDIO + " ) VALUES(?,?,?)";
     private static final String SQL_READ = "SELECT*FROM " + TABLA + " WHERE " + CLAVE_MATERIA + " = ?;";
     private static final String SQL_DELETE = "DELETE  FROM " + TABLA + " WHERE " + CLAVE_MATERIA + " = ?";
-    private static final String SQL_UPDATE = "UPDATE "+ TABLA +"SET " + NOM
-            + " = ? ," + PLAN_DE_ESTUDIO + " = ? WHERE " + CLAVE_MATERIA + " = ?";
+    private static final String SQL_UPDATE = "UPDATE "+ TABLA +" SET " + NOM + " = ? ,"+ PLAN_DE_ESTUDIO
+            +"  = ? WHERE " + CLAVE_MATERIA + " = ?;" ;
 
     /**
      * Constructor de la clase
@@ -80,18 +80,20 @@ public class MateriaDAO extends ConexionBD {
      * @param dto Son los nuevos datos a actualizar
      * @throws Exception Devuelve un error
      */
-    public void update(Materia dto) throws Exception {
+    public boolean update(Materia dto) throws Exception {
         PreparedStatement ps = null;
+        boolean datosModificados;
         //Manda el comando
         ps = conexion.prepareStatement(SQL_UPDATE);
         //Les asigna los valores que deben tener los ?
         ps.setString(1, dto.getNom());
         ps.setString(2, dto.getPlanDeEstudio());
-        ps.setInt(3, dto.getClaveMateria());
+        ps.setString(3, dto.getClaveMateria() + "");
         //Ejecuta el comando y actualiza
-        ps.executeUpdate();
+        datosModificados = ps.executeUpdate() > 0;
         //Cierra la conexión
         cerrar(ps);
+        return datosModificados;
     }
 
     /**
@@ -100,16 +102,18 @@ public class MateriaDAO extends ConexionBD {
      * @param dto Es el dto que se borra
      * @throws Exception Devuelve error
      */
-    public void delete(Materia dto) throws Exception {
+    public boolean delete(Materia dto) throws Exception {
         PreparedStatement ps = null;
+        boolean datosModificados;
         //Manda el comando
         ps = conexion.prepareStatement(SQL_DELETE);
         //Les asigna los valores que deben tener los ?
         ps.setString(1, dto.getClaveMateria()+ "");
         //Ejecuta el comando y actualiza
-        ps.executeUpdate();
+        datosModificados = ps.executeUpdate() > 0;
         //Cierra la conexión
         cerrar(ps);
+        return datosModificados;
     }
 
     /**
