@@ -233,7 +233,7 @@ public class LectorTxt {
                             hrsTC = Integer.parseInt(sublinea[3]);
                             hrsAsig = Integer.parseInt(sublinea[4]);
 
-                            Curso curso = new Curso(new Profesor(null, maestro), new Materia(clave, materia, null), grupo, tipo, hrsTC, hrsAsig); //Se crea el curso con los datos que ya se tienen
+                            Curso curso = new Curso(asignarProfesor(maestro), new Materia(clave, materia, null), grupo, tipo, hrsTC, hrsAsig); //Se crea el curso con los datos que ya se tienen
 
                             //procesado de horas
                             //para separar los dias de las horas, se necesita saber en que caracter inician las horas
@@ -303,7 +303,7 @@ public class LectorTxt {
                             hrsTC = Integer.parseInt(sublinea[3]);
                             hrsAsig = Integer.parseInt(sublinea[4]);
 
-                            Curso curso = new Curso(new Profesor(null, maestro), new Materia(clave, materia, null), grupo, tipo, hrsTC, hrsAsig); //Se crea el curso con los datos que ya se tienen
+                            Curso curso = new Curso(asignarProfesor(maestro), new Materia(clave, materia, null), grupo, tipo, hrsTC, hrsAsig); //Se crea el curso con los datos que ya se tienen
 
                             //procesado de horas
                             //para separar los dias de las horas, se necesita saber en que caracter inician las horas
@@ -365,6 +365,23 @@ public class LectorTxt {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Verifica si ya existe un profesor con ese nombre registrado, de ser asi
+     * devuelve el objeto correspondiente, en caso contrario crea un nuevo
+     * objeto
+     *
+     * @param profesor nombre del profesor
+     * @return objeto correspondiente a ese profesor
+     */
+    private Profesor asignarProfesor(String nombre) {
+        for (Profesor profesor : getProfesor()) {
+            if (profesor.getNom().equals(nombre)) {
+                return profesor;
+            }
+        }
+        return new Profesor(null,nombre);
     }
 
     /**
