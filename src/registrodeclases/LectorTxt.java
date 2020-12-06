@@ -94,7 +94,7 @@ public class LectorTxt {
      */
     public ArrayList<Curso> getCurso() {
         ArrayList<Curso> cursos = new ArrayList();
-        for (CursoHorario curso : this.clases) {
+        for (CursoHorario curso : clases) {
             if (!cursos.contains(curso.getCurso())) {
                 cursos.add(curso.getCurso());
             }

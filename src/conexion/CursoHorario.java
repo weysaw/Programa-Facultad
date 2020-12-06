@@ -37,7 +37,7 @@ public class CursoHorario implements Serializable {
 
     @Override
     public String toString() {
-        return "CursoHorario{" + "curso=" + curso + ", horario=" + horario + '}';
+        return "CursoHorario{" + "curso=" + curso + "\nhorario=" + horario + "}\n\n";
     }
 
 
