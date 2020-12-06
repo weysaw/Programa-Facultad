@@ -1,11 +1,12 @@
 package programafacultad;
 
 import conexion.CursoHorario;
+import conexion.CursoHorarioDAO;
 import java.util.ArrayList;
 import java.util.Collections;
-import registrodeclases.LectorTxt;
 import javax.swing.table.*;
 import java.util.HashSet;
+import javax.swing.JOptionPane;
 
 /**
  * Es la ventana que muestra los horarios
@@ -16,7 +17,7 @@ import java.util.HashSet;
 public class FrmHorario extends javax.swing.JFrame {
 
     private final Principal principal;
-    private final ArrayList<CursoHorario> cursos;
+    private ArrayList<CursoHorario> cursos;
 
     /**
      * Constructor de la clase horario
@@ -25,8 +26,16 @@ public class FrmHorario extends javax.swing.JFrame {
         initComponents();
         this.principal = principal;
         setLocationRelativeTo(principal);
-        LectorTxt lector = new LectorTxt();
-        cursos = lector.recuperarDatos();
+        CursoHorarioDAO dao = new CursoHorarioDAO();
+        cursos = null;
+        try {
+            cursos = dao.readAll();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "No se pudo leer la base de datos\n" + e.getMessage(), 
+                    "ERROR", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            dao.cerrarSSH();
+        }
     }
 
     @SuppressWarnings("unchecked")

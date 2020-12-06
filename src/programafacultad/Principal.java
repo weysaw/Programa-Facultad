@@ -1,8 +1,17 @@
 package programafacultad;
 
+import conexion.CursoHorario;
+import conexion.Profesor;
+import conexion.ProfesorDAO;
+import java.awt.Font;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import registrodeclases.LectorTxt;
+
 /**
  * La clase principal del programa
- * 
+ *
  * @author Leslie Vidal
  * @version 03.12.2020
  */
@@ -13,7 +22,11 @@ public class Principal extends javax.swing.JFrame {
      */
     public Principal() {
         initComponents();
-        setLocationRelativeTo(null);
+        try {
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ex) {
+            System.out.println(ex.toString());
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -23,14 +36,16 @@ public class Principal extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jPanel1 = new javax.swing.JPanel();
+        consultaHorario = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        ConsultaHorario = new javax.swing.JButton();
-        ConsultaMateria = new javax.swing.JButton();
-        ConsultaMaestro = new javax.swing.JButton();
-        ConsultaHoras = new javax.swing.JButton();
+        consultaMateria = new javax.swing.JButton();
+        consultaMaestro = new javax.swing.JButton();
+        consultaHoras = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         altaMaestro = new javax.swing.JButton();
         altaMateria = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        leerArchivo = new javax.swing.JButton();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -38,44 +53,46 @@ public class Principal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Programa Consultas");
+        setMinimumSize(new java.awt.Dimension(526, 500));
+        setPreferredSize(new java.awt.Dimension(469, 500));
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                formComponentResized(evt);
+            }
+        });
 
-        jPanel1.setBackground(new java.awt.Color(153, 255, 153));
+        consultaHorario.setText("Consulta por Horario");
+        consultaHorario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                consultaHorarioActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel1.setText("Facultad De Ingenieria Campus Mexicali");
 
-        ConsultaHorario.setBackground(new java.awt.Color(255, 255, 102));
-        ConsultaHorario.setText("Consulta por Horario");
-        ConsultaHorario.addActionListener(new java.awt.event.ActionListener() {
+        consultaMateria.setText("Consulta por Materia");
+        consultaMateria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ConsultaHorarioActionPerformed(evt);
+                consultaMateriaActionPerformed(evt);
             }
         });
 
-        ConsultaMateria.setBackground(new java.awt.Color(255, 255, 102));
-        ConsultaMateria.setText("Consulta por Materia");
-        ConsultaMateria.addActionListener(new java.awt.event.ActionListener() {
+        consultaMaestro.setText("Consulta por Maestro");
+        consultaMaestro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ConsultaMateriaActionPerformed(evt);
+                consultaMaestroActionPerformed(evt);
             }
         });
 
-        ConsultaMaestro.setBackground(new java.awt.Color(255, 255, 102));
-        ConsultaMaestro.setText("Consulta por Maestro");
-        ConsultaMaestro.addActionListener(new java.awt.event.ActionListener() {
+        consultaHoras.setText("Numeros");
+        consultaHoras.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ConsultaMaestroActionPerformed(evt);
+                consultaHorasActionPerformed(evt);
             }
         });
 
-        ConsultaHoras.setBackground(new java.awt.Color(255, 255, 102));
-        ConsultaHoras.setText("Numeros");
-        ConsultaHoras.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ConsultaHorasActionPerformed(evt);
-            }
-        });
-
+        jLabel2.setBackground(new java.awt.Color(0, 0, 0));
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel2.setText("Dar de alta");
 
@@ -86,6 +103,7 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
+        altaMateria.setFont(altaMateria.getFont().deriveFont(altaMateria.getFont().getSize()+1f));
         altaMateria.setText("Alta Materia");
         altaMateria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -93,98 +111,117 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel3.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel3.setText("Leer Archivos");
+
+        leerArchivo.setText("Leer Profesores");
+        leerArchivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                leerArchivoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(49, 49, 49)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(68, 68, 68))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(209, 209, 209))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addGap(96, 96, 96)
-                        .addComponent(altaMaestro, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(78, 78, 78)
-                        .addComponent(altaMateria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addGap(87, 87, 87)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(ConsultaHorario)
-                            .addComponent(ConsultaMaestro))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(ConsultaMateria)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(32, 32, 32)
-                                .addComponent(ConsultaHoras)))))
-                .addGap(98, 98, 98))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(consultaHorario, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
+                                    .addComponent(consultaHoras, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(63, 63, 63)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(consultaMaestro, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
+                                    .addComponent(consultaMateria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(jLabel1)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(altaMateria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(71, 71, 71)
+                                .addComponent(altaMaestro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(58, 58, 58))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(leerArchivo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(322, 322, 322))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(45, 45, 45)
+                .addGap(40, 40, 40)
                 .addComponent(jLabel1)
-                .addGap(51, 51, 51)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ConsultaMateria)
-                    .addComponent(ConsultaHorario))
-                .addGap(55, 55, 55)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ConsultaHoras)
-                    .addComponent(ConsultaMaestro))
-                .addGap(38, 38, 38)
+                .addGap(49, 49, 49)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(consultaHorario)
+                        .addGap(18, 18, 18)
+                        .addComponent(consultaHoras))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(consultaMateria)
+                        .addGap(18, 18, 18)
+                        .addComponent(consultaMaestro)))
+                .addGap(16, 16, 16)
                 .addComponent(jLabel2)
-                .addGap(30, 30, 30)
+                .addGap(37, 37, 37)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(altaMaestro)
-                    .addComponent(altaMateria))
-                .addContainerGap(87, Short.MAX_VALUE))
+                    .addComponent(altaMateria)
+                    .addComponent(altaMaestro))
+                .addGap(30, 30, 30)
+                .addComponent(jLabel3)
+                .addGap(18, 18, 18)
+                .addComponent(leerArchivo)
+                .addGap(94, 94, 94))
         );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {altaMaestro, altaMateria, consultaHoras, consultaMaestro, consultaMateria, leerArchivo});
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void ConsultaHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConsultaHorarioActionPerformed
+    private void consultaHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaHorarioActionPerformed
         FrmHorario horario = new FrmHorario(this);
         horario.setVisible(true);
         setVisible(false);
-    }//GEN-LAST:event_ConsultaHorarioActionPerformed
+    }//GEN-LAST:event_consultaHorarioActionPerformed
 
-    private void ConsultaMaestroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConsultaMaestroActionPerformed
-         FrmMaestro maestro = new FrmMaestro(this);
-         maestro.setVisible(true);
-         setVisible(false);
-    }//GEN-LAST:event_ConsultaMaestroActionPerformed
+    private void consultaMaestroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaMaestroActionPerformed
+        FrmMaestro maestro = new FrmMaestro(this);
+        maestro.setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_consultaMaestroActionPerformed
 
-    private void ConsultaMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConsultaMateriaActionPerformed
+    private void consultaMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaMateriaActionPerformed
         FrmMateria materia = new FrmMateria(this);
         materia.setVisible(true);
         setVisible(false);
-    }//GEN-LAST:event_ConsultaMateriaActionPerformed
+    }//GEN-LAST:event_consultaMateriaActionPerformed
 
-    private void ConsultaHorasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConsultaHorasActionPerformed
+    private void consultaHorasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaHorasActionPerformed
         FrmHoras hora = new FrmHoras(this, true);
         hora.setVisible(true);
         setVisible(false);
-    }//GEN-LAST:event_ConsultaHorasActionPerformed
+    }//GEN-LAST:event_consultaHorasActionPerformed
 
     private void altaMaestroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_altaMaestroActionPerformed
         AltaMaestro alta = new AltaMaestro(this);
@@ -198,52 +235,71 @@ public class Principal extends javax.swing.JFrame {
         setVisible(false);
     }//GEN-LAST:event_altaMateriaActionPerformed
 
+    private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
+        int proporcion = 40;
+        Font fuente = new Font("Arial", 1, 1 * getWidth() / proporcion);
+        consultaHorario.setFont(fuente);
+        consultaHoras.setFont(fuente);
+        consultaMaestro.setFont(fuente);
+        consultaMateria.setFont(fuente);
+        altaMaestro.setFont(fuente);
+        altaMateria.setFont(fuente);
+        leerArchivo.setFont(fuente);
+        jLabel1.setFont(fuente);
+        jLabel2.setFont(fuente);
+        jLabel3.setFont(fuente);
+    }//GEN-LAST:event_formComponentResized
+
+    private void leerArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leerArchivoActionPerformed
+        LectorTxt lector = new LectorTxt();
+        if (lector.recuperarDatos().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "ERROR AL RECUPERAR ARCHIVOS", "ERROR",
+                    JOptionPane.ERROR_MESSAGE);
+        } else {
+            ProfesorDAO dao = new ProfesorDAO();
+            try {
+                dao.deleteAll();
+                System.out.println("DATOS ELIMINADOS");
+                for (Profesor profesor : lector.getProfesor()) {
+                    if (profesor.getNumEmpleado() != null) {
+                        System.out.println("Agregado ----->" + profesor);
+                        dao.append(profesor);
+                    }
+                }
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "ERROR AL LEER BASE DE DATOS", "ERROR",
+                        JOptionPane.ERROR_MESSAGE);
+            } finally {
+                dao.cerrarSSH();
+            }
+        }
+
+    }//GEN-LAST:event_leerArchivoActionPerformed
+
     /**
+     * Ejecución del programa
+     *
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Principal().setVisible(true);
-            }
-        });
+        Principal principal = new Principal();
+        principal.setVisible(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton ConsultaHorario;
-    private javax.swing.JButton ConsultaHoras;
-    private javax.swing.JButton ConsultaMaestro;
-    private javax.swing.JButton ConsultaMateria;
     private javax.swing.JButton altaMaestro;
     private javax.swing.JButton altaMateria;
+    private javax.swing.JButton consultaHorario;
+    private javax.swing.JButton consultaHoras;
+    private javax.swing.JButton consultaMaestro;
+    private javax.swing.JButton consultaMateria;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JButton leerArchivo;
     // End of variables declaration//GEN-END:variables
 }
