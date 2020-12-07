@@ -36,10 +36,16 @@ public class ConexionBD {
     //El servidor de la conexión ssh
     private static final String SERVERSSH = "148.231.82.5";
 
-//Constructor de la clase
+    //Constructor de la clase
     public ConexionBD() {
         conexion = null;
         session = null;
+    }
+
+    /**
+     * Abre la conexión de base de SSH
+     */
+    public void abrirSSH() {
         try {
             //Crea las propiedades de la conexión
             Properties config = new Properties();
@@ -57,6 +63,16 @@ public class ConexionBD {
             session.connect();
             //Asigna el puerto de la conexión ssh a otro
             session.setPortForwardingL(5050, "localhost", 3306);
+        } catch (JSchException ex) {
+            JOptionPane.showMessageDialog(null, "ERROR DE CONEXIÓN SSH:\n" + ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+            cerrarSSH();
+        }
+    }
+    /**
+     * Se conecta con la base de datos 
+     */
+    public void abrirConexion() {
+        try {
             //Busca el driver de la base de datos
             Class.forName(DRIVER);
             //Intenta conectarse
@@ -65,12 +81,9 @@ public class ConexionBD {
             if (conexion != null) {
                 System.out.println("Conexión establecida...");
             }
-
         } catch (ClassNotFoundException | SQLException ex) {
             //Si hay error le indica porque fue 
             JOptionPane.showMessageDialog(null, "ERROR DE CONEXIÓN BASE DE DATOS:\n" + ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
-        } catch (JSchException ex) {            
-            JOptionPane.showMessageDialog(null, "ERROR DE CONEXIÓN SSH:\n" + ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
 
