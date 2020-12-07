@@ -116,6 +116,21 @@ public class LectorTxt {
         }
         return materias;
     }
+    
+    /**
+     * Despues de recuperar los datos de los txt, permite obtener los horarios
+     *
+     * @return ArrayList con horarios
+     */
+    public ArrayList<Horario> getHorario() {
+        ArrayList<Horario> horarios = new ArrayList();
+        for (CursoHorario curso : clases) {
+            if (!horarios.contains(curso.getHorario())) {
+                horarios.add(curso.getHorario());
+            }
+        }
+        return horarios;
+    }
 
     /**
      * Despues de recuperar los datos de los txt, permite obtener los maestros
@@ -255,32 +270,32 @@ public class LectorTxt {
 
                             //Por cada una de las siguientes condiciones que se cumpla, se añade un elemento al array
                             if (Pattern.matches(".*L.*", sublinea[1])) {//Si contiene la L de lunes
-                                clases.add(new CursoHorario(curso, new Horario(0, "LUNES", null,
+                                clases.add(new CursoHorario(curso, asignarHorario("LUNES",
                                         new Time(Integer.parseInt(horas[0].split(":")[0]), Integer.parseInt(horas[0].split(":")[1]), 0), //Parece mucho rollo, pero solo se separa el horario en inicio, fin, horas y minutos
                                         new Time(Integer.parseInt(horas[1].split(":")[0]), Integer.parseInt(horas[1].split(":")[1]), 0))));
                             }
                             if (Pattern.matches(".*Ma.*", sublinea[1])) {//Si contiene Ma de martes
-                                clases.add(new CursoHorario(curso, new Horario(0, "MARTES", null,
+                                clases.add(new CursoHorario(curso, asignarHorario("MARTES",
                                         new Time(Integer.parseInt(horas[0].split(":")[0]), Integer.parseInt(horas[0].split(":")[1]), 0), //Parece mucho rollo, pero solo se separa el horario en inicio, fin, horas y minutos
                                         new Time(Integer.parseInt(horas[1].split(":")[0]), Integer.parseInt(horas[1].split(":")[1]), 0))));
                             }
                             if (Pattern.matches(".*Mi.*", sublinea[1])) {//Si contiene Mi de miercoles
-                                clases.add(new CursoHorario(curso, new Horario(0, "MIERCOLES", null,
+                                clases.add(new CursoHorario(curso, asignarHorario("MIERCOLES",
                                         new Time(Integer.parseInt(horas[0].split(":")[0]), Integer.parseInt(horas[0].split(":")[1]), 0), //Parece mucho rollo, pero solo se separa el horario en inicio, fin, horas y minutos
                                         new Time(Integer.parseInt(horas[1].split(":")[0]), Integer.parseInt(horas[1].split(":")[1]), 0))));
                             }
                             if (Pattern.matches(".*J.*", sublinea[1])) {//Si contiene J de jueves
-                                clases.add(new CursoHorario(curso, new Horario(0, "JUEVES", null,
+                                clases.add(new CursoHorario(curso, asignarHorario("JUEVES",
                                         new Time(Integer.parseInt(horas[0].split(":")[0]), Integer.parseInt(horas[0].split(":")[1]), 0), //Parece mucho rollo, pero solo se separa el horario en inicio, fin, horas y minutos
                                         new Time(Integer.parseInt(horas[1].split(":")[0]), Integer.parseInt(horas[1].split(":")[1]), 0))));
                             }
                             if (Pattern.matches(".*V.*", sublinea[1])) {//Si contiene V de viernes
-                                clases.add(new CursoHorario(curso, new Horario(0, "VIERNES", null,
+                                clases.add(new CursoHorario(curso, asignarHorario("VIERNES",
                                         new Time(Integer.parseInt(horas[0].split(":")[0]), Integer.parseInt(horas[0].split(":")[1]), 0), //Parece mucho rollo, pero solo se separa el horario en inicio, fin, horas y minutos
                                         new Time(Integer.parseInt(horas[1].split(":")[0]), Integer.parseInt(horas[1].split(":")[1]), 0))));
                             }
                             if (Pattern.matches(".*S.*", sublinea[1])) {//Si contiene S de sabado
-                                clases.add(new CursoHorario(curso, new Horario(0, "SABADO", null,
+                                clases.add(new CursoHorario(curso, asignarHorario("SABADO",
                                         new Time(Integer.parseInt(horas[0].split(":")[0]), Integer.parseInt(horas[0].split(":")[1]), 0), //Parece mucho rollo, pero solo se separa el horario en inicio, fin, horas y minutos
                                         new Time(Integer.parseInt(horas[1].split(":")[0]), Integer.parseInt(horas[1].split(":")[1]), 0))));
                             }
@@ -325,32 +340,32 @@ public class LectorTxt {
 
                             //Por cada una de las siguientes condiciones que se cumpla, se añade un elemento al array
                             if (Pattern.matches(".*L.*", sublinea[1])) {//Si contiene la L de lunes
-                                clases.add(new CursoHorario(curso, new Horario(0, "LUNES", null,
+                                clases.add(new CursoHorario(curso, asignarHorario("LUNES",
                                         new Time(Integer.parseInt(horas[0].split(":")[0]), Integer.parseInt(horas[0].split(":")[1]), 0), //Parece mucho rollo, pero solo se separa el horario en inicio, fin, horas y minutos
                                         new Time(Integer.parseInt(horas[1].split(":")[0]), Integer.parseInt(horas[1].split(":")[1]), 0))));
                             }
                             if (Pattern.matches(".*Ma.*", sublinea[1])) {//Si contiene Ma de martes
-                                clases.add(new CursoHorario(curso, new Horario(0, "MARTES", null,
+                                clases.add(new CursoHorario(curso, asignarHorario("MARTES",
                                         new Time(Integer.parseInt(horas[0].split(":")[0]), Integer.parseInt(horas[0].split(":")[1]), 0), //Parece mucho rollo, pero solo se separa el horario en inicio, fin, horas y minutos
                                         new Time(Integer.parseInt(horas[1].split(":")[0]), Integer.parseInt(horas[1].split(":")[1]), 0))));
                             }
                             if (Pattern.matches(".*Mi.*", sublinea[1])) {//Si contiene Mi de miercoles
-                                clases.add(new CursoHorario(curso, new Horario(0, "MIERCOLES", null,
+                                clases.add(new CursoHorario(curso, asignarHorario("MIERCOLES",
                                         new Time(Integer.parseInt(horas[0].split(":")[0]), Integer.parseInt(horas[0].split(":")[1]), 0), //Parece mucho rollo, pero solo se separa el horario en inicio, fin, horas y minutos
                                         new Time(Integer.parseInt(horas[1].split(":")[0]), Integer.parseInt(horas[1].split(":")[1]), 0))));
                             }
                             if (Pattern.matches(".*J.*", sublinea[1])) {//Si contiene J de jueves
-                                clases.add(new CursoHorario(curso, new Horario(0, "JUEVES", null,
+                                clases.add(new CursoHorario(curso, asignarHorario("JUEVES",
                                         new Time(Integer.parseInt(horas[0].split(":")[0]), Integer.parseInt(horas[0].split(":")[1]), 0), //Parece mucho rollo, pero solo se separa el horario en inicio, fin, horas y minutos
                                         new Time(Integer.parseInt(horas[1].split(":")[0]), Integer.parseInt(horas[1].split(":")[1]), 0))));
                             }
                             if (Pattern.matches(".*V.*", sublinea[1])) {//Si contiene V de viernes
-                                clases.add(new CursoHorario(curso, new Horario(0, "VIERNES", null,
+                                clases.add(new CursoHorario(curso, asignarHorario("VIERNES",
                                         new Time(Integer.parseInt(horas[0].split(":")[0]), Integer.parseInt(horas[0].split(":")[1]), 0), //Parece mucho rollo, pero solo se separa el horario en inicio, fin, horas y minutos
                                         new Time(Integer.parseInt(horas[1].split(":")[0]), Integer.parseInt(horas[1].split(":")[1]), 0))));
                             }
                             if (Pattern.matches(".*S.*", sublinea[1])) {//Si contiene S de sabado
-                                clases.add(new CursoHorario(curso, new Horario(0, "SABADO", null,
+                                clases.add(new CursoHorario(curso, asignarHorario("SABADO",
                                         new Time(Integer.parseInt(horas[0].split(":")[0]), Integer.parseInt(horas[0].split(":")[1]), 0), //Parece mucho rollo, pero solo se separa el horario en inicio, fin, horas y minutos
                                         new Time(Integer.parseInt(horas[1].split(":")[0]), Integer.parseInt(horas[1].split(":")[1]), 0))));
                             }
@@ -382,6 +397,29 @@ public class LectorTxt {
             }
         }
         return new Profesor(null,nombre);
+    }
+    
+    /**
+     * Verifica si ya existe un horario con el mismo dia y horas, de ser asi
+     * devuelve el objeto correspondiente, en caso contrario crea un nuevo
+     * objeto
+     * 
+     * @param dia dia correspondiente
+     * @param inicio hora de inicio
+     * @param fin hora fin
+     * @return objeto correspondiente al horario
+     */
+    private Horario asignarHorario(String dia,Time inicio, Time fin){
+        for (Horario horario : getHorario()) {
+            if (horario.getDia().equals(dia) && 
+                    horario.getHrInicio().getHours()==inicio.getHours() && 
+                    horario.getHrInicio().getMinutes()==inicio.getMinutes() &&
+                    horario.getHrFin().getHours()==fin.getHours() && 
+                    horario.getHrFin().getMinutes()==fin.getMinutes()){
+                return horario;
+            }
+        }
+        return new Horario(0, dia, null, inicio, fin);
     }
 
     /**
