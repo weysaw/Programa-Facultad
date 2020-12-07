@@ -47,9 +47,17 @@ public class Materia implements Serializable {
 
     @Override
     public String toString() {
-        return "Materia{" + "claveMateria=" + claveMateria + ", nom=" + nom + ", planDeEstudio=" + planDeEstudio + '}';
+        return "Materia{" + "claveMateria=" + claveMateria + ", nom=" + nom + ", planDeEstudio=" + planDeEstudio + "}\n";
     }
-    
-    
 
+    @Override
+    public boolean equals(Object obj) {
+        Materia materia = (Materia) obj;
+        boolean esIgualClave = claveMateria == materia.getClaveMateria();
+        boolean esIgualNom = nom == null ? materia.getNom() == null : nom.equals(materia.getNom());
+        boolean esIgualPlan = planDeEstudio == null ? materia.getPlanDeEstudio() == null : planDeEstudio.equals(materia.getPlanDeEstudio());
+        return esIgualClave && esIgualNom && esIgualPlan; 
+    }
+
+    
 }
