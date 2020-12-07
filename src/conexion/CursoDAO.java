@@ -75,7 +75,7 @@ public class CursoDAO extends ConexionBD {
         ps = conexion.prepareStatement(SQL_INSERT);
         ps.setString(1, dto.getProfesor().getNumEmpleado());
         ps.setInt(2, dto.getMateria().getClaveMateria());
-        ps.setInt(3, dto.getGrupo());
+        ps.setString(3, dto.getGrupo());
         ps.setString(4, dto.getTipo());
         ps.setInt(5, dto.getHrsTC());
         ps.setInt(6, dto.getHrsAsig());
@@ -101,7 +101,7 @@ public class CursoDAO extends ConexionBD {
         ps.setInt(2, dto.getHrsAsig());
         ps.setString(3, dto.getProfesor().getNumEmpleado());
         ps.setInt(4, dto.getMateria().getClaveMateria());
-        ps.setInt(5, dto.getGrupo());
+        ps.setString(5, dto.getGrupo());
         ps.setString(6, dto.getTipo());
         //Ejecuta el comando y actualiza
         datosModificados = ps.executeUpdate() > 0;
@@ -124,7 +124,7 @@ public class CursoDAO extends ConexionBD {
         //Les asigna los valores que deben tener los ?
         ps.setString(1, dto.getProfesor().getNumEmpleado());
         ps.setInt(2, dto.getMateria().getClaveMateria());
-        ps.setInt(3, dto.getGrupo());
+        ps.setString(3, dto.getGrupo());
         ps.setString(4, dto.getTipo());
         //Ejecuta el comando y actualiza
         datosModificados = ps.executeUpdate() > 0;
@@ -164,7 +164,7 @@ public class CursoDAO extends ConexionBD {
         //Les asigna los valores que deben tener los ?
         ps.setString(1, dto.getProfesor().getNumEmpleado());
         ps.setInt(2, dto.getMateria().getClaveMateria());
-        ps.setInt(3, dto.getGrupo());
+        ps.setString(3, dto.getGrupo());
         ps.setString(4, dto.getTipo());
         //Ejecuta el comando y devuelve el resultado del comando
         rs = ps.executeQuery();
@@ -188,7 +188,7 @@ public class CursoDAO extends ConexionBD {
      */
     private Curso getObject(ResultSet rs) throws Exception {
         //Se obtienen los datos de la tabla
-        int grupo = Integer.parseInt(rs.getString(GRUPO));
+        String grupo = rs.getString(GRUPO);
         String tipo = rs.getString(TIPO);
         int hrsTc = Integer.parseInt(rs.getString(HRS_TC));
         int hrsAsig = Integer.parseInt(rs.getString(HRS_ASIG));
