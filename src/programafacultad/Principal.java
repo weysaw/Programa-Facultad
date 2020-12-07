@@ -1,6 +1,7 @@
 package programafacultad;
 
 import conexion.*;
+import java.sql.Connection;
 import java.awt.Font;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -19,12 +20,12 @@ public class Principal extends javax.swing.JFrame {
      * Constructor del principal
      */
     public Principal() {
-        initComponents();
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ex) {
             System.out.println(ex.toString());
         }
+        initComponents();
     }
 
     @SuppressWarnings("unchecked")
@@ -197,37 +198,58 @@ public class Principal extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+     * Inicia la ventana de la consulta horario y la hace visible
+     *
+     */
     private void consultaHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaHorarioActionPerformed
+        //Hace visible la consulta horario
         FrmHorario horario = new FrmHorario(this);
         horario.setVisible(true);
         setVisible(false);
     }//GEN-LAST:event_consultaHorarioActionPerformed
-
+    /**
+     * Inicia la ventana de la consulta maestro y la hace visible
+     *
+     */
     private void consultaMaestroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaMaestroActionPerformed
+        //Hace visible la consulta horario
         FrmMaestro maestro = new FrmMaestro(this);
         maestro.setVisible(true);
         setVisible(false);
     }//GEN-LAST:event_consultaMaestroActionPerformed
-
+    /**
+     * Inicia la ventana de la consulta materia y la hace visible
+     *
+     */
     private void consultaMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaMateriaActionPerformed
+        //Hace visible la consulta horario
         FrmMateria materia = new FrmMateria(this);
         materia.setVisible(true);
         setVisible(false);
     }//GEN-LAST:event_consultaMateriaActionPerformed
-
+    /**
+     * Inicia la ventana de la consulta horas y la hace visible
+     *
+     */
     private void consultaHorasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaHorasActionPerformed
+        //Hace visible la consulta horario
         FrmHoras hora = new FrmHoras(this, true);
         hora.setVisible(true);
-        setVisible(false);
     }//GEN-LAST:event_consultaHorasActionPerformed
-
+    /**
+     * Inicia la ventana de la alta maestro y la hace visible
+     */
     private void altaMaestroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_altaMaestroActionPerformed
+        //Hace visible la consulta horario
         AltaMaestro alta = new AltaMaestro(this);
         alta.setVisible(true);
         setVisible(false);
     }//GEN-LAST:event_altaMaestroActionPerformed
-
+    /**
+     * Inicia la ventana de la alta materia y la hace visible
+     *
+     */
     private void altaMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_altaMateriaActionPerformed
         AltaMateria alta = new AltaMateria(this);
         alta.setVisible(true);
@@ -235,8 +257,11 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_altaMateriaActionPerformed
 
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
+        //Sirve para tener una proporción de las letras
         int proporcion = 40;
+        //Crea la fuente
         Font fuente = new Font("Arial", 1, 1 * getWidth() / proporcion);
+        //Asigna el tamaño de letra a cada boton y label
         consultaHorario.setFont(fuente);
         consultaHoras.setFont(fuente);
         consultaMaestro.setFont(fuente);
@@ -250,87 +275,130 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_formComponentResized
 
     private void leerArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leerArchivoActionPerformed
+        //Crear el lector de texto
         LectorTxt lector = new LectorTxt();
+        //Recupera los datos del archivo y si esta vacio le marca error
         if (lector.recuperarDatos().isEmpty()) {
+            //Muestra los mensajes de error
             JOptionPane.showMessageDialog(this, "ERROR AL RECUPERAR ARCHIVOS", "ERROR",
                     JOptionPane.ERROR_MESSAGE);
+            //Si el archivo no esta vacio lee los datos
         } else {
+            //Crear el objeto de profesor
             ProfesorDAO profesorDAO = new ProfesorDAO();
+            //Se crea el objeto que comunica con la tabla
+            MateriaDAO materiaDAO = new MateriaDAO();
+            //Se crea el objeto que comunica con la tabla
+            HorarioDAO horarioDAO = new HorarioDAO();
+            //Se crea el objeto que comunica con la tabla
+            CursoHorarioDAO cursoHorarioDAO = new CursoHorarioDAO();
+            //Abre la conexión ssh
+            profesorDAO.abrirSSH();
+            //Abre la conexión a la base de datos
+            profesorDAO.abrirConexion();
             try {
+                Connection conexion = profesorDAO.getConexionBD();
+                //Borra todos los elementos de la tabla
                 profesorDAO.deleteAll();
                 System.out.println("DATOS ELIMINADOS PROFESOR");
+                //Recorre todo el arreglo del archivo que manda
                 for (Profesor profesor : lector.getProfesor()) {
+                    //Ingresa la información a la base de datos 
                     profesorDAO.append(profesor);
-                    System.out.println("Agregado ---> " + profesor);
+                    //System.out.println("Agregado ---> " + profesor);
+                }
+                //Abre la conexión a la base de datos
+                materiaDAO.setConexion(conexion);
+                try {
+                    //Borra todos los elementos de la tabla
+                    materiaDAO.deleteAll();
+                    System.out.println("DATOS ELIMINADOS MATERIA");
+                    //Recorre todo el arreglo del archivo que manda
+                    for (Materia materia : lector.getMateria()) {
+                        //Ingresa la información a la base de datos 
+                        materiaDAO.append(materia);
+                        //System.out.println("Agregado ---> " + materia);
+                    }
+                    //Abre la conexión a la base de datos
+                    //horarioDAO.abrirConexion();
+                    horarioDAO.setConexion(conexion);
+                    try {
+                        //Borra todos los elementos de la tabla
+                        horarioDAO.deleteAll();
+                        System.out.println("DATOS ELIMINADOS HORARIOS");
+                        //Recorre todo el arreglo del archivo que manda
+                        for (Horario horario : lector.getHorario()) {
+                            //Ingresa la información a la base de datos 
+                            horarioDAO.append(horario);
+                            //System.out.println("Agregado ---> " + horario);
+                        }
+                        //Se crea el objeto que comunica con la tabla
+                        CursoDAO cursoDAO = new CursoDAO();
+                        //Abre la conexión a la base de datos
+                        //cursoDAO.abrirConexion();
+                        cursoDAO.setConexion(conexion);
+                        try {
+                            //Borra todos los elementos de la tabla
+                            cursoDAO.deleteAll();
+                            System.out.println("DATOS ELIMINADOS CURSO");
+                            //Recorre todo el arreglo del archivo que manda
+                            for (Curso curso : lector.getCurso()) {
+                                //Ingresa la información a la base de datos 
+                                cursoDAO.append(curso);
+                                //System.out.println("Agregado ---> " + curso);
+                            }
+                            //Abre la conexión a la base de datos
+                            //horarioDAO.abrirConexion();
+                            horarioDAO.setConexion(conexion);
+                            //Abre la conexión a la base de datos
+                            //cursoHorarioDAO.abrirConexion();
+                            cursoHorarioDAO.setConexion(conexion);
+                            try {
+                                //Borra todos los elementos de la tabla
+                                cursoHorarioDAO.deleteAll();
+                                System.out.println("DATOS ELIMINADOS CURSO_HORARIO");
+                                //Recorre todo el arreglo del archivo que manda
+                                for (CursoHorario cursoHorario : lector.getCursoHorario()) {
+                                    cursoHorario.setHorario(horarioDAO.read(cursoHorario.getHorario()));
+                                    //Ingresa la información a la base de datos 
+                                    cursoHorarioDAO.append(cursoHorario);
+                                    //System.out.println("Agregado ---> " + cursoHorario);
+                                }
+                            } catch (Exception e) {
+                                //Muestra los mensajes de error
+                                System.out.println(e.toString());
+                                JOptionPane.showMessageDialog(this, "ERROR CURSO_HORARIO\n" + e.getMessage(), "ERROR",
+                                        JOptionPane.ERROR_MESSAGE);
+                            }
+                            JOptionPane.showMessageDialog(this, "SE HAN AGREGADO LOS DATOS", "DATOS AGREGADOS",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                        } catch (Exception e) {
+                            //Muestra los mensajes de error
+                            System.out.println(e.toString());
+                            JOptionPane.showMessageDialog(this, "ERROR CURSO BD\n" + e.getMessage(), "ERROR",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
+                    } catch (Exception e) {
+                        //Muestra los mensajes de error
+                        System.out.println(e.toString());
+                        JOptionPane.showMessageDialog(this, "ERROR LEER BASE DE DATOS\n" + e.getMessage(), "ERROR",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (Exception e) {
+                    //Muestra los mensajes de error
+                    System.out.println(e.toString());
+                    JOptionPane.showMessageDialog(this, "ERROR LEER BASE DE DATOS\n" + e.getMessage(), "ERROR",
+                            JOptionPane.ERROR_MESSAGE);
                 }
             } catch (Exception e) {
+                //Muestra los mensajes de error
+                System.out.println(e.toString());
                 JOptionPane.showMessageDialog(this, "ERROR BASE DE DATOS\n" + e.getMessage(), "ERROR",
                         JOptionPane.ERROR_MESSAGE);
             } finally {
+                //Cierra la conexion con el SSH
                 profesorDAO.cerrarSSH();
             }
-
-            MateriaDAO materiaDAO = new MateriaDAO();
-            try {
-                materiaDAO.deleteAll();
-                System.out.println("DATOS ELIMINADOS MATERIA");
-                for (Materia materia : lector.getMateria()) {
-                    materiaDAO.append(materia);
-                    System.out.println("Agregado ---> " + materia);
-                }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "ERROR LEER BASE DE DATOS\n" + e.getMessage(), "ERROR",
-                        JOptionPane.ERROR_MESSAGE);
-            } finally {
-                materiaDAO.cerrarSSH();
-            }
-
-            HorarioDAO horarioDAO = new HorarioDAO();
-            try {
-                horarioDAO.deleteAll();
-                System.out.println("DATOS ELIMINADOS HORARIOS");
-                for (Horario horario : lector.getHorario()) {
-                    horarioDAO.append(horario);
-                    System.out.println("Agregado ---> " + horario);
-                }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "ERROR LEER BASE DE DATOS\n" + e.getMessage(), "ERROR",
-                        JOptionPane.ERROR_MESSAGE);
-            } finally {
-                horarioDAO.cerrarSSH();
-            }
-
-            CursoDAO cursoDAO = new CursoDAO();
-            try {
-                cursoDAO.deleteAll();
-                System.out.println("DATOS ELIMINADOS CURSO");
-                for (Curso curso : lector.getCurso()) {
-                    System.out.println("Agregado ---> " + curso);
-                    cursoDAO.append(curso);
-                }
-            } catch (Exception e) {
-                System.out.println("Repetido");
-                JOptionPane.showMessageDialog(this, "ERROR CURSO BD\n" + e.getMessage(), "ERROR",
-                        JOptionPane.ERROR_MESSAGE);
-            } finally {
-                cursoDAO.cerrarSSH();
-            }
-            CursoHorarioDAO cursoHorarioDAO = new CursoHorarioDAO();
-            try {
-                cursoHorarioDAO.deleteAll();
-                System.out.println("DATOS ELIMINADOS CURSO_HORARIO");
-                for (CursoHorario cursoHorario : lector.getCursoHorario()) {
-                    cursoHorarioDAO.append(cursoHorario);
-                    System.out.println("Agregado ---> " + cursoHorario);
-                }
-            } catch (Exception e) {
-                
-                JOptionPane.showMessageDialog(this, "ERROR CURSO_HORARIO\n" + e.getMessage(), "ERROR",
-                        JOptionPane.ERROR_MESSAGE);
-            } finally {
-                cursoHorarioDAO.cerrarSSH();
-            }
-
         }
     }//GEN-LAST:event_leerArchivoActionPerformed
 
