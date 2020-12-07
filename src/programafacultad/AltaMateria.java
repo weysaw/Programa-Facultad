@@ -156,6 +156,8 @@ public class AltaMateria extends javax.swing.JFrame {
 
     private void registrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarActionPerformed
         MateriaDAO matDAO = new MateriaDAO();
+        matDAO.abrirSSH();
+        matDAO.abrirConexion();
         //Agrega la materia agarrando sus datos
         try {
             String nomMateria, planDeEstudios;
