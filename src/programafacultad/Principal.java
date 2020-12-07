@@ -1,9 +1,8 @@
 package programafacultad;
 
-import conexion.CursoHorario;
-import conexion.Profesor;
-import conexion.ProfesorDAO;
+import conexion.*;
 import java.awt.Font;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -96,7 +95,7 @@ public class Principal extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel2.setText("Dar de alta");
 
-        altaMaestro.setText("Alta Maestro");
+        altaMaestro.setText("Alta Docente");
         altaMaestro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 altaMaestroActionPerformed(evt);
@@ -115,7 +114,7 @@ public class Principal extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel3.setText("Leer Archivos");
 
-        leerArchivo.setText("Leer Profesores");
+        leerArchivo.setText("Leer Cursos, Horarios y Docentes");
         leerArchivo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 leerArchivoActionPerformed(evt);
@@ -133,8 +132,12 @@ public class Principal extends javax.swing.JFrame {
                         .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addContainerGap(396, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(leerArchivo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(consultaHorario, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
                                     .addComponent(consultaHoras, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -142,17 +145,14 @@ public class Principal extends javax.swing.JFrame {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(consultaMaestro, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
                                     .addComponent(consultaMateria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addComponent(jLabel1)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(altaMateria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(71, 71, 71)
                                 .addComponent(altaMaestro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGap(58, 58, 58))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(leerArchivo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(322, 322, 322))))
+                        .addGap(58, 58, 58))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -256,25 +256,84 @@ public class Principal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "ERROR AL RECUPERAR ARCHIVOS", "ERROR",
                     JOptionPane.ERROR_MESSAGE);
         } else {
-            ProfesorDAO dao = new ProfesorDAO();
-            try {
-                dao.deleteAll();
-                System.out.println("DATOS ELIMINADOS");
-                for (Profesor profesor : lector.getProfesor()) {
-                    if (profesor.getNumEmpleado() != null) {
-                        System.out.println("Agregado ----->" + profesor);
-                        dao.append(profesor);
-                    }
-                }
+            ArrayList<CursoHorario> cursosHorarios = lector.getCursoHorario();
+            ArrayList<Horario> horarios = new ArrayList();
 
+            ProfesorDAO profesorDAO = new ProfesorDAO();
+            try {
+                profesorDAO.deleteAll();
+                System.out.println("DATOS ELIMINADOS PROFESOR");
+                for (Profesor profesor : lector.getProfesor()) {
+                    profesorDAO.append(profesor);
+                    System.out.println("Agregado ---> " + profesor);
+                }
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "ERROR AL LEER BASE DE DATOS", "ERROR",
+                JOptionPane.showMessageDialog(this, "ERROR BASE DE DATOS\n" + e.getMessage(), "ERROR",
                         JOptionPane.ERROR_MESSAGE);
             } finally {
-                dao.cerrarSSH();
+                profesorDAO.cerrarSSH();
             }
-        }
 
+            MateriaDAO materiaDAO = new MateriaDAO();
+            try {
+                materiaDAO.deleteAll();
+                System.out.println("DATOS ELIMINADOS MATERIA");
+                for (Materia materia : lector.getMateria()) {
+                    materiaDAO.append(materia);
+                    System.out.println("Agregado ---> " + materia);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "ERROR LEER BASE DE DATOS\n" + e.getMessage(), "ERROR",
+                        JOptionPane.ERROR_MESSAGE);
+            } finally {
+                materiaDAO.cerrarSSH();
+            }
+
+//            HorarioDAO horarioDAO = new HorarioDAO();
+//            try {
+//                horarioDAO.deleteAll();
+//                System.out.println("DATOS ELIMINADOS HORARIOS");
+//                for (Horario horario : horarios) {
+//                    horarioDAO.append(horario);
+//                    System.out.println("Agregado ---> " + horario);
+//                }
+//            } catch (Exception e) {
+//                JOptionPane.showMessageDialog(this, "ERROR LEER BASE DE DATOS\n" + e.getMessage(), "ERROR",
+//                        JOptionPane.ERROR_MESSAGE);
+//            } finally {
+//                horarioDAO.cerrarSSH();
+//            }
+
+            CursoDAO cursoDAO = new CursoDAO();
+            try {
+                cursoDAO.deleteAll();
+                System.out.println("DATOS ELIMINADOS CURSO");
+                for (Curso curso : lector.getCurso()) {
+                    cursoDAO.append(curso);
+                    System.out.println("Agregado ---> " + curso);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "ERROR LEER BASE DE DATOS\n" + e.getMessage(), "ERROR",
+                        JOptionPane.ERROR_MESSAGE);
+            } finally {
+                cursoDAO.cerrarSSH();
+            }
+//            CursoHorarioDAO cursoHorarioDAO = new CursoHorarioDAO();
+//            try {
+//                cursoHorarioDAO.deleteAll();
+//                System.out.println("DATOS ELIMINADOS CURSO_HORARIO");
+//                for (CursoHorario cursoHorario : cursosHorarios) {
+//                    cursoHorarioDAO.append(cursoHorario);
+//                    System.out.println("Agregado ---> " + cursoHorario);
+//                }
+//            } catch (Exception e) {
+//                JOptionPane.showMessageDialog(this, "ERROR LEER BASE DE DATOS\n" + e.getMessage(), "ERROR",
+//                        JOptionPane.ERROR_MESSAGE);
+//            } finally {
+//                cursoHorarioDAO.cerrarSSH();
+//            }
+
+        }
     }//GEN-LAST:event_leerArchivoActionPerformed
 
     /**

@@ -107,7 +107,7 @@ public class LectorTxt {
      *
      * @return ArrayList con materias
      */
-    public ArrayList<Materia> getMatera() {
+    public ArrayList<Materia> getMateria() {
         ArrayList<Materia> materias = new ArrayList();
         for (Curso curso : getCurso()) {
             if (!materias.contains(curso.getMateria())) {
