@@ -149,6 +149,8 @@ public class AltaMaestro extends javax.swing.JFrame {
     private void registrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarActionPerformed
         //Se crea el objeto se registra
         ProfesorDAO profeDAO = new ProfesorDAO();
+        profeDAO.abrirSSH();
+        profeDAO.abrirConexion();
         //Agrega el profesor agarrando sus datos
         try {
             Profesor profesor = new Profesor(nombreDocente.getText(), numeroEmpleado.getText());

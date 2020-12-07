@@ -77,8 +77,5 @@ public class Horario implements Serializable {
     @Override
     public String toString() {
         return "Horario{" + "claveHorario=" + claveHorario + ", dia=" + dia + ", turno=" + turno + ", hrInicio=" + hrInicio + ", hrFin=" + hrFin + "}\n";
-    }
-    
-    
-    
+    }  
 }
