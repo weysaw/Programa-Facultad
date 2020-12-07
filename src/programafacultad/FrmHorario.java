@@ -25,16 +25,7 @@ public class FrmHorario extends javax.swing.JFrame {
         initComponents();
         this.principal = principal;
         setLocationRelativeTo(principal);
-        CursoHorarioDAO dao = new CursoHorarioDAO();
-        cursos = null;
-        try {
-            cursos = dao.readAll();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "No se pudo leer la base de datos\n" + e.getMessage(), 
-                    "ERROR", JOptionPane.ERROR_MESSAGE);
-        } finally {
-            dao.cerrarSSH();
-        }
+
     }
 
     @SuppressWarnings("unchecked")
@@ -76,6 +67,7 @@ public class FrmHorario extends javax.swing.JFrame {
         semestre.setText("Semestre Actual: ");
 
         datosHorarios.setAutoCreateRowSorter(true);
+        datosHorarios.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         datosHorarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -95,6 +87,7 @@ public class FrmHorario extends javax.swing.JFrame {
         jLabel5.setText("Tipo:");
 
         dia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado" }));
+        dia.setSelectedIndex(-1);
         dia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 diaActionPerformed(evt);
@@ -109,6 +102,7 @@ public class FrmHorario extends javax.swing.JFrame {
         });
 
         tipoClase.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Clase", "Taller", "Laboratorio" }));
+        tipoClase.setSelectedIndex(-1);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -196,29 +190,40 @@ public class FrmHorario extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void horasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_horasActionPerformed
-        
+
     }//GEN-LAST:event_horasActionPerformed
 
     private void diaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_diaActionPerformed
-        String docente, materia, nomDia, grupo; 
-        nomDia = dia.getSelectedItem().toString();
+        String docente, materia, nomDia, grupo;
+        nomDia = dia.getSelectedItem().toString().toUpperCase();
         //Se utiliza para agregarlo al combobox
         HashSet<Integer> datos = new HashSet();
-        removerFilas();
-        for (CursoHorario curso : cursos) {
-            if (curso.getHorario().getDia().equalsIgnoreCase(nomDia)) {
+        CursoHorarioDAO dao = new CursoHorarioDAO();
+        cursos = null;
+        dao.abrirSSH();
+        dao.abrirConexion();
+        try {
+            removerFilas();
+            cursos = dao.readDia(nomDia);
+            for (CursoHorario curso : cursos) {
                 docente = curso.getCurso().getProfesor().getNom();//Esto se debe de hacer con quearys
                 grupo = curso.getCurso().getGrupo();
                 materia = curso.getCurso().getMateria().getNom();
                 agregarFila(docente, grupo, materia);
                 datos.add(curso.getHorario().getHrInicio().getHours());
             }
+            ArrayList<Integer> ordenados = new ArrayList(datos);
+            Collections.sort(ordenados);
+            for (int ordenado : ordenados) {
+                horas.addItem(ordenado + ":00");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "No se pudo leer la base de datos\n" + e.getMessage(),
+                    "ERROR", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            dao.cerrarSSH();
         }
-        ArrayList<Integer> ordenados = new ArrayList(datos);
-        Collections.sort(ordenados);
-        for (int ordenado : ordenados) 
-            horas.addItem(ordenado + ":00");
-        
+
     }//GEN-LAST:event_diaActionPerformed
     /**
      * Cierra la ventana y muestra la principal
