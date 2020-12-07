@@ -1,7 +1,6 @@
 package programafacultad;
 
-import conexion.CursoHorario;
-import conexion.CursoHorarioDAO;
+import conexion.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.table.*;
@@ -201,9 +200,9 @@ public class FrmHorario extends javax.swing.JFrame {
     }//GEN-LAST:event_horasActionPerformed
 
     private void diaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_diaActionPerformed
-        String docente, materia, nomDia;
-        int grupo;
+        String docente, materia, nomDia, grupo; 
         nomDia = dia.getSelectedItem().toString();
+        //Se utiliza para agregarlo al combobox
         HashSet<Integer> datos = new HashSet();
         removerFilas();
         for (CursoHorario curso : cursos) {
@@ -236,9 +235,9 @@ public class FrmHorario extends javax.swing.JFrame {
      * @param grupo Es el grupo de la materia
      * @param materia Es el nombre de la materia que se agrega
      */
-    private void agregarFila(String docente, int grupo, String materia) {
+    private void agregarFila(String docente, String grupo, String materia) {
         DefaultTableModel modelo = (DefaultTableModel) datosHorarios.getModel();
-        modelo.addRow(new Object[]{docente, (grupo < 100) ? "0"+grupo:grupo, materia});
+        modelo.addRow(new Object[]{docente, grupo, materia});
     }
 
     /**
