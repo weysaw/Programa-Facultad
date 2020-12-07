@@ -13,12 +13,12 @@ public class Curso implements Serializable {
     
     private Profesor profesor;
     private Materia materia;
-    private int grupo;
+    private String grupo;
     private String tipo;
     private int hrsTC;
     private int hrsAsig;
 
-    public Curso(Profesor profesor, Materia materia, int grupo, String tipo, int hrsTC, int hrsAsig) {
+    public Curso(Profesor profesor, Materia materia, String grupo, String tipo, int hrsTC, int hrsAsig) {
         this.profesor = profesor;
         this.materia = materia;
         this.grupo = grupo;
@@ -43,11 +43,11 @@ public class Curso implements Serializable {
         this.materia = materia;
     }
 
-    public int getGrupo() {
+    public String getGrupo() {
         return grupo;
     }
 
-    public void setGrupo(int grupo) {
+    public void setGrupo(String grupo) {
         this.grupo = grupo;
     }
 
