@@ -73,7 +73,7 @@ public class CursoHorarioDAO extends ConexionBD {
         ps = conexion.prepareStatement(SQL_INSERT);
         ps.setString(1, dto.getCurso().getProfesor().getNumEmpleado());
         ps.setInt(2, dto.getCurso().getMateria().getClaveMateria());
-        ps.setInt(3, dto.getCurso().getGrupo());
+        ps.setString(3, dto.getCurso().getGrupo());
         ps.setString(4, dto.getCurso().getTipo());
         ps.setInt(5, dto.getHorario().getClaveHorario());
         //Ejecuta el comando y acutaliza
@@ -96,7 +96,7 @@ public class CursoHorarioDAO extends ConexionBD {
         //Les asigna los valores que deben tener los ?
         ps.setString(1, dto.getCurso().getProfesor().getNumEmpleado());
         ps.setInt(2, dto.getCurso().getMateria().getClaveMateria());
-        ps.setInt(3, dto.getCurso().getGrupo());
+        ps.setString(3, dto.getCurso().getGrupo());
         ps.setString(4, dto.getCurso().getTipo());
         ps.setInt(5, dto.getHorario().getClaveHorario());
         //Ejecuta el comando y actualiza
@@ -138,7 +138,7 @@ public class CursoHorarioDAO extends ConexionBD {
         //Les asigna los valores que deben tener los ?
         ps.setString(1, dto.getCurso().getProfesor().getNumEmpleado());
         ps.setInt(2, dto.getCurso().getMateria().getClaveMateria());
-        ps.setInt(3, dto.getCurso().getGrupo());
+        ps.setString(3, dto.getCurso().getGrupo());
         ps.setString(4, dto.getCurso().getTipo());
         ps.setInt(5, dto.getHorario().getClaveHorario());
         //Ejecuta el comando y devuelve el resultado del comando
@@ -165,7 +165,7 @@ public class CursoHorarioDAO extends ConexionBD {
         //Se obtienen los datos de la tabla
         String numEmpleado = rs.getString(NUM_EMPLEADO);
         int claveMateria = Integer.parseInt(rs.getString(CLAVE_MATERIA));
-        int grupo = Integer.parseInt(rs.getString(GRUPO));
+        String grupo = rs.getString(GRUPO);
         String tipo = rs.getString(TIPO);
         int claveHorario = Integer.parseInt(rs.getString(CLAVE_HORARIO));
 

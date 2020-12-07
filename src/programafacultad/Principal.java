@@ -2,7 +2,6 @@ package programafacultad;
 
 import conexion.*;
 import java.awt.Font;
-import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -256,9 +255,6 @@ public class Principal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "ERROR AL RECUPERAR ARCHIVOS", "ERROR",
                     JOptionPane.ERROR_MESSAGE);
         } else {
-            ArrayList<CursoHorario> cursosHorarios = lector.getCursoHorario();
-            ArrayList<Horario> horarios = new ArrayList();
-
             ProfesorDAO profesorDAO = new ProfesorDAO();
             try {
                 profesorDAO.deleteAll();
@@ -289,49 +285,51 @@ public class Principal extends javax.swing.JFrame {
                 materiaDAO.cerrarSSH();
             }
 
-//            HorarioDAO horarioDAO = new HorarioDAO();
-//            try {
-//                horarioDAO.deleteAll();
-//                System.out.println("DATOS ELIMINADOS HORARIOS");
-//                for (Horario horario : horarios) {
-//                    horarioDAO.append(horario);
-//                    System.out.println("Agregado ---> " + horario);
-//                }
-//            } catch (Exception e) {
-//                JOptionPane.showMessageDialog(this, "ERROR LEER BASE DE DATOS\n" + e.getMessage(), "ERROR",
-//                        JOptionPane.ERROR_MESSAGE);
-//            } finally {
-//                horarioDAO.cerrarSSH();
-//            }
+            HorarioDAO horarioDAO = new HorarioDAO();
+            try {
+                horarioDAO.deleteAll();
+                System.out.println("DATOS ELIMINADOS HORARIOS");
+                for (Horario horario : lector.getHorario()) {
+                    horarioDAO.append(horario);
+                    System.out.println("Agregado ---> " + horario);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "ERROR LEER BASE DE DATOS\n" + e.getMessage(), "ERROR",
+                        JOptionPane.ERROR_MESSAGE);
+            } finally {
+                horarioDAO.cerrarSSH();
+            }
 
             CursoDAO cursoDAO = new CursoDAO();
             try {
                 cursoDAO.deleteAll();
                 System.out.println("DATOS ELIMINADOS CURSO");
                 for (Curso curso : lector.getCurso()) {
-                    cursoDAO.append(curso);
                     System.out.println("Agregado ---> " + curso);
+                    cursoDAO.append(curso);
                 }
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "ERROR LEER BASE DE DATOS\n" + e.getMessage(), "ERROR",
+                System.out.println("Repetido");
+                JOptionPane.showMessageDialog(this, "ERROR CURSO BD\n" + e.getMessage(), "ERROR",
                         JOptionPane.ERROR_MESSAGE);
             } finally {
                 cursoDAO.cerrarSSH();
             }
-//            CursoHorarioDAO cursoHorarioDAO = new CursoHorarioDAO();
-//            try {
-//                cursoHorarioDAO.deleteAll();
-//                System.out.println("DATOS ELIMINADOS CURSO_HORARIO");
-//                for (CursoHorario cursoHorario : cursosHorarios) {
-//                    cursoHorarioDAO.append(cursoHorario);
-//                    System.out.println("Agregado ---> " + cursoHorario);
-//                }
-//            } catch (Exception e) {
-//                JOptionPane.showMessageDialog(this, "ERROR LEER BASE DE DATOS\n" + e.getMessage(), "ERROR",
-//                        JOptionPane.ERROR_MESSAGE);
-//            } finally {
-//                cursoHorarioDAO.cerrarSSH();
-//            }
+            CursoHorarioDAO cursoHorarioDAO = new CursoHorarioDAO();
+            try {
+                cursoHorarioDAO.deleteAll();
+                System.out.println("DATOS ELIMINADOS CURSO_HORARIO");
+                for (CursoHorario cursoHorario : lector.getCursoHorario()) {
+                    cursoHorarioDAO.append(cursoHorario);
+                    System.out.println("Agregado ---> " + cursoHorario);
+                }
+            } catch (Exception e) {
+                
+                JOptionPane.showMessageDialog(this, "ERROR CURSO_HORARIO\n" + e.getMessage(), "ERROR",
+                        JOptionPane.ERROR_MESSAGE);
+            } finally {
+                cursoHorarioDAO.cerrarSSH();
+            }
 
         }
     }//GEN-LAST:event_leerArchivoActionPerformed
