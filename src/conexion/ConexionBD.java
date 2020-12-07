@@ -92,10 +92,19 @@ public class ConexionBD {
      *
      * @return Devuelve la conexión
      */
-    public ConexionBD getConexionBD() {
-        return (ConexionBD) conexion;
+    public Connection getConexionBD() {
+        return  conexion;
+    }
+    /**
+     * Se indica la conexión 
+     * 
+     * @param conexion Es la conexion que se indica
+     */
+    public void setConexion(Connection conexion) {
+        this.conexion = conexion;
     }
 
+    
     /**
      * Cierra la conexión de comandos de mysql
      *
