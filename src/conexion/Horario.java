@@ -12,8 +12,7 @@ import java.sql.Time;
  */
 public class Horario implements Serializable {
     
-    //Deprecated
-    private int claveHorario;//No borrar porque se quiebra, se debe optimizar
+    private int claveHorario;
     private String dia;
     private String turno;
     private Time hrInicio;
@@ -23,6 +22,14 @@ public class Horario implements Serializable {
         this.claveHorario = claveHorario;
         this.dia = dia;
         this.turno = turno;
+        this.hrInicio = hrInicio;
+        this.hrFin = hrFin;
+    }
+
+    public Horario(String dia, Time hrInicio, Time hrFin) {
+        claveHorario = 0;
+        turno = null;
+        this.dia = dia;
         this.hrInicio = hrInicio;
         this.hrFin = hrFin;
     }
@@ -69,7 +76,7 @@ public class Horario implements Serializable {
 
     @Override
     public String toString() {
-        return "Horario{" + "claveHorario=" + claveHorario + ", dia=" + dia + ", turno=" + turno + ", hrInicio=" + hrInicio + ", hrFin=" + hrFin + '}';
+        return "Horario{" + "claveHorario=" + claveHorario + ", dia=" + dia + ", turno=" + turno + ", hrInicio=" + hrInicio + ", hrFin=" + hrFin + "}\n";
     }
     
     

@@ -33,7 +33,7 @@ public class Profesor {
 
     @Override
     public String toString() {
-        return "Profesor{" + "numEmpleado=" + numEmpleado + ", nom=" + nom + '}';
+        return "Profesor{" + "numEmpleado=" + numEmpleado + ", nom=" + nom + "}\n";
     }
     
     
