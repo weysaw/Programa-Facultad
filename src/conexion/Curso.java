@@ -77,7 +77,7 @@ public class Curso implements Serializable {
 
     @Override
     public String toString() {
-        return "Curso{" + "profesor=" + profesor + ", materia=" + materia + ", grupo=" + grupo + ", tipo=" + tipo + ", hrsTC=" + hrsTC + ", hrsAsig=" + hrsAsig + '}';
+        return "Curso{" + "profesor=" + profesor + ", materia=" + materia + ", grupo=" + grupo + ", tipo=" + tipo + ", hrsTC=" + hrsTC + ", hrsAsig=" + hrsAsig + "\n}";
     }
     
     
