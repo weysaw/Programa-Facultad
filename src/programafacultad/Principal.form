@@ -28,9 +28,6 @@
     <SyntheticProperty name="generateSize" type="boolean" value="false"/>
     <SyntheticProperty name="generateCenter" type="boolean" value="true"/>
   </SyntheticProperties>
-  <Events>
-    <EventHandler event="componentResized" listener="java.awt.event.ComponentListener" parameters="java.awt.event.ComponentEvent" handler="formComponentResized"/>
-  </Events>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
@@ -181,7 +178,7 @@
                               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
-                              <Component id="jSeparator1" pref="315" max="32767" attributes="0"/>
+                              <Component id="jSeparator1" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -311,6 +308,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Modificar Docente"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="modificarDocenteActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="modificarMateria">
               <Properties>
@@ -324,6 +324,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Modificar Curso"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="modificarCursoActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

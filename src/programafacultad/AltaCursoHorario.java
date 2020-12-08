@@ -19,7 +19,7 @@ import java.sql.Time;
  * @author Leslie Vidal, Ornelas Munguía Axel Leonardo
  * @version 07.12.2020
  */
-public class altaCursoHorario extends javax.swing.JFrame {
+public class AltaCursoHorario extends javax.swing.JFrame {
 
     private final Principal principal;
     private ArrayList<Materia> materiaDAO;
@@ -30,7 +30,7 @@ public class altaCursoHorario extends javax.swing.JFrame {
     /**
      * Constructor de la clase
      */
-    public altaCursoHorario(Principal principal) {
+    public AltaCursoHorario(Principal principal) {
         initComponents();
         this.principal = principal;
         setLocationRelativeTo(principal);
@@ -70,7 +70,7 @@ public class altaCursoHorario extends javax.swing.JFrame {
                 materias.addItem(materiaDAO.get(i).getClaveMateria() + " " + materiaDAO.get(i).getNom());
             }
         } catch (Exception ex) {
-            Logger.getLogger(altaCursoHorario.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AltaCursoHorario.class.getName()).log(Level.SEVERE, null, ex);
         } finally { //Cierra el ssh
             materia.cerrarSSH();
         }
@@ -84,7 +84,7 @@ public class altaCursoHorario extends javax.swing.JFrame {
                 docentes.addItem(profeDAO.get(i).getNumEmpleado() + " " + profeDAO.get(i).getNom());
             }
         } catch (Exception ex) {
-            Logger.getLogger(altaCursoHorario.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AltaCursoHorario.class.getName()).log(Level.SEVERE, null, ex);
         } finally { //Cierra el ssh
             profesor.cerrarSSH();
         }
@@ -332,7 +332,7 @@ public class altaCursoHorario extends javax.swing.JFrame {
         finViernes = new javax.swing.JComboBox<>();
         finSabado = new javax.swing.JComboBox<>();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
