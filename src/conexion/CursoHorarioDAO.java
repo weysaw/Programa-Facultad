@@ -66,14 +66,15 @@ public class CursoHorarioDAO extends ConexionBD {
      * @return El arreglo de objetos
      * @throws Exception Devuelve error
      */
-    public ArrayList<CursoHorario> readDia(String dia) throws Exception {
+    public ArrayList<CursoHorario> readDiaHoraClase(String dia, String hora, String clase) throws Exception {
         PreparedStatement ps = null;
         ResultSet rs = null;
         //Se utilza para almacenar los objetos
         ArrayList<CursoHorario> result = new ArrayList();
         //Manda al comando
-        ps = conexion.prepareStatement("SELECT*FROM "+ TABLA 
-                + " WHERE claveHorario IN (SELECT claveHorario FROM HORARIO WHERE dia = '"+ dia +"');");
+        ps = conexion.prepareStatement("SELECT*FROM " + TABLA
+                + " WHERE claveHorario IN (SELECT claveHorario FROM HORARIO WHERE dia = " + dia
+                + " AND hrInicio = " + hora + ") AND tipo = "+ clase +";");
         //Ejecuta el comando y devuelve el resultado del comando
         rs = ps.executeQuery();
         //Recorre por todos los resultados
