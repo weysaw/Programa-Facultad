@@ -1,23 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package programafacultad;
 
 import conexion.*;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import java.sql.Time;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 
 /**
  * Da de alta los cursos y los usuarios
  *
  * @author Leslie Vidal, Ornelas Munguía Axel Leonardo
- * @version 07.12.2020
+ * @version 08.12.2020
  */
 public class AltaCursoHorario extends javax.swing.JFrame {
 
@@ -43,7 +38,7 @@ public class AltaCursoHorario extends javax.swing.JFrame {
     /**
      * Método para bloquear los comboBox de las horas
      */
-    public void bloqueo() {
+    private void bloqueo() {
         inicioLunes.setEnabled(false);
         inicioMartes.setEnabled(false);
         inicioMiercoles.setEnabled(false);
@@ -60,232 +55,96 @@ public class AltaCursoHorario extends javax.swing.JFrame {
 
     /* Método que trae la información de las materias y docentes para
        insertarla en los comboBox correspondientes*/
-    public void informacion() {
-        MateriaDAO materia = new MateriaDAO();
-        materia.abrirSSH();
-        materia.abrirConexion();
-        try {
-            materiaDAO = materia.readAll();
-            for (int i = 0; i < materiaDAO.size(); i++) {
-                materias.addItem(materiaDAO.get(i).getClaveMateria() + " " + materiaDAO.get(i).getNom());
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(AltaCursoHorario.class.getName()).log(Level.SEVERE, null, ex);
-        } finally { //Cierra el ssh
-            materia.cerrarSSH();
-        }
-
+    private void informacion() {
+        MateriaDAO materiaConexion = new MateriaDAO();
         ProfesorDAO profesor = new ProfesorDAO();
-        profesor.abrirSSH();
-        profesor.abrirConexion();
+        //Se abren las conexiones
+        materiaConexion.abrirSSH();
+        materiaConexion.abrirConexion();
         try {
-            profeDAO = profesor.readAll();
-            for (int i = 0; i < profeDAO.size(); i++) {
-                docentes.addItem(profeDAO.get(i).getNumEmpleado() + " " + profeDAO.get(i).getNom());
+            materiaDAO = materiaConexion.readAll();
+            for (Materia materia1 : materiaDAO) {
+                materias.addItem(materia1.getClaveMateria() + " " + materia1.getNom());
+            }
+            profesor.setConexion(materiaConexion.getConexionBD());
+            try {
+                profeDAO = profesor.readAll();
+                for (Profesor profesor1 : profeDAO) {
+                    docentes.addItem(profesor1.getNumEmpleado() + " " + profesor1.getNom());
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "ERROR LECTURA PROFESOR\n" + ex.getMessage(),
+                        "ERROR", JOptionPane.ERROR_MESSAGE);
+                dispose();
             }
         } catch (Exception ex) {
-            Logger.getLogger(AltaCursoHorario.class.getName()).log(Level.SEVERE, null, ex);
-        } finally { //Cierra el ssh
-            profesor.cerrarSSH();
+            JOptionPane.showMessageDialog(this, "ERROR LECTURA MATERIA\n" + ex.getMessage(),
+                    "ERROR", JOptionPane.ERROR_MESSAGE);
+            dispose();
+        } finally { // Cierra la conexión SSH
+            materiaConexion.cerrarSSH();
         }
     }
 
-    public void asignarHorario(Curso cursos) {
-        // Agregamos los horarios junto con el curso horario a la base de datos por dias
-        if (lunes.isSelected()) {
-            String hora = inicioLunes.getSelectedItem().toString() + "-" + finLunes.getSelectedItem().toString();
-            String[] horas;
-            horas = hora.split("-");
-            horas = hora.split("-");
-            Horario horario = new Horario(lunes.getText(), new Time(Integer.parseInt(horas[0].split(":")[0]), Integer.parseInt(horas[0].split(":")[1]), 0),
-                    new Time(Integer.parseInt(horas[1].split(":")[0]), Integer.parseInt(horas[1].split(":")[1]), 0));
-            HorarioDAO horarioDAO = new HorarioDAO();
-            horarioDAO.abrirSSH();
-            horarioDAO.abrirConexion();
-            try {
+    private void agregarCursoHorario(Curso cursos, JComboBox<String> hrInicioDia, JComboBox<String> hrFinDia, JCheckBox dia) {
+        //Convierte las horas del dia
+        String hrFin = hrFinDia.getSelectedItem().toString().split(":")[0];
+        String hrInicio = hrInicioDia.getSelectedItem().toString().split(":")[0];
+        int horaFin = Integer.parseInt(hrFin);
+        int horaInicio = Integer.parseInt(hrInicio);
+
+        Time tiempoInicio = new Time(horaInicio, 0, 0);
+        Time tiempoFin = new Time(horaFin, 0, 0);
+        String diaTexto = dia.getText().toUpperCase();
+
+        Horario horario = new Horario(diaTexto, tiempoInicio, tiempoFin);
+
+        HorarioDAO horarioDAO = new HorarioDAO();
+        horarioDAO.abrirConexion();
+        try {
+            Horario repetido = horarioDAO.read(horario);
+            if (repetido == null) {
                 horarioDAO.append(horario);
                 System.out.println("SE REGISTRO EL HORARIO");
-            } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
-                JOptionPane.showMessageDialog(this, "Ya existe un horario registrado \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
-            } catch (Exception ex) { //Error en general
-                JOptionPane.showMessageDialog(this, "ERROR \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
-            } finally {
-                horarioDAO.cerrarSSH();
+                horario = horarioDAO.read(horario);
+            } else {
+                horario = repetido;
             }
-            System.out.println(horario.toString());
-            System.out.println(cursos.toString());
             CursoHorario cursoH = new CursoHorario(cursos, horario);
             CursoHorarioDAO cursoHDAO = new CursoHorarioDAO();
-            cursoHDAO.abrirSSH();
-            cursoHDAO.abrirConexion();
+            cursoHDAO.setConexion(horarioDAO.getConexionBD());
             try {
                 cursoHDAO.append(cursoH);
                 System.out.println("SE REGISTRO EL CURSO HORARIO");
             } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
-                JOptionPane.showMessageDialog(this, "Ya existe un curso horario registrado \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Ya existe un curso horario registrado \n" + ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
             } catch (Exception ex) { //Error en general
-                JOptionPane.showMessageDialog(this, "ERROR \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
-            } finally {
-                cursoHDAO.cerrarSSH();
+                JOptionPane.showMessageDialog(this, "ERROR \n" + ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
             }
-        } else if (martes.isSelected()) {
-            String hora = inicioMartes.getSelectedItem().toString() + "-" + finMartes.getSelectedItem().toString();
-            String[] horas;
-            horas = hora.split("-");
-            horas = hora.split("-");
-            Horario horario = new Horario(martes.getText(), new Time(Integer.parseInt(horas[0].split(":")[0]), Integer.parseInt(horas[0].split(":")[1]), 0),
-                    new Time(Integer.parseInt(horas[1].split(":")[0]), Integer.parseInt(horas[1].split(":")[1]), 0));
-            HorarioDAO horarioDAO = new HorarioDAO();
-            horarioDAO.abrirSSH();
-            horarioDAO.abrirConexion();
-            try {
-                horarioDAO.append(horario);
-            } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
-                JOptionPane.showMessageDialog(this, "Ya existe un curso registrado \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
-            } catch (Exception ex) { //Error en general
-                JOptionPane.showMessageDialog(this, "ERROR \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
-            } finally {
-                horarioDAO.cerrarSSH();
-            }
-            CursoHorario cursoH = new CursoHorario(cursos, horario);
-            CursoHorarioDAO cursoHDAO = new CursoHorarioDAO();
-            cursoHDAO.abrirSSH();
-            cursoHDAO.abrirConexion();
-            try {
-                cursoHDAO.append(cursoH);
-            } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
-                JOptionPane.showMessageDialog(this, "Ya existe un curso registrado \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
-            } catch (Exception ex) { //Error en general
-                JOptionPane.showMessageDialog(this, "ERROR \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
-            } finally {
-                cursoHDAO.cerrarSSH();
-            }
-        } else if (miercoles.isSelected()) {
-            String hora = inicioMiercoles.getSelectedItem().toString() + "-" + finMiercoles.getSelectedItem().toString();
-            String[] horas;
-            horas = hora.split("-");
-            horas = hora.split("-");
-            Horario horario = new Horario(miercoles.getText(), new Time(Integer.parseInt(horas[0].split(":")[0]), Integer.parseInt(horas[0].split(":")[1]), 0),
-                    new Time(Integer.parseInt(horas[1].split(":")[0]), Integer.parseInt(horas[1].split(":")[1]), 0));
-            HorarioDAO horarioDAO = new HorarioDAO();
-            horarioDAO.abrirSSH();
-            horarioDAO.abrirConexion();
-            try {
-                horarioDAO.append(horario);
-            } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
-                JOptionPane.showMessageDialog(this, "Ya existe un curso registrado \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
-            } catch (Exception ex) { //Error en general
-                JOptionPane.showMessageDialog(this, "ERROR \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
-            } finally {
-                horarioDAO.cerrarSSH();
-            }
-            CursoHorario cursoH = new CursoHorario(cursos, horario);
-            CursoHorarioDAO cursoHDAO = new CursoHorarioDAO();
-            cursoHDAO.abrirSSH();
-            cursoHDAO.abrirConexion();
-            try {
-                cursoHDAO.append(cursoH);
-            } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
-                JOptionPane.showMessageDialog(this, "Ya existe un curso registrado \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
-            } catch (Exception ex) { //Error en general
-                JOptionPane.showMessageDialog(this, "ERROR \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
-            } finally {
-                cursoHDAO.cerrarSSH();
-            }
-        } else if (jueves.isSelected()) {
-            String hora = inicioJueves.getSelectedItem().toString() + "-" + finJueves.getSelectedItem().toString();
-            String[] horas;
-            horas = hora.split("-");
-            horas = hora.split("-");
-            Horario horario = new Horario(jueves.getText(), new Time(Integer.parseInt(horas[0].split(":")[0]), Integer.parseInt(horas[0].split(":")[1]), 0),
-                    new Time(Integer.parseInt(horas[1].split(":")[0]), Integer.parseInt(horas[1].split(":")[1]), 0));
-            HorarioDAO horarioDAO = new HorarioDAO();
-            horarioDAO.abrirSSH();
-            horarioDAO.abrirConexion();
-            try {
-                horarioDAO.append(horario);
-            } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
-                JOptionPane.showMessageDialog(this, "Ya existe un curso registrado \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
-            } catch (Exception ex) { //Error en general
-                JOptionPane.showMessageDialog(this, "ERROR \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
-            } finally {
-                horarioDAO.cerrarSSH();
-            }
-            CursoHorario cursoH = new CursoHorario(cursos, horario);
-            CursoHorarioDAO cursoHDAO = new CursoHorarioDAO();
-            cursoHDAO.abrirSSH();
-            cursoHDAO.abrirConexion();
-            try {
-                cursoHDAO.append(cursoH);
-            } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
-                JOptionPane.showMessageDialog(this, "Ya existe un curso registrado \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
-            } catch (Exception ex) { //Error en general
-                JOptionPane.showMessageDialog(this, "ERROR \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
-            }
-        } else if (viernes.isSelected()) {
-            String hora = inicioViernes.getSelectedItem().toString() + "-" + finViernes.getSelectedItem().toString();
-            String[] horas;
-            horas = hora.split("-");
-            horas = hora.split("-");
-            Horario horario = new Horario(viernes.getText(), new Time(Integer.parseInt(horas[0].split(":")[0]), Integer.parseInt(horas[0].split(":")[1]), 0),
-                    new Time(Integer.parseInt(horas[1].split(":")[0]), Integer.parseInt(horas[1].split(":")[1]), 0));
-            HorarioDAO horarioDAO = new HorarioDAO();
-            horarioDAO.abrirSSH();
-            horarioDAO.abrirConexion();
-            try {
-                horarioDAO.append(horario);
-            } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
-                JOptionPane.showMessageDialog(this, "Ya existe un curso registrado \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
-            } catch (Exception ex) { //Error en general
-                JOptionPane.showMessageDialog(this, "ERROR \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
-            } finally {
-                horarioDAO.cerrarSSH();
-            }
-            CursoHorario cursoH = new CursoHorario(cursos, horario);
-            CursoHorarioDAO cursoHDAO = new CursoHorarioDAO();
-            cursoHDAO.abrirSSH();
-            cursoHDAO.abrirConexion();
-            try {
-                cursoHDAO.append(cursoH);
-            } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
-                JOptionPane.showMessageDialog(this, "Ya existe un curso registrado \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
-            } catch (Exception ex) { //Error en general
-                JOptionPane.showMessageDialog(this, "ERROR \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
-            } finally {
-                cursoHDAO.cerrarSSH();
-            }
-        } else if (sabado.isSelected()) {
-            String hora = inicioSabado.getSelectedItem().toString() + "-" + finSabado.getSelectedItem().toString();
-            String[] horas;
-            horas = hora.split("-");
-            horas = hora.split("-");
-            Horario horario = new Horario(sabado.getText(), new Time(Integer.parseInt(horas[0].split(":")[0]), Integer.parseInt(horas[0].split(":")[1]), 0),
-                    new Time(Integer.parseInt(horas[1].split(":")[0]), Integer.parseInt(horas[1].split(":")[1]), 0));
-            HorarioDAO horarioDAO = new HorarioDAO();
-            horarioDAO.abrirSSH();
-            horarioDAO.abrirConexion();
-            try {
-                horarioDAO.append(horario);
-            } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
-                JOptionPane.showMessageDialog(this, "Ya existe un curso registrado \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
-            } catch (Exception ex) { //Error en general
-                JOptionPane.showMessageDialog(this, "ERROR \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
-            } finally {
-                horarioDAO.cerrarSSH();
-            }
-            CursoHorario cursoH = new CursoHorario(cursos, horario);
-            CursoHorarioDAO cursoHDAO = new CursoHorarioDAO();
-            cursoHDAO.abrirSSH();
-            cursoHDAO.abrirConexion();
-            try {
-                cursoHDAO.append(cursoH);
-            } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
-                JOptionPane.showMessageDialog(this, "Ya existe un curso registrado \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
-            } catch (Exception ex) { //Error en general
-                JOptionPane.showMessageDialog(this, "ERROR \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
-            } finally {
-                cursoHDAO.cerrarSSH();
-            }
+        } catch (Exception ex) { //Error en general
+            JOptionPane.showMessageDialog(this, "ERROR\n" + ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void asignarHorario(Curso cursos) {
+        // Agregamos los horarios junto con el curso horario a la base de datos por dias
+        if (lunes.isSelected()) {
+            agregarCursoHorario(cursos, inicioLunes, finLunes, lunes);
+        }
+        if (martes.isSelected()) {
+            agregarCursoHorario(cursos, inicioMartes, finMartes, martes);
+        }
+        if (miercoles.isSelected()) {
+            agregarCursoHorario(cursos, inicioMiercoles, finMiercoles, miercoles);
+        }
+        if (jueves.isSelected()) {
+            agregarCursoHorario(cursos, inicioJueves, finJueves, jueves);
+        }
+        if (viernes.isSelected()) {
+            agregarCursoHorario(cursos, inicioViernes, finViernes, viernes);
+        }
+        if (sabado.isSelected()) {
+            agregarCursoHorario(cursos, inicioSabado, finSabado, sabado);
         }
     }
 
@@ -464,19 +323,6 @@ public class AltaCursoHorario extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(34, 34, 34)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel1)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel3)
-                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGap(267, 267, 267)))
-                            .addComponent(docentes, 0, 365, Short.MAX_VALUE)
-                            .addComponent(materias, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(61, 61, 61)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -514,7 +360,20 @@ public class AltaCursoHorario extends javax.swing.JFrame {
                                             .addComponent(horasAsig, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGap(97, 97, 97)
                                         .addComponent(regresar)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(34, 34, 34)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(189, 189, 189)
+                                        .addComponent(jLabel1))
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(docentes, 0, 365, Short.MAX_VALUE)
+                                .addComponent(materias, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(tipo, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -536,69 +395,72 @@ public class AltaCursoHorario extends javax.swing.JFrame {
                 .addGap(32, 32, 32)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(docentes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(materias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(grupo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel9)
-                    .addComponent(jLabel10))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lunes)
-                    .addComponent(inicioLunes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(finLunes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(martes)
-                    .addComponent(inicioMartes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(finMartes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(miercoles)
-                    .addComponent(inicioMiercoles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(finMiercoles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(7, 7, 7)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jueves)
-                    .addComponent(inicioJueves, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(finJueves, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(viernes)
-                    .addComponent(inicioViernes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(finViernes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(inicioSabado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(sabado)
-                    .addComponent(finSabado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(36, 36, 36)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(horasTC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(horasAsig, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(regresar)
-                    .addComponent(registrar))
-                .addGap(19, 19, 19))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(docentes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(materias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(grupo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(32, 32, 32)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel10))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lunes)
+                            .addComponent(inicioLunes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(finLunes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(martes)
+                            .addComponent(inicioMartes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(finMartes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(miercoles)
+                            .addComponent(inicioMiercoles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(finMiercoles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(7, 7, 7)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jueves)
+                            .addComponent(inicioJueves, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(finJueves, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(viernes)
+                            .addComponent(inicioViernes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(finViernes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(inicioSabado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(sabado)
+                            .addComponent(finSabado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(36, 36, 36)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(horasTC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(horasAsig, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel8))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(regresar)
+                            .addComponent(registrar))
+                        .addGap(19, 19, 19))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -624,20 +486,19 @@ public class AltaCursoHorario extends javax.swing.JFrame {
             cursoDAO.abrirSSH();
             cursoDAO.abrirConexion();
             try {
-                cursos = new Curso(docente, materia, grupo.getText(), tipo.getSelectedItem().toString(),
+                cursos = new Curso(docente, materia, grupo.getText(), tipo.getSelectedItem().toString().toUpperCase(),
                         Integer.parseInt(horasTC.getText()), Integer.parseInt(horasAsig.getText()));
-                System.out.println("REGISTRO DEL CURSO");
                 cursoDAO.append(cursos);
-                System.out.println("SE REGISTRO");
             } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
                 JOptionPane.showMessageDialog(this, "Ya existe un curso registrado \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
             } catch (Exception ex) { //Error en general
                 JOptionPane.showMessageDialog(this, "ERROR \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
             } finally {
+                // Agregamos los horarios junto con el curso horario a la base de datos por dias
+                asignarHorario(cursos);
                 cursoDAO.cerrarSSH();
             }
-            // Agregamos los horarios junto con el curso horario a la base de datos por dias
-            asignarHorario(cursos);
+
         }
     }//GEN-LAST:event_registrarActionPerformed
 
@@ -710,25 +571,28 @@ public class AltaCursoHorario extends javax.swing.JFrame {
             finSabado.setEnabled(false);
         }
     }//GEN-LAST:event_sabadoActionPerformed
-
+/**
+ * TERMINAN ACCIONES DE LA SEMANA
+ * 
+ */
+    
+    
     private void docentesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_docentesActionPerformed
         String nombreDocente;
-        for (int i = 0; i < profeDAO.size(); i++) {
-            nombreDocente = profeDAO.get(i).getNumEmpleado() + " " + profeDAO.get(i).getNom();
+        for (Profesor profesor : profeDAO) {
+            nombreDocente = profesor.getNumEmpleado() + " " + profesor.getNom();
             if (docentes.getSelectedItem().equals(nombreDocente)) {
-                docente = profeDAO.get(i);
-                System.out.println(profeDAO.get(i).getNom());
+                docente = profesor;
             }
         }
     }//GEN-LAST:event_docentesActionPerformed
 
     private void materiasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_materiasActionPerformed
         String nombreMateria;
-        for (int i = 0; i < materiaDAO.size(); i++) {
-            nombreMateria = materiaDAO.get(i).getClaveMateria() + " " + materiaDAO.get(i).getNom();
+        for (Materia materia1 : materiaDAO) {
+            nombreMateria = materia1.getClaveMateria() + " " + materia1.getNom();
             if (materias.getSelectedItem().equals(nombreMateria)) {
-                materia = materiaDAO.get(i);
-                System.out.println(materiaDAO.get(i).getNom());
+                materia = materia1;
             }
         }
     }//GEN-LAST:event_materiasActionPerformed
