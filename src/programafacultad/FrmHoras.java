@@ -27,7 +27,6 @@ public class FrmHoras extends javax.swing.JDialog {
     private void calcularHoras() {
         //Crea el objeto que se comunica con la tabla Curso
         CursoDAO dao = new CursoDAO();
-        long a = System.currentTimeMillis(); 
         //Abre la conexión SSH
         dao.abrirSSH();
         //Abre la conexión con la BD
@@ -38,13 +37,12 @@ public class FrmHoras extends javax.swing.JDialog {
         } catch (Exception e) {
             //Mensaje de error
             System.out.println(e.toString());
-            JOptionPane.showMessageDialog(this, "ERROR\n" + e.getMessage(), "ERROR", 
+            JOptionPane.showMessageDialog(this, "ERROR\n" + e.getMessage(), "ERROR",
                     JOptionPane.ERROR_MESSAGE);
         } finally {
             //Cierra la conexión SSH
             dao.cerrarSSH();
         }
-        System.out.println(System.currentTimeMillis() - a);
     }
 
     @SuppressWarnings("unchecked")
@@ -161,8 +159,7 @@ public class FrmHoras extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void regresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regresarActionPerformed
-
-        dispose();       
+        dispose();
     }//GEN-LAST:event_regresarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
