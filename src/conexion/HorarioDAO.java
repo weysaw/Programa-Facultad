@@ -19,12 +19,15 @@ public class HorarioDAO extends ConexionBD {
     private static final String HR_FIN = "hrFin";
     private static final String SQL_SELECT_ALL = "SELECT * FROM " + TABLA;
     private static final String SQL_INSERT = "INSERT INTO " + TABLA + "(" + DIA + ", "
-            + TURNO +", "+ HR_INICIO + ", "+ HR_FIN +") VALUES(?,?,?,?)";
-    private static final String SQL_READ = "SELECT*FROM " + TABLA + " WHERE " + CLAVE_HORARIO + " = ?;";
+            + TURNO + ", " + HR_INICIO + ", " + HR_FIN + ") VALUES(?,?,?,?)";
+    private static final String SQL_READ = "SELECT*FROM " + TABLA + " WHERE " + DIA + " = ? AND "
+            + HR_INICIO + " = ? AND " + HR_FIN + " = ?;";
+    private static final String SQL_READ_CLAVE = "SELECT*FROM " + TABLA + " WHERE " + CLAVE_HORARIO + "= ?;";
     private static final String SQL_DELETE = "DELETE  FROM " + TABLA + " WHERE " + CLAVE_HORARIO + " = ?";
-    private static final String SQL_UPDATE = "UPDATE "+ TABLA +" SET " + DIA + " = ?,"
-            + TURNO +" = ?, "+ HR_INICIO +" = ?, "+ HR_FIN +" = ? WHERE " + CLAVE_HORARIO + " = ?";
+    private static final String SQL_UPDATE = "UPDATE " + TABLA + " SET " + DIA + " = ?,"
+            + TURNO + " = ?, " + HR_INICIO + " = ?, " + HR_FIN + " = ? WHERE " + CLAVE_HORARIO + " = ?";
     private static final String SQL_DELETE_ALL = "DELETE FROM " + TABLA;
+
     /**
      * Constructor de la clase
      */
@@ -70,9 +73,9 @@ public class HorarioDAO extends ConexionBD {
         //Les asigna los valores que deben tener los ?
         ps.setString(1, dto.getDia());
         ps.setString(2, dto.getTurno());
-        Time tiempo = new Time(dto.getHrInicio().getHours() - 8,0,0);
+        Time tiempo = new Time(dto.getHrInicio().getHours() - 8, 0, 0);
         ps.setTime(3, tiempo);
-        tiempo = new Time(dto.getHrFin().getHours() - 8,0,0);
+        tiempo = new Time(dto.getHrFin().getHours() - 8, 0, 0);
         ps.setTime(4, tiempo);
         //Ejecuta el comando y acutaliza
         ps.executeUpdate();
@@ -94,9 +97,9 @@ public class HorarioDAO extends ConexionBD {
         //Les asigna los valores que deben tener los ?
         ps.setString(1, dto.getDia());
         ps.setString(2, dto.getTurno());
-        Time tiempo = new Time(dto.getHrInicio().getHours() - 8,0,0);
+        Time tiempo = new Time(dto.getHrInicio().getHours() - 8, 0, 0);
         ps.setTime(3, tiempo);
-        tiempo = new Time(dto.getHrFin().getHours() - 8,0,0);
+        tiempo = new Time(dto.getHrFin().getHours() - 8, 0, 0);
         ps.setTime(4, tiempo);
         ps.setInt(5, dto.getClaveHorario());
         //Ejecuta el comando y actualiza
@@ -118,7 +121,7 @@ public class HorarioDAO extends ConexionBD {
         //Manda el comando
         ps = conexion.prepareStatement(SQL_DELETE);
         //Les asigna los valores que deben tener los ?
-        ps.setString(1, dto.getClaveHorario()+ "");
+        ps.setString(1, dto.getClaveHorario() + "");
         //Ejecuta el comando y actualiza
         datosModificados = ps.executeUpdate() > 0;
         //Cierra la conexión
@@ -126,7 +129,7 @@ public class HorarioDAO extends ConexionBD {
         return datosModificados;
     }
 
-   /**
+    /**
      * Borra un dato de la tabla
      *
      * @throws Exception Devuelve error
@@ -137,11 +140,12 @@ public class HorarioDAO extends ConexionBD {
         ps = conexion.prepareStatement(SQL_DELETE_ALL);
         //Ejecuta el comando y actualiza
         ps.executeUpdate();
+        ps = conexion.prepareStatement("ALTER TABLE " + TABLA + " AUTO_INCREMENT = 1");
+        ps.executeUpdate();
         //Cierra la conexión
         cerrar(ps);
     }
-    
-    
+
     /**
      * Lee la información de un profesor en especifico
      *
@@ -156,7 +160,39 @@ public class HorarioDAO extends ConexionBD {
         //Manda el comando
         ps = conexion.prepareStatement(SQL_READ);
         //Les asigna los valores que deben tener los ?
-        ps.setString(1, dto.getClaveHorario() + "");
+        ps.setString(1, dto.getDia());
+        Time tiempo = new Time(dto.getHrInicio().getHours() - 8, 0, 0);
+        ps.setTime(2, tiempo);
+        tiempo = new Time(dto.getHrFin().getHours() - 8, 0, 0);
+        ps.setTime(3, tiempo);
+        //Ejecuta el comando y devuelve el resultado del comando
+        rs = ps.executeQuery();
+        //Recorre por todos los resultados
+        if (rs.next()) {
+            result = getObject(rs);
+        }
+        //Cierra las conexiones
+        cerrar(ps);
+        cerrar(rs);
+
+        return result;
+    }
+
+    /**
+     * Lee la información de un horaio en especifico
+     *
+     * @param dto Es el horario a buscar
+     * @return Devuelve el objeto dto si lo encuentra
+     * @throws Exception Devuelve un error
+     */
+    public Horario readClave(Horario dto) throws Exception {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Horario result = null;
+        //Manda el comando
+        ps = conexion.prepareStatement(SQL_READ_CLAVE);
+        //Les asigna los valores que deben tener los ?
+        ps.setInt(1, dto.getClaveHorario());
         //Ejecuta el comando y devuelve el resultado del comando
         rs = ps.executeQuery();
         //Recorre por todos los resultados
@@ -178,8 +214,8 @@ public class HorarioDAO extends ConexionBD {
      * @throws Exception Devuelve un error
      */
     private Horario getObject(ResultSet rs) throws Exception {
-        return new Horario(Integer.parseInt(rs.getString(CLAVE_HORARIO)), rs.getString(DIA), 
-                rs.getString(TURNO),new Time(rs.getTime(HR_INICIO).getHours() + 8,0,0) , new Time(rs.getTime(HR_FIN).getHours() + 8,0,0));
+        return new Horario(Integer.parseInt(rs.getString(CLAVE_HORARIO)), rs.getString(DIA),
+                rs.getString(TURNO), new Time(rs.getTime(HR_INICIO).getHours() + 8, 0, 0), new Time(rs.getTime(HR_FIN).getHours() + 8, 0, 0));
     }
-    
+
 }

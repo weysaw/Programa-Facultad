@@ -107,7 +107,7 @@ public class LectorTxt {
      *
      * @return ArrayList con materias
      */
-    public ArrayList<Materia> getMatera() {
+    public ArrayList<Materia> getMateria() {
         ArrayList<Materia> materias = new ArrayList();
         for (Curso curso : getCurso()) {
             if (!materias.contains(curso.getMateria())) {
@@ -209,7 +209,7 @@ public class LectorTxt {
         int clave;
         String materia = null;
         String semestre;
-        int grupo;
+        String grupo;
         String tipo;
         int hrsTC;
         int hrsAsig;
@@ -240,10 +240,10 @@ public class LectorTxt {
                             maestro = sublinea[0]; //El primer campo es el nombre del maestro
                             if (Pattern.matches(".*T.*", sublinea[2])) {//Si el campo de grupo contiene una T
                                 tipo = "TALLER";
-                                grupo = Integer.parseInt(sublinea[2].substring(0, 3));//Se toman los primeros 3 caracteres como el grupo 
+                                grupo = sublinea[2].substring(0, 3);//Se toman los primeros 3 caracteres como el grupo 
                             } else {
                                 tipo = "CLASE";
-                                grupo = Integer.parseInt(sublinea[2]);//si no es taller, el grupo se toma tal cual
+                                grupo = sublinea[2];//si no es taller, el grupo se toma tal cual
                             }
                             hrsTC = Integer.parseInt(sublinea[3]);
                             hrsAsig = Integer.parseInt(sublinea[4]);
@@ -314,7 +314,7 @@ public class LectorTxt {
                             String[] sublinea = line.split("\t");
                             maestro = sublinea[0]; //El primer campo es el nombre del maestro
                             tipo = "LABORATORIO";
-                            grupo = Integer.parseInt(sublinea[2].substring(0, 3));//Se toman los primeros 3 caracteres como el grupo                             
+                            grupo = sublinea[2];//Se toman los primeros 3 caracteres como el grupo                             
                             hrsTC = Integer.parseInt(sublinea[3]);
                             hrsAsig = Integer.parseInt(sublinea[4]);
 

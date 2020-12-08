@@ -1,12 +1,11 @@
 package programafacultad;
 
 import conexion.*;
-import java.util.ArrayList;
-import registrodeclases.LectorTxt;
+import javax.swing.JOptionPane;
 
 /**
  * Muestra las horas totales
- * 
+ *
  * @author Leslies Patricia, Ornelas Munguía Axel Leonardo
  * @version 03.12.2020
  */
@@ -19,19 +18,33 @@ public class FrmHoras extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(parent);
-        LectorTxt lector = new LectorTxt();
-        ArrayList<CursoHorario> cursos = lector.recuperarDatos();
-        ArrayList<Curso> cursosLeidos = new ArrayList();
-        int horasClase = 0, horasAsig = 0;
-        for (CursoHorario curso : cursos) {
-            if(!cursosLeidos.contains(curso.getCurso())) {
-                horasAsig += curso.getCurso().getHrsAsig();
-                horasClase += curso.getCurso().getHrsTC();
-                cursosLeidos.add(curso.getCurso());
-            }
+        calcularHoras();
+    }
+
+    /**
+     * Calcula las horas totales de asignatura y clase
+     */
+    private void calcularHoras() {
+        //Crea el objeto que se comunica con la tabla Curso
+        CursoDAO dao = new CursoDAO();
+        long a = System.currentTimeMillis(); 
+        //Abre la conexión SSH
+        dao.abrirSSH();
+        //Abre la conexión con la BD
+        dao.abrirConexion();
+        try {
+            hA.setText(dao.devolverSuma("hrsAsig") + " Horas");
+            hC.setText(dao.devolverSuma("hrsTC") + " Horas");
+        } catch (Exception e) {
+            //Mensaje de error
+            System.out.println(e.toString());
+            JOptionPane.showMessageDialog(this, "ERROR\n" + e.getMessage(), "ERROR", 
+                    JOptionPane.ERROR_MESSAGE);
+        } finally {
+            //Cierra la conexión SSH
+            dao.cerrarSSH();
         }
-        hA.setText(horasAsig + " horas");
-        hC.setText(horasClase + " horas");
+        System.out.println(System.currentTimeMillis() - a);
     }
 
     @SuppressWarnings("unchecked")
@@ -148,7 +161,8 @@ public class FrmHoras extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void regresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regresarActionPerformed
-        dispose();
+
+        dispose();       
     }//GEN-LAST:event_regresarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

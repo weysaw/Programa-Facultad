@@ -2,7 +2,6 @@ package conexion;
 
 import java.util.*;
 import java.sql.*;
-import javax.swing.JOptionPane;
 
 /**
  * Es la clase curso que se comunica con la base de datos
@@ -23,12 +22,12 @@ public class CursoDAO extends ConexionBD {
     private static final String SQL_INSERT = "INSERT INTO " + TABLA + "(" + NUM_EMPLEADO + "," + CLAVE_MATERIA + ","
             + GRUPO + ", " + TIPO + ", " + HRS_TC + ", " + HRS_ASIG + ") VALUES(?,?,?,?,?,?);";
     private static final String SQL_READ = "SELECT*FROM " + TABLA + " WHERE " + NUM_EMPLEADO + " = ? AND "
-            + CLAVE_MATERIA + "= ? AND" + GRUPO + "= ? AND" + TIPO + "= ?;";
-    private static final String SQL_DELETE = "DELETE  FROM " + TABLA + "WHERE " + NUM_EMPLEADO + " = ? AND"
-            + CLAVE_MATERIA + "= ? AND" + GRUPO + "= ? AND" + TIPO + "= ?;";
+            + CLAVE_MATERIA + "= ? AND " + GRUPO + "= ? AND " + TIPO + "= ?;";
+    private static final String SQL_DELETE = "DELETE  FROM " + TABLA + "WHERE " + NUM_EMPLEADO + " = ? AND "
+            + CLAVE_MATERIA + "= ? AND " + GRUPO + "= ? AND " + TIPO + "= ?;";
     private static final String SQL_UPDATE = "UPDATE " + TABLA + " SET " + HRS_TC + " = ?, "
-            + HRS_ASIG + " = ? WHERE " + NUM_EMPLEADO + " = ? AND"
-            + CLAVE_MATERIA + "= ? AND" + GRUPO + "= ? AND" + TIPO + "= ?;";
+            + HRS_ASIG + " = ? WHERE " + NUM_EMPLEADO + " = ? AND "
+            + CLAVE_MATERIA + "= ? AND " + GRUPO + "= ? AND " + TIPO + "= ?;";
     private static final String SQL_DELETE_ALL = "DELETE FROM " + TABLA;
 
     /**
@@ -75,7 +74,7 @@ public class CursoDAO extends ConexionBD {
         ps = conexion.prepareStatement(SQL_INSERT);
         ps.setString(1, dto.getProfesor().getNumEmpleado());
         ps.setInt(2, dto.getMateria().getClaveMateria());
-        ps.setInt(3, dto.getGrupo());
+        ps.setString(3, dto.getGrupo());
         ps.setString(4, dto.getTipo());
         ps.setInt(5, dto.getHrsTC());
         ps.setInt(6, dto.getHrsAsig());
@@ -101,7 +100,7 @@ public class CursoDAO extends ConexionBD {
         ps.setInt(2, dto.getHrsAsig());
         ps.setString(3, dto.getProfesor().getNumEmpleado());
         ps.setInt(4, dto.getMateria().getClaveMateria());
-        ps.setInt(5, dto.getGrupo());
+        ps.setString(5, dto.getGrupo());
         ps.setString(6, dto.getTipo());
         //Ejecuta el comando y actualiza
         datosModificados = ps.executeUpdate() > 0;
@@ -124,7 +123,7 @@ public class CursoDAO extends ConexionBD {
         //Les asigna los valores que deben tener los ?
         ps.setString(1, dto.getProfesor().getNumEmpleado());
         ps.setInt(2, dto.getMateria().getClaveMateria());
-        ps.setInt(3, dto.getGrupo());
+        ps.setString(3, dto.getGrupo());
         ps.setString(4, dto.getTipo());
         //Ejecuta el comando y actualiza
         datosModificados = ps.executeUpdate() > 0;
@@ -133,7 +132,7 @@ public class CursoDAO extends ConexionBD {
         return datosModificados;
     }
 
-   /**
+    /**
      * Borra un dato de la tabla
      *
      * @throws Exception Devuelve error
@@ -147,7 +146,7 @@ public class CursoDAO extends ConexionBD {
         //Cierra la conexión
         cerrar(ps);
     }
-    
+
     /**
      * Lee la información de un profesor en especifico
      *
@@ -164,7 +163,7 @@ public class CursoDAO extends ConexionBD {
         //Les asigna los valores que deben tener los ?
         ps.setString(1, dto.getProfesor().getNumEmpleado());
         ps.setInt(2, dto.getMateria().getClaveMateria());
-        ps.setInt(3, dto.getGrupo());
+        ps.setString(3, dto.getGrupo());
         ps.setString(4, dto.getTipo());
         //Ejecuta el comando y devuelve el resultado del comando
         rs = ps.executeQuery();
@@ -178,6 +177,30 @@ public class CursoDAO extends ConexionBD {
 
         return result;
     }
+    /**
+     * Lee la información de un profesor en especifico
+     *
+     * @param dto Es el profesor a buscar
+     * @return Devuelve el objeto dto si lo encuentra
+     * @throws Exception Devuelve un error
+     */
+    public String devolverSuma(String campo) throws Exception {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String result = null;
+        //Manda el comando
+        ps = conexion.prepareStatement("SELECT SUM(" + campo + ") AS SUMA FROM " + TABLA);
+        //Ejecuta el comando y devuelve el resultado del comando
+        rs = ps.executeQuery();
+        //Recorre por todos los resultados
+        if (rs.next()) {
+            result = rs.getString("SUMA");
+        }
+        //Cierra las conexiones
+        cerrar(ps);
+        cerrar(rs);
+        return result;
+    }
 
     /**
      * Detecta el objeto enviado por el resultset y lo devuelve convertido a dto
@@ -188,41 +211,22 @@ public class CursoDAO extends ConexionBD {
      */
     private Curso getObject(ResultSet rs) throws Exception {
         //Se obtienen los datos de la tabla
-        int grupo = Integer.parseInt(rs.getString(GRUPO));
+        String grupo = rs.getString(GRUPO);
         String tipo = rs.getString(TIPO);
         int hrsTc = Integer.parseInt(rs.getString(HRS_TC));
         int hrsAsig = Integer.parseInt(rs.getString(HRS_ASIG));
         String numEmpleado = rs.getString(NUM_EMPLEADO);
         int claveMateria = Integer.parseInt(rs.getString(CLAVE_MATERIA));
-
-        //Se crea el profesor para buscar el objeto
         ProfesorDAO profesorDAO = new ProfesorDAO();
-        Profesor profesor = null;
-        try {
-            //Se busca el profesor con el numero de empleado indicado
-            profesor = profesorDAO.read(new Profesor(numEmpleado, null));
-        } catch (Exception e) {
-            //Se le indica el mensaje de error
-            JOptionPane.showMessageDialog(null, "Error de lectura profesor:\n" + e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
-        } finally {
-            //Se cierra la conexión
-            profesorDAO.cerrarSSH();
-        }
-
-        //Se crea la materia para buscar el objeto
         MateriaDAO materiaDAO = new MateriaDAO();
+        profesorDAO.setConexion(conexion);
+        materiaDAO.setConexion(conexion);
+        Profesor profesor = null;
+        //Se busca el profesor con el numero de empleado indicado
+        profesor = profesorDAO.read(new Profesor(numEmpleado, null));
         Materia materia = null;
-        try {
-            //Se busca la materia con la clave de la materia indicado
-            materia = materiaDAO.read(new Materia(claveMateria, null, null));
-        } catch (Exception e) {
-            //Se le indica el mensaje de error
-            JOptionPane.showMessageDialog(null, "Error de lectura materia:\n" + e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
-        } finally {
-            //Se cierra la conexión
-            materiaDAO.cerrarSSH();
-        }
-
+        //Se busca la materia con la clave de la materia indicado
+        materia = materiaDAO.read(new Materia(claveMateria, null, null));
         return new Curso(profesor, materia, grupo, tipo, hrsTc, hrsAsig);
     }
 }

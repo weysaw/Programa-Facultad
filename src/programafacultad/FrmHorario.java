@@ -1,7 +1,6 @@
 package programafacultad;
 
-import conexion.CursoHorario;
-import conexion.CursoHorarioDAO;
+import conexion.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.table.*;
@@ -18,6 +17,10 @@ public class FrmHorario extends javax.swing.JFrame {
 
     private final Principal principal;
     private ArrayList<CursoHorario> cursos;
+    private boolean seleccionaDia;
+    private boolean seleccionaHora;
+    //Se crea el objeto para la conexión
+    private final CursoHorarioDAO dao;
 
     /**
      * Constructor de la clase horario
@@ -26,16 +29,9 @@ public class FrmHorario extends javax.swing.JFrame {
         initComponents();
         this.principal = principal;
         setLocationRelativeTo(principal);
-        CursoHorarioDAO dao = new CursoHorarioDAO();
-        cursos = null;
-        try {
-            cursos = dao.readAll();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "No se pudo leer la base de datos\n" + e.getMessage(), 
-                    "ERROR", JOptionPane.ERROR_MESSAGE);
-        } finally {
-            dao.cerrarSSH();
-        }
+        seleccionaDia = false;
+        seleccionaHora = false;
+        dao = new CursoHorarioDAO();
     }
 
     @SuppressWarnings("unchecked")
@@ -77,6 +73,7 @@ public class FrmHorario extends javax.swing.JFrame {
         semestre.setText("Semestre Actual: ");
 
         datosHorarios.setAutoCreateRowSorter(true);
+        datosHorarios.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         datosHorarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -96,20 +93,26 @@ public class FrmHorario extends javax.swing.JFrame {
         jLabel5.setText("Tipo:");
 
         dia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado" }));
+        dia.setSelectedIndex(-1);
         dia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 diaActionPerformed(evt);
             }
         });
 
-        horas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+        horas.setSelectedIndex(-1);
         horas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 horasActionPerformed(evt);
             }
         });
 
-        tipoClase.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Clase", "Taller", "Laboratorio" }));
+        tipoClase.setSelectedIndex(-1);
+        tipoClase.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tipoClaseActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -197,30 +200,143 @@ public class FrmHorario extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void horasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_horasActionPerformed
-        
+        if (!seleccionaDia) {
+            String docente, materia, nomDia, grupo, hora;
+            //Se utiliza para agregarlo al combobox tipo Clase
+            HashSet<String> tipo = new HashSet();
+            //Se devuelve el día de la semana por el combobox
+            nomDia = dia.getSelectedItem().toString().toUpperCase();
+            //Se devuelve la hora por del combobox que esta seleccionado
+            hora = horas.getSelectedItem().toString();
+            //Se le indica que esta usando las horas
+            seleccionaHora = true;
+            //Abre las conexiones
+            dao.abrirSSH();
+            dao.abrirConexion();
+            //Remueve todas las filas de la tabla
+            removerFilas();
+            //Remueve los objetos que tenga el combobox del tipo clase
+            tipoClase.removeAllItems();
+            try {
+                //Devuelve el arreglo con el día y la hora en especifico
+                cursos = dao.readDiaHoraClase("'" + nomDia + "'", "'" + hora + ":00'", "tipo");
+                //Recorre todo el arreglo y agrega los datos a la tabla
+                for (CursoHorario curso : cursos) {
+                    //Devuelve el atributo para cada cosa en la tabla
+                    docente = curso.getCurso().getProfesor().getNom();
+                    grupo = curso.getCurso().getGrupo();
+                    materia = curso.getCurso().getMateria().getNom();
+                    //Agrega el dato a la tabla
+                    agregarFila(docente, grupo, materia);
+                    //Se indica para que el combobox tenga los datos correctos sin repeticion
+                    tipo.add(curso.getCurso().getTipo());
+                }
+                //Usa un arraylist para ordenar los datos de orden ascendente
+                ArrayList<String> ordenados = new ArrayList(tipo);
+                //Ordena los datos
+                Collections.sort(ordenados);
+                //Recorre todos los datos ordenados y los agrega a la lista
+                for (String ordenado : ordenados) {
+                    tipoClase.addItem(ordenado);
+                }
+
+                tipoClase.setSelectedIndex(-1);
+            } catch (Exception e) {
+                //Mensaje de error
+                JOptionPane.showMessageDialog(this, "No se pudo leer la base de datos\n" + e.getMessage(),
+                        "ERROR", JOptionPane.ERROR_MESSAGE);
+            } finally {
+                //Cierra la conexión
+                dao.cerrarSSH();
+            }
+            //Le indica que ya no esta presionando la lista de horas
+            seleccionaHora = false;
+        }
     }//GEN-LAST:event_horasActionPerformed
 
     private void diaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_diaActionPerformed
-        String docente, materia, nomDia;
-        int grupo;
-        nomDia = dia.getSelectedItem().toString();
+        String docente, materia, nomDia, grupo;
+        nomDia = dia.getSelectedItem().toString().toUpperCase();
+        //Se utiliza para agregarlo al combobox de horas 
         HashSet<Integer> datos = new HashSet();
+        //Abre las conexiones
+        dao.abrirSSH();
+        dao.abrirConexion();
+        //Le indica que esta usando la lista de días
+        seleccionaDia = true;
+        //Remueve las filas de la tabla
         removerFilas();
-        for (CursoHorario curso : cursos) {
-            if (curso.getHorario().getDia().equalsIgnoreCase(nomDia)) {
-                docente = curso.getCurso().getProfesor().getNom();//Esto se debe de hacer con quearys
+        //Remueve los objetos de los combobox
+        horas.removeAllItems();
+        tipoClase.removeAllItems();
+
+        try {
+            //Lee los cursos que tengan el mismo nombre del día
+            cursos = dao.readDiaHoraClase("'" + nomDia + "'", "hrInicio", "tipo");
+
+            //Recorre todo el arreglo y agrega los datos a la tabla
+            for (CursoHorario curso : cursos) {
+                docente = curso.getCurso().getProfesor().getNom();
                 grupo = curso.getCurso().getGrupo();
                 materia = curso.getCurso().getMateria().getNom();
                 agregarFila(docente, grupo, materia);
+                //Agrega los datos de la hora a lista que no permite repeticiones
                 datos.add(curso.getHorario().getHrInicio().getHours());
             }
+            //Usa un arraylist para ordenar los datos de orden ascendente
+            ArrayList<Integer> ordenados = new ArrayList(datos);
+            //Ordena los datos
+            Collections.sort(ordenados);
+            //Recorre todo el arreglo y lo agrega al combobox
+            for (int ordenado : ordenados) {
+                horas.addItem(ordenado + ":00");
+            }
+            horas.setSelectedIndex(-1);
+            tipoClase.setSelectedIndex(-1);
+        } catch (Exception e) {
+            //Mensaje de error
+            JOptionPane.showMessageDialog(this, "No se pudo leer la base de datos\n" + e.getMessage(),
+                    "ERROR", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            //Cierra la conexión
+            dao.cerrarSSH();
         }
-        ArrayList<Integer> ordenados = new ArrayList(datos);
-        Collections.sort(ordenados);
-        for (int ordenado : ordenados) 
-            horas.addItem(ordenado + ":00");
-        
+        //Le indica que ya no esta presionando la lista de días
+        seleccionaDia = false;
     }//GEN-LAST:event_diaActionPerformed
+
+    private void tipoClaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tipoClaseActionPerformed
+        //Verifica si esta seleccionandose la hora o los día
+        if (!seleccionaHora && !seleccionaDia) {
+            String docente, materia, nomDia, grupo, hora, tipo;
+            //Devuelve el día que esta seleccionado en la lista
+            nomDia = dia.getSelectedItem().toString().toUpperCase();
+            //Devuelve la hora que esta seleccionado en la lista
+            hora = horas.getSelectedItem().toString();
+            //Devuelve el tipo de clase que esta seleccionado en la lista            
+            tipo = tipoClase.getSelectedItem().toString();
+            //Abre las conexiones
+            dao.abrirSSH();
+            dao.abrirConexion();
+
+            try {
+                //Remuevo todas las filas 
+                removerFilas();
+                cursos = dao.readDiaHoraClase("'" + nomDia + "'", "'" + hora + ":00'", "'" + tipo + "'");
+                for (CursoHorario curso : cursos) {
+                    docente = curso.getCurso().getProfesor().getNom();//Esto se debe de hacer con quearys
+                    grupo = curso.getCurso().getGrupo();
+                    materia = curso.getCurso().getMateria().getNom();
+                    agregarFila(docente, grupo, materia);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "No se pudo leer la base de datos\n" + e.getMessage(),
+                        "ERROR", JOptionPane.ERROR_MESSAGE);
+            } finally {
+                dao.cerrarSSH();
+            }
+        }
+    }//GEN-LAST:event_tipoClaseActionPerformed
     /**
      * Cierra la ventana y muestra la principal
      */
@@ -236,9 +352,9 @@ public class FrmHorario extends javax.swing.JFrame {
      * @param grupo Es el grupo de la materia
      * @param materia Es el nombre de la materia que se agrega
      */
-    private void agregarFila(String docente, int grupo, String materia) {
+    private void agregarFila(String docente, String grupo, String materia) {
         DefaultTableModel modelo = (DefaultTableModel) datosHorarios.getModel();
-        modelo.addRow(new Object[]{docente, (grupo < 100) ? "0"+grupo:grupo, materia});
+        modelo.addRow(new Object[]{docente, grupo, materia});
     }
 
     /**
@@ -247,7 +363,6 @@ public class FrmHorario extends javax.swing.JFrame {
     private void removerFilas() {
         DefaultTableModel modelo = (DefaultTableModel) datosHorarios.getModel();
         modelo.setRowCount(0);
-        horas.removeAllItems();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
