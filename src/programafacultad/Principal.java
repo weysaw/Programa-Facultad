@@ -45,15 +45,19 @@ public class Principal extends javax.swing.JFrame {
         altaMateria = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         leerArchivo = new javax.swing.JButton();
+        altaCursoHorario = new javax.swing.JButton();
+        modificarMateria = new javax.swing.JButton();
+        modificarDocente = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Programa Consultas");
-        setMinimumSize(new java.awt.Dimension(526, 500));
-        setPreferredSize(new java.awt.Dimension(469, 500));
+        setMinimumSize(new java.awt.Dimension(582, 687));
+        setPreferredSize(new java.awt.Dimension(582, 687));
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentResized(java.awt.event.ComponentEvent evt) {
                 formComponentResized(evt);
@@ -121,6 +125,30 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
+        altaCursoHorario.setText("Alta Curso Horario");
+        altaCursoHorario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                altaCursoHorarioActionPerformed(evt);
+            }
+        });
+
+        modificarMateria.setText("Modificar Materia");
+        modificarMateria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modificarMateriaActionPerformed(evt);
+            }
+        });
+
+        modificarDocente.setText("Modificar Docente");
+        modificarDocente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modificarDocenteActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel4.setText("Modificar");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -132,26 +160,33 @@ public class Principal extends javax.swing.JFrame {
                         .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addContainerGap(396, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel3))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(leerArchivo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(modificarDocente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(66, 66, 66)
+                                .addComponent(modificarMateria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(altaMateria, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+                                .addGap(63, 63, 63)
+                                .addComponent(altaMaestro, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE))
+                            .addComponent(altaCursoHorario, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(consultaHorario, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
-                                    .addComponent(consultaHoras, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(consultaHorario, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+                                    .addComponent(consultaHoras, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE))
                                 .addGap(63, 63, 63)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(consultaMaestro, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
-                                    .addComponent(consultaMateria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addComponent(consultaMaestro, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+                                    .addComponent(consultaMateria, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel1)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(altaMateria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(71, 71, 71)
-                                .addComponent(altaMaestro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addGap(58, 58, 58))))
         );
         jPanel1Layout.setVerticalGroup(
@@ -175,11 +210,19 @@ public class Principal extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(altaMateria)
                     .addComponent(altaMaestro))
-                .addGap(30, 30, 30)
+                .addGap(35, 35, 35)
+                .addComponent(altaCursoHorario)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel4)
+                .addGap(24, 24, 24)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(modificarDocente)
+                    .addComponent(modificarMateria))
+                .addGap(27, 27, 27)
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
                 .addComponent(leerArchivo)
-                .addGap(94, 94, 94))
+                .addContainerGap(107, Short.MAX_VALUE))
         );
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {altaMaestro, altaMateria, consultaHoras, consultaMaestro, consultaMateria, leerArchivo});
@@ -272,6 +315,11 @@ public class Principal extends javax.swing.JFrame {
         jLabel1.setFont(fuente);
         jLabel2.setFont(fuente);
         jLabel3.setFont(fuente);
+        jLabel4.setFont(fuente);
+        altaCursoHorario.setFont(fuente);
+        modificarDocente.setFont(fuente);
+        modificarMateria.setFont(fuente);
+        
     }//GEN-LAST:event_formComponentResized
 
     private void leerArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leerArchivoActionPerformed
@@ -320,7 +368,6 @@ public class Principal extends javax.swing.JFrame {
                         //System.out.println("Agregado ---> " + materia);
                     }
                     //Abre la conexión a la base de datos
-                    //horarioDAO.abrirConexion();
                     horarioDAO.setConexion(conexion);
                     try {
                         //Borra todos los elementos de la tabla
@@ -335,7 +382,6 @@ public class Principal extends javax.swing.JFrame {
                         //Se crea el objeto que comunica con la tabla
                         CursoDAO cursoDAO = new CursoDAO();
                         //Abre la conexión a la base de datos
-                        //cursoDAO.abrirConexion();
                         cursoDAO.setConexion(conexion);
                         try {
                             //Borra todos los elementos de la tabla
@@ -348,10 +394,8 @@ public class Principal extends javax.swing.JFrame {
                                 //System.out.println("Agregado ---> " + curso);
                             }
                             //Abre la conexión a la base de datos
-                            //horarioDAO.abrirConexion();
                             horarioDAO.setConexion(conexion);
                             //Abre la conexión a la base de datos
-                            //cursoHorarioDAO.abrirConexion();
                             cursoHorarioDAO.setConexion(conexion);
                             try {
                                 //Borra todos los elementos de la tabla
@@ -402,6 +446,24 @@ public class Principal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_leerArchivoActionPerformed
 
+    private void altaCursoHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_altaCursoHorarioActionPerformed
+        altaCursoHorario alta = new altaCursoHorario(this);
+        alta.setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_altaCursoHorarioActionPerformed
+
+    private void modificarMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificarMateriaActionPerformed
+        ModificarMateria modificar = new ModificarMateria(this);
+        modificar.setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_modificarMateriaActionPerformed
+
+    private void modificarDocenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificarDocenteActionPerformed
+        ModificarMaestro modificar = new ModificarMaestro(this);
+        modificar.setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_modificarDocenteActionPerformed
+
     /**
      * Ejecución del programa
      *
@@ -413,6 +475,7 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton altaCursoHorario;
     private javax.swing.JButton altaMaestro;
     private javax.swing.JButton altaMateria;
     private javax.swing.JButton consultaHorario;
@@ -422,9 +485,12 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JButton leerArchivo;
+    private javax.swing.JButton modificarDocente;
+    private javax.swing.JButton modificarMateria;
     // End of variables declaration//GEN-END:variables
 }
