@@ -101,12 +101,14 @@ public class FrmHorario extends javax.swing.JFrame {
             }
         });
 
+        horas.setSelectedIndex(-1);
         horas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 horasActionPerformed(evt);
             }
         });
 
+        tipoClase.setSelectedIndex(-1);
         tipoClase.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tipoClaseActionPerformed(evt);

@@ -221,6 +221,9 @@
           </AuxValues>
         </Component>
         <Component class="javax.swing.JComboBox" name="horas">
+          <Properties>
+            <Property name="selectedIndex" type="int" value="-1"/>
+          </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="horasActionPerformed"/>
           </Events>
@@ -229,6 +232,9 @@
           </AuxValues>
         </Component>
         <Component class="javax.swing.JComboBox" name="tipoClase">
+          <Properties>
+            <Property name="selectedIndex" type="int" value="-1"/>
+          </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tipoClaseActionPerformed"/>
           </Events>
