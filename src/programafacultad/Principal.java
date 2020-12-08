@@ -2,7 +2,6 @@ package programafacultad;
 
 import conexion.*;
 import java.sql.Connection;
-import java.awt.Font;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -70,11 +69,6 @@ public class Principal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Programa Consultas");
         setResizable(false);
-        addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentResized(java.awt.event.ComponentEvent evt) {
-                formComponentResized(evt);
-            }
-        });
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -165,7 +159,7 @@ public class Principal extends javax.swing.JFrame {
                                     .addComponent(consultaMateria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addGap(10, 10, 10))
                     .addGroup(ConsultasLayout.createSequentialGroup()
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
+                        .addComponent(jSeparator1)
                         .addContainerGap())))
         );
         ConsultasLayout.setVerticalGroup(
@@ -189,6 +183,11 @@ public class Principal extends javax.swing.JFrame {
         jLabel7.setText("Modificaciones");
 
         modificarDocente.setText("Modificar Docente");
+        modificarDocente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modificarDocenteActionPerformed(evt);
+            }
+        });
 
         modificarMateria.setText("Modificar Materia");
         modificarMateria.addActionListener(new java.awt.event.ActionListener() {
@@ -198,6 +197,11 @@ public class Principal extends javax.swing.JFrame {
         });
 
         modificarCurso.setText("Modificar Curso");
+        modificarCurso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modificarCursoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout ModificacionesLayout = new javax.swing.GroupLayout(Modificaciones);
         Modificaciones.setLayout(ModificacionesLayout);
@@ -375,41 +379,6 @@ public class Principal extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-    /**
-     * Inicia la ventana de la consulta horario y la hace visible
-     *
-     */    /**
-     * Inicia la ventana de la consulta maestro y la hace visible
-     *
-     */    /**
-     * Inicia la ventana de la consulta materia y la hace visible
-     *
-     */    /**
-     * Inicia la ventana de la consulta horas y la hace visible
-     *
-     */    /**
-     * Inicia la ventana de la alta maestro y la hace visible
-     */    /**
-     * Inicia la ventana de la alta materia y la hace visible
-     *
-     */
-    private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
-//        //Sirve para tener una proporción de las letras
-//        int proporcion = 40;
-//        //Crea la fuente
-//        Font fuente = new Font("Arial", 1, 1 * getWidth() / proporcion);
-//        //Asigna el tamaño de letra a cada boton y label
-//        consultaHorario.setFont(fuente);
-//        consultaHoras.setFont(fuente);
-//        consultaMaestro.setFont(fuente);
-//        consultaMateria.setFont(fuente);
-//        altaMaestro.setFont(fuente);
-//        altaMateria.setFont(fuente);
-//        leerArchivo.setFont(fuente);
-//        jLabel1.setFont(fuente);
-//        jLabel2.setFont(fuente);
-//        jLabel3.setFont(fuente);
-    }//GEN-LAST:event_formComponentResized
 
     private void leerArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leerArchivoActionPerformed
         //Crear el lector de texto
@@ -417,8 +386,8 @@ public class Principal extends javax.swing.JFrame {
         //Recupera los datos del archivo y si esta vacio le marca error
         if (lector.recuperarDatos().isEmpty()) {
             //Muestra los mensajes de error
-            JOptionPane.showMessageDialog(this, "ERROR AL RECUPERAR ARCHIVOS", "ERROR",
-                JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "SE CANCELO LA OPERACIÓN", "CANCELADO",
+                    JOptionPane.ERROR_MESSAGE);
             //Si el archivo no esta vacio lee los datos
         } else {
             //Crear el objeto de profesor
@@ -505,33 +474,33 @@ public class Principal extends javax.swing.JFrame {
                                 //Muestra los mensajes de error
                                 System.out.println(e.toString());
                                 JOptionPane.showMessageDialog(this, "ERROR CURSO_HORARIO\n" + e.getMessage(), "ERROR",
-                                    JOptionPane.ERROR_MESSAGE);
+                                        JOptionPane.ERROR_MESSAGE);
                             }
                             JOptionPane.showMessageDialog(this, "SE HAN AGREGADO LOS DATOS", "DATOS AGREGADOS",
-                                JOptionPane.INFORMATION_MESSAGE);
+                                    JOptionPane.INFORMATION_MESSAGE);
                         } catch (Exception e) {
                             //Muestra los mensajes de error
                             System.out.println(e.toString());
                             JOptionPane.showMessageDialog(this, "ERROR CURSO BD\n" + e.getMessage(), "ERROR",
-                                JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.ERROR_MESSAGE);
                         }
                     } catch (Exception e) {
                         //Muestra los mensajes de error
                         System.out.println(e.toString());
                         JOptionPane.showMessageDialog(this, "ERROR LEER BASE DE DATOS\n" + e.getMessage(), "ERROR",
-                            JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.ERROR_MESSAGE);
                     }
                 } catch (Exception e) {
                     //Muestra los mensajes de error
                     System.out.println(e.toString());
                     JOptionPane.showMessageDialog(this, "ERROR LEER BASE DE DATOS\n" + e.getMessage(), "ERROR",
-                        JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.ERROR_MESSAGE);
                 }
             } catch (Exception e) {
                 //Muestra los mensajes de error
                 System.out.println(e.toString());
                 JOptionPane.showMessageDialog(this, "ERROR BASE DE DATOS\n" + e.getMessage(), "ERROR",
-                    JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.ERROR_MESSAGE);
             } finally {
                 //Cierra la conexion con el SSH
                 profesorDAO.cerrarSSH();
@@ -580,12 +549,26 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_altaMateriaActionPerformed
 
     private void altaCursoHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_altaCursoHorarioActionPerformed
-        // TODO add your handling code here:
+        AltaCursoHorario alta = new AltaCursoHorario(this);
+        alta.setVisible(true);
+        setVisible(false);
     }//GEN-LAST:event_altaCursoHorarioActionPerformed
 
     private void modificarMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificarMateriaActionPerformed
-        // TODO add your handling code here:
+        ModificarMateria modificar = new ModificarMateria(this);
+        modificar.setVisible(true);
+        setVisible(false);
     }//GEN-LAST:event_modificarMateriaActionPerformed
+
+    private void modificarCursoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificarCursoActionPerformed
+
+    }//GEN-LAST:event_modificarCursoActionPerformed
+
+    private void modificarDocenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificarDocenteActionPerformed
+        ModificarMaestro modificar = new ModificarMaestro(this);
+        modificar.setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_modificarDocenteActionPerformed
 
     /**
      * Ejecución del programa
