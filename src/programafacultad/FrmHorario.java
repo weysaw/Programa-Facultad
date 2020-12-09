@@ -192,11 +192,11 @@ public class FrmHorario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void regresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regresarActionPerformed
-        cerrrarVentana();
+        cerrarVentana();
     }//GEN-LAST:event_regresarActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        cerrrarVentana();
+        cerrarVentana();
     }//GEN-LAST:event_formWindowClosing
 
     private void horasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_horasActionPerformed
@@ -340,7 +340,7 @@ public class FrmHorario extends javax.swing.JFrame {
     /**
      * Cierra la ventana y muestra la principal
      */
-    private void cerrrarVentana() {
+    private void cerrarVentana() {
         principal.setVisible(true);
         dispose();
     }
