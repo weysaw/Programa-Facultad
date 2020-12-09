@@ -1,4 +1,10 @@
 package programafacultad;
+import conexion.*;
+import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.*;
+import java.sql.Time;
 
 /**
  * Muestra la información de la materia
@@ -9,6 +15,20 @@ package programafacultad;
 public class FrmMateria extends javax.swing.JFrame {
 
     private final Principal principal;
+    private ArrayList<CursoHorario> cursos;
+    //Se crea el objeto para la conexión
+    private final CursoHorarioDAO dao;
+    //Constantes
+    private final byte DOCENTE = 0;
+    private final byte GRUPO = 1;
+    private final byte TIPO = 2;
+    private final byte LUNES = 3;
+    private final byte MARTES = 4;
+    private final byte MIERCOLES = 5;
+    private final byte JUEVES = 6;
+    private final byte VIERNES = 7;
+    private final byte SABADO = 8;
+    
     /**
      * Constructor de la clase
      */
@@ -16,6 +36,8 @@ public class FrmMateria extends javax.swing.JFrame {
         initComponents();
         this.principal = principal;
         setLocationRelativeTo(principal);
+        dao = new CursoHorarioDAO();
+        construyeLista();
     }
 
     @SuppressWarnings("unchecked")
@@ -54,6 +76,12 @@ public class FrmMateria extends javax.swing.JFrame {
 
         jLabel1.setText("Materia: ");
 
+        materias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                materiasActionPerformed(evt);
+            }
+        });
+
         datosMaterias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -69,29 +97,30 @@ public class FrmMateria extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(regresar)
-                .addGap(317, 317, 317))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addComponent(jLabel2))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(47, 47, 47)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(materias, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(23, 23, 23)
+                .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(semestreActual, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(24, 24, 24))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 690, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addComponent(jScrollPane1))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(47, 47, 47)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(materias, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(155, 155, 155)))
+                .addGap(32, 32, 32))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(337, Short.MAX_VALUE)
+                .addComponent(regresar)
+                .addContainerGap(338, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -128,19 +157,175 @@ public class FrmMateria extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void regresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regresarActionPerformed
-        cerrrarVentana();
+        cerrarVentana();
     }//GEN-LAST:event_regresarActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        cerrrarVentana();
+        cerrarVentana();
     }//GEN-LAST:event_formWindowClosing
+
+    private void materiasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_materiasActionPerformed
+        String materia, docente, grupo, tipo, dia, hrInicio, hrFin,
+                numEmpleadoPrevio = "";
+        int fila;
+        
+        materia = materias.getSelectedItem().toString().toUpperCase();
+        //Abre las conexiones
+        dao.abrirSSH();
+        dao.abrirConexion();
+        //Remueve las filas de la tabla
+        removerFilas();
+        try {
+            //Lee los cursos que tengan la materia especificada
+            cursos = dao.readMateria("'" + materia + "'");
+            
+            //Recorre todo el arreglo y agrega los datos a la tabla
+            for (CursoHorario curso : cursos) {
+                docente = curso.getCurso().getProfesor().getNom();
+                grupo = curso.getCurso().getGrupo();
+                tipo = curso.getCurso().getTipo();
+                dia = curso.getHorario().getDia();
+                hrInicio = curso.getHorario().getHrInicio().toString();
+                hrFin = curso.getHorario().getHrFin().toString();
+                
+                //Agrega cada registro a la fila
+                DefaultTableModel modelo = (DefaultTableModel) datosMaterias.getModel();
+                fila = modelo.getRowCount();
+                if (fila == 0) {
+                    //Siempre agrega el primer registro como la primera fila
+                    numEmpleadoPrevio = curso.getCurso().getProfesor().getNumEmpleado();
+                    agregarFila(docente, grupo, tipo, dia, hrInicio, hrFin,
+                            modelo);
+                } else {
+                    fila--;
+                    /* Si el registro actual es del mismo curso que el registro anterior
+                       pero con un dia y hora diferente, agrega la hora a la columna del
+                       día indicado del renglón del registro anterior.
+                       Como puede haber varios profesores con el mismo nombre completo,
+                       es necesario compararlos por sus números de empleado.
+                    */
+                    if (curso.getCurso().getProfesor().getNumEmpleado().equals(numEmpleadoPrevio) &&
+                            modelo.getValueAt(fila, GRUPO).equals(grupo) &&
+                            modelo.getValueAt(fila, TIPO).equals(tipo)) {
+                        actualizarFila(dia, hrInicio, hrFin, modelo);
+                    } else {
+                        numEmpleadoPrevio = curso.getCurso().getProfesor().getNumEmpleado();
+                        agregarFila(docente, grupo, tipo, dia, hrInicio, hrFin,
+                            modelo);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            //Mensaje de error
+            JOptionPane.showMessageDialog(this, "No se pudo leer la base de datos\n" + e.getMessage(),
+                    "ERROR", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            //Cierra la conexión
+            dao.cerrarSSH();
+        }
+    }//GEN-LAST:event_materiasActionPerformed
+    
+    //Agrega las materias registradas a la lista de materias
+    private void construyeLista() {
+        /* Desactiva el listener temporalmente para evitar que corra el evento
+           al agregar nuevos objetos al comboBox
+        */
+        materias.removeActionListener(materias.getActionListeners()[0]);
+        //Abre las conexiones
+        MateriaDAO dao = new MateriaDAO();
+        dao.abrirSSH();
+        dao.abrirConexion();
+        //Consigue la lista
+        try {
+            ArrayList<Materia> listaMaterias = dao.readAll();
+            //Recorre el arreglo y agrega cada materia a la lista
+            for (Materia materia : listaMaterias) {
+                materias.addItem(materia.getNom());
+            }
+        } catch (Exception e) {
+            //Mensaje de error
+            JOptionPane.showMessageDialog(this, "No se pudo conseguir la lista de "
+                    + "materias registradas\n" + e.getMessage(), "ERROR",
+                    JOptionPane.ERROR_MESSAGE);
+        } finally {
+            //Cierra la conexión
+            dao.cerrarSSH();
+        }
+        //Reactiva el listener
+        materias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                materiasActionPerformed(evt);
+            }
+        });
+    }
+    
+    /**
+     * Agrega la fila a la tabla
+     *
+     * @param docente El nombre del docente que imparte el curso
+     * @param grupo El grupo del curso impartido
+     * @param tipo El tipo del curso impartido
+     * @param dia El dia en el que se imparte el curso
+     * @param hrInicio La hora de inicio del curso
+     * @param hrFin La hora de finalización del curso
+     * @param modelo La tabla en la que se agregará la fila
+     */
+    private void agregarFila(String docente, String grupo, String tipo, String dia,
+                                String hrInicio, String hrFin, DefaultTableModel modelo) {
+        modelo.addRow(new Object[]{docente, grupo, tipo});
+        actualizarFila(dia, hrInicio, hrFin, modelo);
+    }
+    
+    /**
+     * Actualiza la fila más reciente de la tabla
+     *
+     * @param dia El dia en el que se imparte el curso
+     * @param hrInicio La hora de inicio del curso
+     * @param hrFin La hora de finalización del curso
+     * @param modelo La tabla cuya fila se actualizará
+     */
+    private void actualizarFila(String dia, String hrInicio, String hrFin,
+            DefaultTableModel modelo) {
+        //Quita los segundos de las horas, ej: 08:00:00 -> 08:00
+        hrInicio = hrInicio.substring(0, hrInicio.length()-3);
+        hrFin = hrFin.substring(0, hrFin.length()-3);
+        
+        switch (dia) {
+            case "LUNES":
+                modelo.setValueAt(hrInicio+"-"+hrFin, modelo.getRowCount()-1, LUNES);
+                break;
+            case "MARTES":
+                modelo.setValueAt(hrInicio+"-"+hrFin, modelo.getRowCount()-1, MARTES);
+                break;
+            case "MIERCOLES":
+                modelo.setValueAt(hrInicio+"-"+hrFin, modelo.getRowCount()-1, MIERCOLES);
+                break;
+            case "JUEVES":
+                modelo.setValueAt(hrInicio+"-"+hrFin, modelo.getRowCount()-1, JUEVES);
+                break;
+            case "VIERNES":
+                modelo.setValueAt(hrInicio+"-"+hrFin, modelo.getRowCount()-1, VIERNES);
+                break;
+            case "SABADO":
+                modelo.setValueAt(hrInicio+"-"+hrFin, modelo.getRowCount()-1, SABADO);
+                break;
+        }
+    }
     
      /**
      * Cierra la ventana y muestra la principal
      */
-    private void cerrrarVentana() {
+    private void cerrarVentana() {
         principal.setVisible(true);
         dispose();
+    }
+    
+    /**
+     * Remueve todas las filas de la tabla
+     */
+    private void removerFilas() {
+        DefaultTableModel modelo = (DefaultTableModel) datosMaterias.getModel();
+        modelo.setRowCount(0);
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
