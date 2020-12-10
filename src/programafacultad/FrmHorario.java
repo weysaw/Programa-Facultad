@@ -59,7 +59,7 @@ public class FrmHorario extends javax.swing.JFrame  {
         jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Horarios");
+        setTitle("Consulta Horarios");
         setMinimumSize(new java.awt.Dimension(650, 550));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -103,7 +103,6 @@ public class FrmHorario extends javax.swing.JFrame  {
         });
         datosHorarios.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
         datosHorarios.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        datosHorarios.setRowSelectionAllowed(true);
         datosHorarios.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(datosHorarios);
 
@@ -199,7 +198,7 @@ public class FrmHorario extends javax.swing.JFrame  {
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setText("<Titulo del programa>");
+        jLabel8.setText("Planta academica FIM");
 
         javax.swing.GroupLayout TituloLayout = new javax.swing.GroupLayout(Titulo);
         Titulo.setLayout(TituloLayout);
