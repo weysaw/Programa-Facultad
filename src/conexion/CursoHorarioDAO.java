@@ -267,25 +267,21 @@ public class CursoHorarioDAO extends ConexionBD {
         CursoDAO cursoDAO = new CursoDAO();
         //Se crea el horario para buscar el objeto
         HorarioDAO horarioDAO = new HorarioDAO();
-        Profesor profesor = null;
-        Materia materia = null;
-        Curso curso = null;
-        Horario horario = null;
 
         profesorDAO.setConexion(conexion);
         //Se busca el profesor con el numero de empleado indicado
-        profesor = profesorDAO.read(new Profesor(numEmpleado, null));
+        Profesor profesor = profesorDAO.read(new Profesor(numEmpleado, null, false));
         materiaDAO.setConexion(conexion);
         //Se busca la materia con la clave de la materia indicado
-        materia = materiaDAO.read(new Materia(claveMateria, null, null));
+        Materia materia = materiaDAO.read(new Materia(claveMateria, null));
         cursoDAO.setConexion(conexion);
         //Se busca el curso con los objetos indicados
-        curso = cursoDAO.read(new Curso(profesor, materia, grupo, tipo, 0, 0));
+        Curso curso = cursoDAO.read(new Curso(profesor, materia, grupo, tipo, 0, 0));
 
         horarioDAO.setConexion(conexion);
 
         //Se busca el horario con la clave horario indicado
-        horario = horarioDAO.readClave(new Horario(claveHorario, null, null, null, null));
+        Horario horario = horarioDAO.readClave(new Horario(claveHorario, null, null, null, null));
 
         //Devuelve el curso horario
         return new CursoHorario(curso, horario);

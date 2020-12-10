@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package programafacultad;
 
 import conexion.Profesor;
@@ -70,6 +65,8 @@ public class ModificarMaestro extends javax.swing.JFrame {
         numDocente = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         nombre = new javax.swing.JTextField();
+        asignatura = new javax.swing.JRadioButton();
+        completo = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Modificar Docente");
@@ -111,6 +108,10 @@ public class ModificarMaestro extends javax.swing.JFrame {
 
         jLabel3.setText("Nombre:");
 
+        asignatura.setText("Asignatura");
+
+        completo.setText("Tiempo Completo");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -129,6 +130,11 @@ public class ModificarMaestro extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(26, 26, 26)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(completo)
+                                .addGap(18, 18, 18)
+                                .addComponent(asignatura, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(283, 283, 283))
@@ -150,7 +156,11 @@ public class ModificarMaestro extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(nombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addGap(28, 28, 28)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(completo)
+                    .addComponent(asignatura))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(aceptar)
                     .addComponent(regresar))
@@ -179,8 +189,9 @@ public class ModificarMaestro extends javax.swing.JFrame {
         int reply = JOptionPane.showConfirmDialog(null, "¿Seguro que desea registrar esta información?", "Confirmación", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
             ProfesorDAO profeDAO = new ProfesorDAO();
+            profeDAO.abrirSSH();
             try {
-                Profesor empleado = new Profesor(numEmpleado, nombre.getText());
+                Profesor empleado = new Profesor(numEmpleado, nombre.getText(), completo.isSelected());
                 profeDAO.update(empleado);
                 JOptionPane.showMessageDialog(this, "Se ha modificado con exito", "EXITO", JOptionPane.INFORMATION_MESSAGE);
             } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
@@ -233,6 +244,8 @@ public class ModificarMaestro extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aceptar;
+    private javax.swing.JRadioButton asignatura;
+    private javax.swing.JRadioButton completo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

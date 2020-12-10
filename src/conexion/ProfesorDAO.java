@@ -14,11 +14,14 @@ public class ProfesorDAO extends ConexionBD {
     private static final String TABLA = "PROFESOR";
     private static final String NUM_EMPLEADO = "numEmpleado";
     private static final String NOM = "nom";
+    private static final String ES_TIEMPO_COMPLETO = "esTiempoCompleto";
     private static final String SQL_SELECT_ALL = "SELECT * FROM " + TABLA+";";
-    private static final String SQL_INSERT = "INSERT INTO " + TABLA + "(" + NUM_EMPLEADO + "," + NOM + ") VALUES(?,?);";
+    private static final String SQL_INSERT = "INSERT INTO " + TABLA + "(" + NUM_EMPLEADO + "," + NOM + ","
+            + ES_TIEMPO_COMPLETO +") VALUES(?,?,?);";
     private static final String SQL_READ = "SELECT*FROM " + TABLA + " WHERE " + NUM_EMPLEADO + " = ?;";
     private static final String SQL_DELETE = "DELETE  FROM " + TABLA + " WHERE " + NUM_EMPLEADO + " = ?;";
-    private static final String SQL_UPDATE = "UPDATE " + TABLA + " SET " + NOM + " = ? WHERE " + NUM_EMPLEADO + " = ?;";
+    private static final String SQL_UPDATE = "UPDATE " + TABLA + " SET " + NOM + " = ? WHERE " + NUM_EMPLEADO + " = ?, "+
+            ES_TIEMPO_COMPLETO + "= ?;";
     private static final String SQL_DELETE_ALL = "DELETE FROM " + TABLA;
     /**
      * Constructor de la clase
@@ -64,6 +67,7 @@ public class ProfesorDAO extends ConexionBD {
         ps = conexion.prepareStatement(SQL_INSERT);
         ps.setString(1, dto.getNumEmpleado());
         ps.setString(2, dto.getNom());
+        ps.setBoolean(3, dto.isEsTiempoCompleto());
         //Ejecuta el comando y acutaliza
         ps.executeUpdate();
         //Cierra la conexión
@@ -84,6 +88,7 @@ public class ProfesorDAO extends ConexionBD {
         //Les asigna los valores que deben tener los ?
         ps.setString(1, dto.getNom());
         ps.setString(2, dto.getNumEmpleado());
+        ps.setBoolean(3, dto.isEsTiempoCompleto());
         //Ejecuta el comando y actualiza
         datosModificados = ps.executeUpdate() > 0;
         //Cierra la conexión
@@ -103,7 +108,7 @@ public class ProfesorDAO extends ConexionBD {
         //Manda el comando
         ps = conexion.prepareStatement(SQL_DELETE);
         //Les asigna los valores que deben tener los ?
-        ps.setString(1, dto.getNumEmpleado() + "");
+        ps.setString(1, dto.getNumEmpleado());
         //Ejecuta el comando y actualiza
         datosModificados = ps.executeUpdate() > 0;
         //Cierra la conexión
@@ -162,7 +167,6 @@ public class ProfesorDAO extends ConexionBD {
      * @throws Exception Devuelve un error
      */
     private Profesor getObject(ResultSet rs) throws Exception {
-        return new Profesor(rs.getString(NUM_EMPLEADO), rs.getString(NOM));
-    }
-   
+        return new Profesor(rs.getString(NUM_EMPLEADO), rs.getString(NOM), rs.getBoolean(ES_TIEMPO_COMPLETO));
+    } 
 }

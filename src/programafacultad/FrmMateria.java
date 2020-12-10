@@ -129,10 +129,20 @@ public class FrmMateria extends javax.swing.JFrame {
             new String [] {
                 "Docente", "Grupo", "Tipo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"
             }
-        ));
-        datosMaterias.setEnabled(false);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         datosMaterias.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(datosMaterias);
+        if (datosMaterias.getColumnModel().getColumnCount() > 0) {
+            datosMaterias.getColumnModel().getColumn(0).setPreferredWidth(250);
+        }
 
         regresar.setText("Regresar");
         regresar.addActionListener(new java.awt.event.ActionListener() {

@@ -219,14 +219,15 @@ public class CursoDAO extends ConexionBD {
         int claveMateria = Integer.parseInt(rs.getString(CLAVE_MATERIA));
         ProfesorDAO profesorDAO = new ProfesorDAO();
         MateriaDAO materiaDAO = new MateriaDAO();
+        
         profesorDAO.setConexion(conexion);
         materiaDAO.setConexion(conexion);
-        Profesor profesor = null;
+        
         //Se busca el profesor con el numero de empleado indicado
-        profesor = profesorDAO.read(new Profesor(numEmpleado, null));
-        Materia materia = null;
+        Profesor profesor = profesorDAO.read(new Profesor(numEmpleado, null, false));
         //Se busca la materia con la clave de la materia indicado
-        materia = materiaDAO.read(new Materia(claveMateria, null, null));
+        Materia materia = materiaDAO.read(new Materia(claveMateria, null));
+        
         return new Curso(profesor, materia, grupo, tipo, hrsTc, hrsAsig);
     }
 }

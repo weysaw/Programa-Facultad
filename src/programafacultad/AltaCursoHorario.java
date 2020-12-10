@@ -167,12 +167,8 @@ public class AltaCursoHorario extends javax.swing.JFrame {
         tipo = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         grupo = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
         registrar = new javax.swing.JButton();
         regresar = new javax.swing.JButton();
-        horasTC = new javax.swing.JTextField();
-        horasAsig = new javax.swing.JTextField();
         horario = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -272,10 +268,6 @@ public class AltaCursoHorario extends javax.swing.JFrame {
             }
         });
 
-        jLabel7.setText("Horas TC");
-
-        jLabel8.setText("Horas Asig");
-
         registrar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         registrar.setText("Registrar");
         registrar.addActionListener(new java.awt.event.ActionListener() {
@@ -291,10 +283,6 @@ public class AltaCursoHorario extends javax.swing.JFrame {
                 regresarActionPerformed(evt);
             }
         });
-
-        horasTC.setText("0");
-
-        horasAsig.setText("0");
 
         horario.setLayout(new java.awt.GridLayout(7, 3, 5, 5));
 
@@ -422,18 +410,10 @@ public class AltaCursoHorario extends javax.swing.JFrame {
                         .addComponent(grupo, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(horario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(AltaLayout.createSequentialGroup()
-                        .addGroup(AltaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7)
-                            .addComponent(horasTC, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(29, 29, 29)
-                        .addGroup(AltaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(AltaLayout.createSequentialGroup()
-                                .addComponent(horasAsig, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(registrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(18, 18, 18)
-                                .addComponent(regresar))
-                            .addComponent(jLabel8))))
+                        .addGap(238, 238, 238)
+                        .addComponent(registrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(regresar)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         AltaLayout.setVerticalGroup(
@@ -459,14 +439,8 @@ public class AltaCursoHorario extends javax.swing.JFrame {
                     .addComponent(grupo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(horario, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(40, 40, 40)
                 .addGroup(AltaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(AltaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(horasTC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(horasAsig, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(registrar)
                     .addComponent(regresar))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -507,8 +481,8 @@ public class AltaCursoHorario extends javax.swing.JFrame {
             cursoDAO.abrirSSH();
             cursoDAO.abrirConexion();
             try {
-                cursos = new Curso(docente, materia, grupo.getText(), tipo.getSelectedItem().toString().toUpperCase(),
-                        Integer.parseInt(horasTC.getText()), Integer.parseInt(horasAsig.getText()));
+                //Se necesita corregirs
+                cursos = new Curso(docente, materia, grupo.getText(), tipo.getSelectedItem().toString().toUpperCase(),0, 0);
                 cursoDAO.append(cursos);
             } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
                 JOptionPane.showMessageDialog(this, "Ya existe un curso registrado \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
@@ -644,8 +618,6 @@ public class AltaCursoHorario extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> finViernes;
     private javax.swing.JTextField grupo;
     private javax.swing.JPanel horario;
-    private javax.swing.JTextField horasAsig;
-    private javax.swing.JTextField horasTC;
     private javax.swing.JComboBox<String> inicioJueves;
     private javax.swing.JComboBox<String> inicioLunes;
     private javax.swing.JComboBox<String> inicioMartes;
@@ -662,8 +634,6 @@ public class AltaCursoHorario extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JCheckBox jueves;
     private javax.swing.JCheckBox lunes;

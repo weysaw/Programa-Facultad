@@ -14,14 +14,13 @@ public class MateriaDAO extends ConexionBD {
     private static final String TABLA = "MATERIA";
     private static final String CLAVE_MATERIA = "claveMateria";
     private static final String NOM = "nom";
-    private static final String PLAN_DE_ESTUDIO = "planDeEstudio";
     private static final String SQL_SELECT_ALL = "SELECT * FROM " + TABLA;
     private static final String SQL_INSERT = "INSERT INTO " + TABLA + "(" + CLAVE_MATERIA
-            + "," + NOM + ", " + PLAN_DE_ESTUDIO + " ) VALUES(?,?,?)";
+            + "," + NOM + ") VALUES(?,?)";
     private static final String SQL_READ = "SELECT*FROM " + TABLA + " WHERE " + CLAVE_MATERIA + " = ?;";
     private static final String SQL_DELETE = "DELETE  FROM " + TABLA + " WHERE " + CLAVE_MATERIA + " = ?";
-    private static final String SQL_UPDATE = "UPDATE "+ TABLA +" SET " + NOM + " = ? ,"+ PLAN_DE_ESTUDIO
-            +"  = ? WHERE " + CLAVE_MATERIA + " = ?;" ;
+    private static final String SQL_UPDATE = "UPDATE "+ TABLA +" SET " + NOM + " = ?"+ 
+            "  = ? WHERE " + CLAVE_MATERIA + " = ?;" ;
     private static final String SQL_DELETE_ALL = "DELETE FROM " + TABLA;
 
     /**
@@ -68,7 +67,6 @@ public class MateriaDAO extends ConexionBD {
         ps = conexion.prepareStatement(SQL_INSERT);
         ps.setString(1, dto.getClaveMateria()+ "");
         ps.setString(2, dto.getNom());
-        ps.setString(3, dto.getPlanDeEstudio());
         //Ejecuta el comando y acutaliza
         ps.executeUpdate();
         //Cierra la conexión
@@ -88,8 +86,7 @@ public class MateriaDAO extends ConexionBD {
         ps = conexion.prepareStatement(SQL_UPDATE);
         //Les asigna los valores que deben tener los ?
         ps.setString(1, dto.getNom());
-        ps.setString(2, dto.getPlanDeEstudio());
-        ps.setString(3, dto.getClaveMateria() + "");
+        ps.setString(2, dto.getClaveMateria() + "");
         //Ejecuta el comando y actualiza
         datosModificados = ps.executeUpdate() > 0;
         //Cierra la conexión
@@ -168,7 +165,6 @@ public class MateriaDAO extends ConexionBD {
      * @throws Exception Devuelve un error
      */
     private Materia getObject(ResultSet rs) throws Exception {
-        return new Materia(Integer.parseInt(rs.getString(CLAVE_MATERIA)), rs.getString(NOM),
-                rs.getString(PLAN_DE_ESTUDIO));
+        return new Materia(Integer.parseInt(rs.getString(CLAVE_MATERIA)), rs.getString(NOM));
     }
 }

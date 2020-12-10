@@ -28,6 +28,7 @@ public class AltaMaestro extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        tipoProfe = new javax.swing.ButtonGroup();
         Titulo = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
@@ -40,6 +41,8 @@ public class AltaMaestro extends javax.swing.JFrame {
         nombreDocente = new javax.swing.JTextField();
         registrar = new javax.swing.JButton();
         regresar = new javax.swing.JButton();
+        completo = new javax.swing.JRadioButton();
+        asignatura = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Alta de docente");
@@ -121,6 +124,12 @@ public class AltaMaestro extends javax.swing.JFrame {
             }
         });
 
+        tipoProfe.add(completo);
+        completo.setText("Tiempo Completo");
+
+        tipoProfe.add(asignatura);
+        asignatura.setText("Asignatura");
+
         javax.swing.GroupLayout AltaLayout = new javax.swing.GroupLayout(Alta);
         Alta.setLayout(AltaLayout);
         AltaLayout.setHorizontalGroup(
@@ -128,19 +137,27 @@ public class AltaMaestro extends javax.swing.JFrame {
             .addGroup(AltaLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(AltaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, AltaLayout.createSequentialGroup()
-                        .addComponent(registrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
-                        .addComponent(regresar))
+                    .addGroup(AltaLayout.createSequentialGroup()
+                        .addComponent(registrar, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(200, 200, 200)
+                        .addComponent(regresar)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(AltaLayout.createSequentialGroup()
                         .addGroup(AltaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(nombreDocente)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(numeroEmpleado))
-                .addContainerGap())
+                            .addComponent(nombreDocente)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(numeroEmpleado)
+                            .addGroup(AltaLayout.createSequentialGroup()
+                                .addGroup(AltaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel3))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(AltaLayout.createSequentialGroup()
+                        .addComponent(completo)
+                        .addGap(18, 18, 18)
+                        .addComponent(asignatura, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         AltaLayout.setVerticalGroup(
             AltaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -157,9 +174,13 @@ public class AltaMaestro extends javax.swing.JFrame {
                 .addComponent(nombreDocente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(AltaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(completo)
+                    .addComponent(asignatura))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addGroup(AltaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(registrar)
                     .addComponent(regresar))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -179,8 +200,7 @@ public class AltaMaestro extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(Titulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Alta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(Alta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -193,7 +213,7 @@ public class AltaMaestro extends javax.swing.JFrame {
         profeDAO.abrirConexion();
         //Agrega el profesor agarrando sus datos
         try {
-            Profesor profesor = new Profesor(nombreDocente.getText(), numeroEmpleado.getText());
+            Profesor profesor = new Profesor(nombreDocente.getText(), numeroEmpleado.getText(), completo.isSelected());
             profeDAO.append(profesor);
             JOptionPane.showMessageDialog(this, "Registrado con exito", "EXITO", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
@@ -245,6 +265,8 @@ public class AltaMaestro extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Alta;
     private javax.swing.JPanel Titulo;
+    private javax.swing.JRadioButton asignatura;
+    private javax.swing.JRadioButton completo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -255,5 +277,6 @@ public class AltaMaestro extends javax.swing.JFrame {
     private javax.swing.JTextField numeroEmpleado;
     private javax.swing.JButton registrar;
     private javax.swing.JButton regresar;
+    private javax.swing.ButtonGroup tipoProfe;
     // End of variables declaration//GEN-END:variables
 }

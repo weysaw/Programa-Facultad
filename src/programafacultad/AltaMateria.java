@@ -31,10 +31,8 @@ public class AltaMateria extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         claveMateria = new javax.swing.JTextField();
         nombreMateria = new javax.swing.JTextField();
-        planEstudios = new javax.swing.JTextField();
         registrar = new javax.swing.JButton();
         regresar = new javax.swing.JButton();
         Titulo = new javax.swing.JPanel();
@@ -57,8 +55,6 @@ public class AltaMateria extends javax.swing.JFrame {
         jLabel2.setText("Clave de la Materia:");
 
         jLabel3.setText("Nombre de la Materia:");
-
-        jLabel4.setText("Plan de Estudios:");
 
         claveMateria.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -93,13 +89,11 @@ public class AltaMateria extends javax.swing.JFrame {
                         .addGroup(AltasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4))
+                            .addComponent(jLabel3))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(planEstudios)
                     .addGroup(AltasLayout.createSequentialGroup()
-                        .addComponent(registrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
+                        .addComponent(registrar, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(regresar)))
                 .addContainerGap())
         );
@@ -116,11 +110,7 @@ public class AltaMateria extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(nombreMateria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(planEstudios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(36, 36, 36)
                 .addGroup(AltasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(registrar)
                     .addComponent(regresar))
@@ -181,8 +171,8 @@ public class AltaMateria extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(Titulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Altas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(Altas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -203,16 +193,14 @@ public class AltaMateria extends javax.swing.JFrame {
         matDAO.abrirConexion();
         //Agrega la materia agarrando sus datos
         try {
-            String nomMateria, planDeEstudios;
-            int numMateria;
-            nomMateria = nombreMateria.getText();
-            planDeEstudios = planEstudios.getText();
-            numMateria = Integer.parseInt(claveMateria.getText());
-            Materia materia = new Materia(numMateria, nomMateria, planDeEstudios);
+            String nomMateria = nombreMateria.getText();
+            int numMateria = Integer.parseInt(claveMateria.getText());
+            Materia materia = new Materia(numMateria, nomMateria);
+            
             matDAO.append(materia);
             JOptionPane.showMessageDialog(this, "Registrado con exito", "EXITO", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
-            JOptionPane.showMessageDialog(this, "Ya existe un docente registrado con este número de Empleado\n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Ya existe una materia con esta clave\n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) { //Error en general
             JOptionPane.showMessageDialog(this, "ERROR \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
         } finally { //Cierra el ssh
@@ -247,9 +235,7 @@ public class AltaMateria extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JTextField nombreMateria;
-    private javax.swing.JTextField planEstudios;
     private javax.swing.JButton registrar;
     private javax.swing.JButton regresar;
     // End of variables declaration//GEN-END:variables
