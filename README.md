@@ -1,4 +1,19 @@
 # Programa-Facultad
-Es una programa es cual hace consulta de maestros, horarios, etc.
+Es un programa es cual hace consulta de maestros, horarios, etc.
 
-Constantemente se actualiza por el momento porque se esta realizando
+Detalles a resolver:
+- Verificar traslape en alta de curso
+- Separar nombre y apellidos en alta de Docente
+- Ordenar por nombre en consulta por maestro
+- ~~Nuevo atributo de Profesores Asig/TC~~
+- ~~Eliminar plan de estudio~~
+- Nombre del Programa: Planta academica FIM
+- Renombrar titulos de ventanas
+- Ortografia
+
+Datos a considerar: 
+- 0 = Asignatura
+- 1 = Tiempo Completo 
+- 2 = Tiempo Completo
+- 3 = Tiempo Completo 
+- 4 = Tiempo Completo
