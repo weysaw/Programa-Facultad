@@ -91,7 +91,7 @@ public class CursoHorarioDAO extends ConexionBD {
      * Regresa los CursoHorarios de la materia especificada, ordenados 
      * de forma ascendiente por numEmpleado, grupo, tipo y claveHorario.
      *
-     * @param materia La materia de los CursoHorarios a obtener
+     * @param materia La claveMateria de los CursoHorarios a obtener
      * @return El ArrayList de CursoHorario
      * @throws Exception Devuelve error
      */
@@ -102,8 +102,37 @@ public class CursoHorarioDAO extends ConexionBD {
         ArrayList<CursoHorario> result = new ArrayList();
         //Manda al comando
         ps = conexion.prepareStatement("SELECT * FROM " + TABLA
-                + " WHERE " + CLAVE_MATERIA + " IN (SELECT " + CLAVE_MATERIA + " FROM"
-                + " MATERIA WHERE nom = " + materia + ") ORDER BY " + NUM_EMPLEADO
+                + " WHERE " + CLAVE_MATERIA + " = " + materia + " ORDER BY "
+                + NUM_EMPLEADO + " ASC, " + GRUPO + " ASC, " + TIPO + " ASC, "
+                + CLAVE_HORARIO + " ASC;");
+        //Ejecuta el comando y devuelve el resultado del comando
+        rs = ps.executeQuery();
+        //Recorre por todos los resultados
+        while (rs.next()) {
+            result.add(getObject(rs));
+        }
+        //Cierra las conexiones
+        cerrar(ps);
+        cerrar(rs);
+        return result;
+    }
+    
+    /**
+     * Regresa los CursoHorarios del profesor especificado, ordenados 
+     * de forma ascendiente por claveMateria, grupo, tipo y claveHorario.
+     *
+     * @param numEmpleado El número de empleado del profesor de los CursoHorarios a obtener
+     * @return El ArrayList de CursoHorario
+     * @throws Exception Devuelve error
+     */
+    public ArrayList<CursoHorario> readProfesor(String numEmpleado) throws Exception {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        //Se utilza para almacenar los objetos
+        ArrayList<CursoHorario> result = new ArrayList();
+        //Manda al comando
+        ps = conexion.prepareStatement("SELECT * FROM " + TABLA + " WHERE "
+                + NUM_EMPLEADO + " = " + numEmpleado + " ORDER BY " + CLAVE_MATERIA
                 + " ASC, " + GRUPO + " ASC, " + TIPO + " ASC, " + CLAVE_HORARIO
                 + " ASC;");
         //Ejecuta el comando y devuelve el resultado del comando
