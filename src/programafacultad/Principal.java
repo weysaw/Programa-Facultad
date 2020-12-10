@@ -509,34 +509,34 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_leerArchivoActionPerformed
 
     private void consultaMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaMateriaActionPerformed
-        //Hace visible la consulta por materia
+        //Hace visible la consulta horario
         FrmMateria materia = new FrmMateria(this);
         materia.setVisible(true);
         setVisible(false);
     }//GEN-LAST:event_consultaMateriaActionPerformed
 
     private void consultaHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaHorarioActionPerformed
-        //Hace visible la consulta por horario
+        //Hace visible la consulta horario
         FrmHorario horario = new FrmHorario(this);
         horario.setVisible(true);
         setVisible(false);
     }//GEN-LAST:event_consultaHorarioActionPerformed
 
     private void consultaMaestroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaMaestroActionPerformed
-        //Hace visible la consulta por maestro
+        //Hace visible la consulta horario
         FrmMaestro maestro = new FrmMaestro(this);
         maestro.setVisible(true);
         setVisible(false);
     }//GEN-LAST:event_consultaMaestroActionPerformed
 
     private void consultaHorasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaHorasActionPerformed
-        //Hace visible la consulta por horas
+        //Hace visible la consulta horario
         FrmHoras hora = new FrmHoras(this, true);
         hora.setVisible(true);
     }//GEN-LAST:event_consultaHorasActionPerformed
 
     private void altaMaestroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_altaMaestroActionPerformed
-        //Hace visible la alta de maestro
+        //Hace visible la consulta horario
         AltaMaestro alta = new AltaMaestro(this);
         alta.setVisible(true);
         setVisible(false);
