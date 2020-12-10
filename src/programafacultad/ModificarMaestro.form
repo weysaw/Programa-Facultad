@@ -59,6 +59,12 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <Component id="completo" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="asignatura" min="-2" pref="106" max="-2" attributes="0"/>
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel3" max="32767" attributes="0"/>
                                   <EmptySpace min="283" pref="283" max="-2" attributes="0"/>
@@ -86,7 +92,12 @@
                   <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="nombre" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="40" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="completo" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="asignatura" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace pref="23" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="aceptar" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="regresar" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -145,6 +156,16 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="nombre">
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="asignatura">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Asignatura"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="completo">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Tiempo Completo"/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>

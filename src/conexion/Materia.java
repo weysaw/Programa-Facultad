@@ -13,12 +13,10 @@ public class Materia implements Serializable {
     
     private int claveMateria;
     private String nom;
-    private String planDeEstudio;
 
-    public Materia(int claveMateria, String nom, String planDeEstudio) {
+    public Materia(int claveMateria, String nom) {
         this.claveMateria = claveMateria;
         this.nom = nom;
-        this.planDeEstudio = planDeEstudio;
     }
 
     public int getClaveMateria() {
@@ -37,17 +35,9 @@ public class Materia implements Serializable {
         this.nom = nom;
     }
 
-    public String getPlanDeEstudio() {
-        return planDeEstudio;
-    }
-
-    public void setPlanDeEstudio(String planDeEstudio) {
-        this.planDeEstudio = planDeEstudio;
-    }
-
     @Override
     public String toString() {
-        return "Materia{" + "claveMateria=" + claveMateria + ", nom=" + nom + ", planDeEstudio=" + planDeEstudio + "}\n";
+        return "Materia{" + "claveMateria=" + claveMateria + ", nom=" + nom +"}\n";
     }
 
     @Override
@@ -55,8 +45,7 @@ public class Materia implements Serializable {
         Materia materia = (Materia) obj;
         boolean esIgualClave = claveMateria == materia.getClaveMateria();
         boolean esIgualNom = nom == null ? materia.getNom() == null : nom.equals(materia.getNom());
-        boolean esIgualPlan = planDeEstudio == null ? materia.getPlanDeEstudio() == null : planDeEstudio.equals(materia.getPlanDeEstudio());
-        return esIgualClave && esIgualNom && esIgualPlan; 
+        return esIgualClave && esIgualNom; 
     }
 
     

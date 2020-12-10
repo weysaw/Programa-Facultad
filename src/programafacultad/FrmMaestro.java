@@ -98,9 +98,20 @@ public class FrmMaestro extends javax.swing.JFrame {
             new String [] {
                 "Materia", "Grupo", "Tipo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Total Horas"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         datosDocente.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(datosDocente);
+        if (datosDocente.getColumnModel().getColumnCount() > 0) {
+            datosDocente.getColumnModel().getColumn(0).setPreferredWidth(250);
+        }
 
         jLabel4.setText("Docente:");
 

@@ -31,10 +31,7 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-          </Group>
+          <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -52,29 +49,29 @@
                           <EmptySpace min="-2" pref="172" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
-                                  <Component id="aceptar" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
-                                  <Component id="regresar" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="planEstudios" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="materias" alignment="0" pref="260" max="32767" attributes="0"/>
-                                  <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="nomMateria" alignment="0" max="32767" attributes="0"/>
-                              </Group>
+                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                              <Component id="materias" alignment="0" pref="260" max="32767" attributes="0"/>
+                              <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="nomMateria" alignment="0" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="95" max="-2" attributes="0"/>
-                  <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="102" attributes="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="95" max="-2" attributes="0"/>
+                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="71" max="-2" attributes="0"/>
+                          <Component id="aceptar" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="regresar" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -91,16 +88,12 @@
                   <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="nomMateria" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="planEstudios" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="48" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="aceptar" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="regresar" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                  <EmptySpace pref="37" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -132,8 +125,6 @@
         </Component>
         <Component class="javax.swing.JTextField" name="nomMateria">
         </Component>
-        <Component class="javax.swing.JTextField" name="planEstudios">
-        </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
             <Property name="text" type="java.lang.String" value="Selecione la materia a modificar:"/>
@@ -142,11 +133,6 @@
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
             <Property name="text" type="java.lang.String" value="Nombre de la Materia:"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="jLabel4">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Plan de Estudios:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JComboBox" name="materias">

@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
  * @author Leslie Vidal, Ornelas Munguía Axel Leonardo
  * @version 05.12.2020
  */
-public class FrmHorario extends javax.swing.JFrame {
+public class FrmHorario extends javax.swing.JFrame  {
 
     private final Principal principal;
     private ArrayList<CursoHorario> cursos;
@@ -32,6 +32,7 @@ public class FrmHorario extends javax.swing.JFrame {
         seleccionaDia = false;
         seleccionaHora = false;
         dao = new CursoHorarioDAO();
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -80,6 +81,8 @@ public class FrmHorario extends javax.swing.JFrame {
 
         semestreActual.setText("20XX-X");
 
+        jScrollPane1.setToolTipText("");
+
         datosHorarios.setAutoCreateRowSorter(true);
         datosHorarios.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         datosHorarios.setModel(new javax.swing.table.DefaultTableModel(
@@ -89,15 +92,24 @@ public class FrmHorario extends javax.swing.JFrame {
             new String [] {
                 "Docente", "Num. Grupo", "Materia"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         datosHorarios.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
-        datosHorarios.setEnabled(false);
+        datosHorarios.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        datosHorarios.setRowSelectionAllowed(true);
         datosHorarios.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(datosHorarios);
 
         jLabel3.setText("Dia:");
 
-        jLabel4.setText("Hora:");
+        jLabel4.setText("Hora Inicio:");
 
         jLabel5.setText("Tipo:");
 
@@ -149,7 +161,7 @@ public class FrmHorario extends javax.swing.JFrame {
                                 .addComponent(jLabel5)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(tipoClase, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 86, Short.MAX_VALUE))
+                        .addGap(0, 53, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, consultasLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(regresar)))
