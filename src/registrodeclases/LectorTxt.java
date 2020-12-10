@@ -72,6 +72,9 @@ public class LectorTxt {
                                 for (Profesor profesor : profesores) {
                                     if (profesor.getNom().equals(empleado[1])) {
                                         profesor.setNumEmpleado(empleado[0]);
+                                        if(Integer.parseInt(empleado[2])!=0){//Si el numero es distinto a 0, quiere decir que es TC
+                                            profesor.setEsTiempoCompleto(true);
+                                        }
                                         break;
                                     }
                                 }
