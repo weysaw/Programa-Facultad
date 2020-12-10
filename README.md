@@ -7,8 +7,8 @@ Detalles a resolver:
 - Ordenar por nombre en consulta por maestro
 - ~~Nuevo atributo de Profesores Asig/TC~~
 - ~~Eliminar plan de estudio~~
-- Nombre del Programa: Planta academica FIM
-- Renombrar titulos de ventanas
+- ~~Nombre del Programa: Planta academica FIM~~
+- ~~Renombrar titulos de ventanas~~
 - Ortografia
 
 Datos a considerar: 
