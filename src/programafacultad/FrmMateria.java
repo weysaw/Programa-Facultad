@@ -234,11 +234,12 @@ public class FrmMateria extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void materiasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_materiasActionPerformed
-        String materia, docente, grupo, tipo, dia, hrInicio, hrFin,
-                numEmpleadoPrevio = "";
+        String materia, docenteNum, docenteNom, grupo, tipo, dia, hrInicio, hrFin;
         int fila;
         
-        materia = materias.getSelectedItem().toString().toUpperCase();
+        //Obtén solo la clave de la materia del comboBox
+        materia = materias.getSelectedItem().toString();
+        materia = materia.substring(0, materia.indexOf(' '));
         //Abre las conexiones
         dao.abrirSSH();
         dao.abrirConexion();
@@ -250,7 +251,8 @@ public class FrmMateria extends javax.swing.JFrame {
             
             //Recorre todo el arreglo y agrega los datos a la tabla
             for (CursoHorario curso : cursos) {
-                docente = curso.getCurso().getProfesor().getNom();
+                docenteNum = curso.getCurso().getProfesor().getNumEmpleado();
+                docenteNom = curso.getCurso().getProfesor().getNom();
                 grupo = curso.getCurso().getGrupo();
                 tipo = curso.getCurso().getTipo();
                 dia = curso.getHorario().getDia();
@@ -262,9 +264,8 @@ public class FrmMateria extends javax.swing.JFrame {
                 fila = modelo.getRowCount();
                 if (fila == 0) {
                     //Siempre agrega el primer registro como la primera fila
-                    numEmpleadoPrevio = curso.getCurso().getProfesor().getNumEmpleado();
-                    agregarFila(docente, grupo, tipo, dia, hrInicio, hrFin,
-                            modelo);
+                    agregarFila(docenteNum + " " + docenteNom, grupo, tipo, dia,
+                            hrInicio, hrFin, modelo);
                 } else {
                     fila--;
                     /* Si el registro actual es del mismo curso que el registro anterior
@@ -273,14 +274,13 @@ public class FrmMateria extends javax.swing.JFrame {
                        Como puede haber varios profesores con el mismo nombre completo,
                        es necesario compararlos por sus números de empleado.
                     */
-                    if (curso.getCurso().getProfesor().getNumEmpleado().equals(numEmpleadoPrevio) &&
+                    if (modelo.getValueAt(fila, DOCENTE).equals(docenteNum + " " + docenteNom) &&
                             modelo.getValueAt(fila, GRUPO).equals(grupo) &&
                             modelo.getValueAt(fila, TIPO).equals(tipo)) {
                         actualizarFila(dia, hrInicio, hrFin, modelo);
                     } else {
-                        numEmpleadoPrevio = curso.getCurso().getProfesor().getNumEmpleado();
-                        agregarFila(docente, grupo, tipo, dia, hrInicio, hrFin,
-                            modelo);
+                        agregarFila(docenteNum + " " + docenteNom, grupo, tipo,
+                                dia, hrInicio, hrFin, modelo);
                     }
                 }
             }
@@ -309,7 +309,7 @@ public class FrmMateria extends javax.swing.JFrame {
             ArrayList<Materia> listaMaterias = dao.readAll();
             //Recorre el arreglo y agrega cada materia a la lista
             for (Materia materia : listaMaterias) {
-                materias.addItem(materia.getNom());
+                materias.addItem(materia.getClaveMateria() + " " + materia.getNom());
             }
         } catch (Exception e) {
             //Mensaje de error
@@ -331,7 +331,7 @@ public class FrmMateria extends javax.swing.JFrame {
     /**
      * Agrega la fila a la tabla
      *
-     * @param docente El nombre del docente que imparte el curso
+     * @param docente La clave y nombre del docente que imparte el curso
      * @param grupo El grupo del curso impartido
      * @param tipo El tipo del curso impartido
      * @param dia El dia en el que se imparte el curso
