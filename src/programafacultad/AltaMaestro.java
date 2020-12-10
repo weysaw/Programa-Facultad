@@ -51,7 +51,6 @@ public class AltaMaestro extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Alta de docente");
-        setPreferredSize(new java.awt.Dimension(378, 398));
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -235,7 +234,7 @@ public class AltaMaestro extends javax.swing.JFrame {
         profeDAO.abrirConexion();
         //Agrega el profesor agarrando sus datos.
         try {
-            Profesor profesor = new Profesor((apellidoP.getText() + apellidoM.getText() + nombreDocente.getText()), numeroEmpleado.getText(), completo.isSelected());
+            Profesor profesor = new Profesor((apellidoP.getText() + " " + apellidoM.getText() + " " + nombreDocente.getText()), numeroEmpleado.getText(), completo.isSelected());
             profeDAO.append(profesor);
             JOptionPane.showMessageDialog(this, "Registrado con exito", "EXITO", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
