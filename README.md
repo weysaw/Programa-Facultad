@@ -3,7 +3,7 @@ Es un programa es cual hace consulta de maestros, horarios, etc.
 
 Detalles a resolver:
 - Verificar traslape en alta de curso
-- Separar nombre y apellidos en alta de Docente
+- ~~Separar nombre y apellidos en alta de Docente~~
 - Ordenar por nombre en consulta por maestro
 - ~~Nuevo atributo de Profesores Asig/TC~~
 - ~~Eliminar plan de estudio~~
