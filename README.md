@@ -3,6 +3,7 @@ Es un programa es cual hace consulta de maestros, horarios, etc.
 
 Detalles a resolver:
 - Verificar traslape en alta de curso
+- Calcular horas en alta de curso
 - Ordenar por nombre en consulta por maestro
 - Ortografia
 - ~~Separar nombre y apellidos en alta de Docente~~
