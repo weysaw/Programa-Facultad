@@ -129,6 +129,7 @@ public class AltaMaestro extends javax.swing.JFrame {
         });
 
         tipoProfe.add(completo);
+        completo.setSelected(true);
         completo.setText("Tiempo Completo");
 
         tipoProfe.add(asignatura);
@@ -234,7 +235,11 @@ public class AltaMaestro extends javax.swing.JFrame {
         profeDAO.abrirConexion();
         //Agrega el profesor agarrando sus datos.
         try {
-            Profesor profesor = new Profesor((apellidoP.getText() + " " + apellidoM.getText() + " " + nombreDocente.getText()), numeroEmpleado.getText(), completo.isSelected());
+            String apellidos = apellidoP.getText() + " " + apellidoM.getText();
+            String nombres = nombreDocente.getText();
+            
+            Profesor profesor = new Profesor(numeroEmpleado.getText()
+                    , apellidos + " " + nombres, completo.isSelected());
             profeDAO.append(profesor);
             JOptionPane.showMessageDialog(this, "Registrado con exito", "EXITO", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
@@ -244,7 +249,7 @@ public class AltaMaestro extends javax.swing.JFrame {
         } finally { //Cierra el ssh
             profeDAO.cerrarSSH();
         }
-
+        dispose();
     }//GEN-LAST:event_registrarActionPerformed
 
     private void regresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regresarActionPerformed
@@ -255,7 +260,7 @@ public class AltaMaestro extends javax.swing.JFrame {
     private void numeroEmpleadoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_numeroEmpleadoKeyTyped
         char C = evt.getKeyChar();
         //Si teclea alguna espacio en blanco o letra le dice que es un error
-        if (Character.isAlphabetic(C) || Character.isWhitespace(C)) {
+        if (Character.isAlphabetic(C) || Character.isSpaceChar(C)) {
             evt.consume();
             JOptionPane.showMessageDialog(this, "Ingrese solo numeros", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
