@@ -4,19 +4,19 @@ import conexion.Materia;
 import conexion.MateriaDAO;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
- *
- * @author Leslie Vidal
+ * Modifica la materia 
+ * 
+ * @author Leslie Vidal, Ornelas Munguía Axel Leonardo
+ * @version 11.12.2020
  */
 public class ModificarMateria extends javax.swing.JFrame {
 
      private final Principal principal;
-     ArrayList<Materia> materiaDAO;
-     int numMateria;
+     private ArrayList<Materia> materiaDAO;
+     private int numMateria;
     /**
      * Creates new form ModificarMateria
      */
@@ -37,13 +37,14 @@ public class ModificarMateria extends javax.swing.JFrame {
          try {
              materiaDAO = new ArrayList();
              materiaDAO = materia.readAll();
-             for(int i=0; i<materiaDAO.size(); i++){
+             for(int i=0; i <materiaDAO.size(); i++){
                  materias.addItem(materiaDAO.get(i).getClaveMateria()+" "+materiaDAO.get(i).getNom());
              }
          } catch (Exception ex) {
-             Logger.getLogger(ModificarMateria.class.getName()).log(Level.SEVERE, null, ex);
+             JOptionPane.showMessageDialog(this, "ERROR\n" + ex.getMessage(),"ERROR",JOptionPane.ERROR_MESSAGE);
          } finally {
              materia.cerrarSSH();
+             dispose();
          }
     }
     

@@ -2,14 +2,15 @@ package programafacultad;
 
 import conexion.Profesor;
 import conexion.ProfesorDAO;
-import java.awt.Font;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
- *
+ * Modifica el maestro de la base de datos que se indique
+ * 
  * @author Leslie Vidal, Ornelas Munguía Axel Leonardo
+ * @version 11.12.2020
  */
 public class ModificarMaestro extends javax.swing.JFrame {
 
@@ -77,11 +78,6 @@ public class ModificarMaestro extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Modificar Docente");
         setResizable(false);
-        addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentResized(java.awt.event.ComponentEvent evt) {
-                formComponentResized(evt);
-            }
-        });
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -116,6 +112,7 @@ public class ModificarMaestro extends javax.swing.JFrame {
         jLabel3.setText("Nombre:");
 
         tipo.add(asignatura);
+        asignatura.setSelected(true);
         asignatura.setText("Asignatura");
 
         tipo.add(completo);
@@ -244,20 +241,22 @@ public class ModificarMaestro extends javax.swing.JFrame {
     }//GEN-LAST:event_regresarActionPerformed
 
     private void aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarActionPerformed
-        int reply = JOptionPane.showConfirmDialog(null, "¿Seguro que desea registrar esta información?", "Confirmación", JOptionPane.YES_NO_OPTION);
+        int reply = JOptionPane.showConfirmDialog(this, "¿Seguro que desea registrar esta información?", "Confirmación", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
             ProfesorDAO profeDAO = new ProfesorDAO();
             profeDAO.abrirSSH();
+            profeDAO.abrirConexion();
             try {
                 Profesor empleado = new Profesor(numEmpleado, nombre.getText(), completo.isSelected());
                 profeDAO.update(empleado);
                 JOptionPane.showMessageDialog(this, "Se ha modificado con exito", "EXITO", JOptionPane.INFORMATION_MESSAGE);
             } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
-                JOptionPane.showMessageDialog(this, "Ya existe una Materia registrada con este número de Materia\n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Ya existe un Maestro registrada con este número de empleado\n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
             } catch (Exception ex) { //Error en general
                 JOptionPane.showMessageDialog(this, "ERROR \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
             } finally { //Cierra el ssh
                 profeDAO.cerrarSSH();
+                cerrrarVentana();
             }
         }
     }//GEN-LAST:event_aceptarActionPerformed
@@ -280,16 +279,6 @@ public class ModificarMaestro extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_numDocenteActionPerformed
-
-    private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
-         //Sirve para tener una proporción de las letras
-        int proporcion = 40;
-        //Crea la fuente
-        Font fuente = new Font("Arial", 1, 1 * getWidth() / proporcion);
-        aceptar.setFont(fuente);
-        jLabel1.setFont(fuente);
-        jLabel2.setFont(fuente);
-    }//GEN-LAST:event_formComponentResized
 
     /**
      * Cierra la ventana y muestra la principal

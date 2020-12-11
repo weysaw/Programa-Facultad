@@ -7,18 +7,22 @@ import javax.swing.JOptionPane;
 import java.sql.Time;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import java.awt.Component;
 
 /**
  * Da de alta los cursos y los usuarios
  *
- * @author Leslie Vidal, Ornelas Munguía Axel Leonardo
- * @version 08.12.2020
+ * @author Leslie Vidal, Ornelas Munguía Axel Leonardo, Perez Valdez Raymundo
+ * @version 11.12.2020
  */
 public class AltaCursoHorario extends javax.swing.JFrame {
 
     private final Principal principal;
     private ArrayList<Materia> materiaDAO;
     private ArrayList<Profesor> profeDAO;
+    private final ArrayList<JCheckBox> checkDias;
+    private final ArrayList<JComboBox> fines;
+    private final ArrayList<JComboBox> inicios;
     private Profesor docente;
     private Materia materia;
 
@@ -29,10 +33,41 @@ public class AltaCursoHorario extends javax.swing.JFrame {
         initComponents();
         this.principal = principal;
         setLocationRelativeTo(principal);
+        //Inicializa las relaciones de los checkbox y combobox
         materiaDAO = new ArrayList();
         profeDAO = new ArrayList();
+        checkDias = new ArrayList();
+        inicios = new ArrayList();
+        fines = new ArrayList();
+        //Agrega las referencias de los checkbox y combobox
+        inicios.add(inicioLunes);
+        inicios.add(inicioMartes);
+        inicios.add(inicioMiercoles);
+        inicios.add(inicioJueves);
+        inicios.add(inicioViernes);
+        inicios.add(inicioSabado);
+        fines.add(finLunes);
+        fines.add(finMartes);
+        fines.add(finMiercoles);
+        fines.add(finJueves);
+        fines.add(finViernes);
+        fines.add(finSabado);
+        checkDias.add(lunes);
+        checkDias.add(martes);
+        checkDias.add(miercoles);
+        checkDias.add(jueves);
+        checkDias.add(viernes);
+        checkDias.add(sabado);
         bloqueo();
-        informacion();
+        //Es el mensaje de espera
+        MensajeEspera mensaje = new MensajeEspera(principal) {
+            @Override
+            public void accion(Component cmp) {
+                informacion();
+            }
+        };
+        //Muestra el mensaje de espera
+        mensaje.mostrarMensaje();
     }
 
     /**
@@ -75,17 +110,25 @@ public class AltaCursoHorario extends javax.swing.JFrame {
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "ERROR LECTURA PROFESOR\n" + ex.getMessage(),
                         "ERROR", JOptionPane.ERROR_MESSAGE);
-                dispose();
+                cerrrarVentana();
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "ERROR LECTURA MATERIA\n" + ex.getMessage(),
                     "ERROR", JOptionPane.ERROR_MESSAGE);
-            dispose();
+            cerrrarVentana();
         } finally { // Cierra la conexión SSH
             materiaConexion.cerrarSSH();
         }
     }
 
+    /**
+     * Agrega el curso horario indicado por los parametros indicados
+     * 
+     * @param cursos Agrega el curso
+     * @param hrInicioDia Agrega la hr inicio dia
+     * @param hrFinDia Agrega la hr fin del día 
+     * @param dia Agrega el día
+     */
     private void agregarCursoHorario(Curso cursos, JComboBox<String> hrInicioDia, JComboBox<String> hrFinDia, JCheckBox dia) {
         //Convierte las horas del dia
         String hrFin = hrFinDia.getSelectedItem().toString().split(":")[0];
@@ -93,27 +136,37 @@ public class AltaCursoHorario extends javax.swing.JFrame {
         int horaFin = Integer.parseInt(hrFin);
         int horaInicio = Integer.parseInt(hrInicio);
 
+        //Crea las horas con time
         Time tiempoInicio = new Time(horaInicio, 0, 0);
         Time tiempoFin = new Time(horaFin, 0, 0);
         String diaTexto = dia.getText().toUpperCase();
+        //Inicializa la hora 
+        Horario hora = new Horario(diaTexto, tiempoInicio, tiempoFin);
 
-        Horario horario = new Horario(diaTexto, tiempoInicio, tiempoFin);
-
+        //Crea la conexion
         HorarioDAO horarioDAO = new HorarioDAO();
+        //Abre la conexion con la BD
         horarioDAO.abrirConexion();
         try {
-            Horario repetido = horarioDAO.read(horario);
+            //Lee los horarios y busca si tiene repetidos
+            Horario repetido = horarioDAO.read(hora);
+            //Si no esta repetido la agrega
             if (repetido == null) {
-                horarioDAO.append(horario);
+                horarioDAO.append(hora);
                 System.out.println("SE REGISTRO EL HORARIO");
-                horario = horarioDAO.read(horario);
+                hora = horarioDAO.read(hora);
             } else {
-                horario = repetido;
+                //Si se repite lo asigna
+                hora = repetido;
             }
-            CursoHorario cursoH = new CursoHorario(cursos, horario);
+            //Inicializa el curso horario
+            CursoHorario cursoH = new CursoHorario(cursos, hora);
             CursoHorarioDAO cursoHDAO = new CursoHorarioDAO();
+            //Pone la conexión al Curso Horario
             cursoHDAO.setConexion(horarioDAO.getConexionBD());
+            
             try {
+                //Agrega el curso horario
                 cursoHDAO.append(cursoH);
                 System.out.println("SE REGISTRO EL CURSO HORARIO");
             } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
@@ -126,33 +179,51 @@ public class AltaCursoHorario extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Asigna el horario dependiendo de los check seleccionados
+     * 
+     * @param cursos Es el curso agrega
+     */
     private void asignarHorario(Curso cursos) {
         // Agregamos los horarios junto con el curso horario a la base de datos por dias
-        if (lunes.isSelected()) {
-            agregarCursoHorario(cursos, inicioLunes, finLunes, lunes);
+        for (int i = 0; i < 6; i++) {
+            if (checkDias.get(i).isSelected()) {
+                agregarCursoHorario(cursos, inicios.get(i), fines.get(i), checkDias.get(i));
+            }
         }
-        if (martes.isSelected()) {
-            agregarCursoHorario(cursos, inicioMartes, finMartes, martes);
+    }
+
+    /**
+     * Valida si el horario no se ha traslapado
+     * 
+     * @param dia Es el dia que se verifica
+     * @param numEmpleado Es el numEmpleado a que se verifica
+     * @return Devuelve true si no esta en la lista y false no no esta
+     */
+    private boolean validarTraslape(String dia, String hrInicio, String hrFin) {
+        CursoHorarioDAO dao = new CursoHorarioDAO();
+        dao.abrirConexion();
+        ArrayList<CursoHorario> curso = null;
+        try {
+            //Busca el horario en la base de datos con el Queary indicado
+            curso = dao.readHrIntervaloProfe(dia, hrInicio, hrFin, docente.getNumEmpleado());
+            for (CursoHorario cursoHorario : curso) {
+                System.out.println(cursoHorario.getHorario());
+            }
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            return false;
         }
-        if (miercoles.isSelected()) {
-            agregarCursoHorario(cursos, inicioMiercoles, finMiercoles, miercoles);
+        if (curso.isEmpty()) {
+            return true;
         }
-        if (jueves.isSelected()) {
-            agregarCursoHorario(cursos, inicioJueves, finJueves, jueves);
-        }
-        if (viernes.isSelected()) {
-            agregarCursoHorario(cursos, inicioViernes, finViernes, viernes);
-        }
-        if (sabado.isSelected()) {
-            agregarCursoHorario(cursos, inicioSabado, finSabado, sabado);
-        }
+        return false;
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        dias = new javax.swing.ButtonGroup();
         Titulo = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
@@ -263,9 +334,9 @@ public class AltaCursoHorario extends javax.swing.JFrame {
 
         jLabel2.setText("Grupo:");
 
-        grupo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                grupoActionPerformed(evt);
+        grupo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                grupoKeyTyped(evt);
             }
         });
 
@@ -474,27 +545,46 @@ public class AltaCursoHorario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void registrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarActionPerformed
-        int reply = JOptionPane.showConfirmDialog(null, "¿Seguro que desea registrar esta información?", "Confirmación", JOptionPane.YES_NO_OPTION);
+        //Pregunta si quiere ingresar el dato
+        int reply = JOptionPane.showConfirmDialog(this, "¿Seguro que desea registrar esta información?", "Confirmación", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
             Curso cursos = null;
             // Agregamos el curso a la base de datos
             CursoDAO cursoDAO = new CursoDAO();
             cursoDAO.abrirSSH();
             cursoDAO.abrirConexion();
-            try {
-                //Se necesita corregirs
-                cursos = new Curso(docente, materia, grupo.getText(), tipo.getSelectedItem().toString().toUpperCase(),0, 0);
-                cursoDAO.append(cursos);
-            } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
-                JOptionPane.showMessageDialog(this, "Ya existe un curso registrado \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
-            } catch (Exception ex) { //Error en general
-                JOptionPane.showMessageDialog(this, "ERROR \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
-            } finally {
-                // Agregamos los horarios junto con el curso horario a la base de datos por dias
-                asignarHorario(cursos);
-                cursoDAO.cerrarSSH();
-            }
 
+            boolean validar = true;
+            //Busca por si estan checkado los dias y los manda a validar
+            for (int i = 0; i < checkDias.size() && validar; i++) {
+                if (checkDias.get(i).isSelected()) {
+                    String dia = checkDias.get(i).getText().toUpperCase();
+                    String hrInicio = inicios.get(i).getSelectedItem().toString() + ":00";
+                    String hrFin = fines.get(i).getSelectedItem().toString() + ":00";
+                    validar = validarTraslape(dia, hrInicio, hrFin);
+                }
+            }
+            System.out.println(validar);
+            //Si no es valido o el vacante ingresa el horario
+            if (validar || docente.getNumEmpleado().equals("000000")) {
+                try {
+                    //Se necesita corregir
+                    cursos = new Curso(docente, materia, grupo.getText(), tipo.getSelectedItem().toString().toUpperCase(), 0, 0);
+                    //Agrega el curso
+                    cursoDAO.append(cursos);
+                } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
+                    JOptionPane.showMessageDialog(this, "Ya existe un curso registrado \n" + ex.toString(),
+                            "INFORMANDO", JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception ex) { //Error en general
+                    JOptionPane.showMessageDialog(this, "ERROR \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
+                } finally {
+                    // Agregamos los horarios junto con el curso horario a la base de datos por dias
+                    asignarHorario(cursos);
+                    cursoDAO.cerrarSSH();
+                }
+            } else {
+                System.out.println("XD");
+            }
         }
     }//GEN-LAST:event_registrarActionPerformed
 
@@ -567,12 +657,12 @@ public class AltaCursoHorario extends javax.swing.JFrame {
             finSabado.setEnabled(false);
         }
     }//GEN-LAST:event_sabadoActionPerformed
-/**
- * TERMINAN ACCIONES DE LA SEMANA
- * 
- */
-    
-    
+    /**
+     * TERMINAN ACCIONES DE LA SEMANA
+     *
+     */
+
+
     private void docentesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_docentesActionPerformed
         String nombreDocente;
         for (Profesor profesor : profeDAO) {
@@ -593,9 +683,9 @@ public class AltaCursoHorario extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_materiasActionPerformed
 
-    private void grupoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_grupoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_grupoActionPerformed
+    private void grupoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_grupoKeyTyped
+
+    }//GEN-LAST:event_grupoKeyTyped
 
     /**
      * Cierra la ventana y muestra la principal
@@ -609,7 +699,6 @@ public class AltaCursoHorario extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Alta;
     private javax.swing.JPanel Titulo;
-    private javax.swing.ButtonGroup dias;
     private javax.swing.JComboBox<String> docentes;
     private javax.swing.JComboBox<String> finJueves;
     private javax.swing.JComboBox<String> finLunes;
