@@ -5,7 +5,7 @@ Detalles a resolver:
 - Calcular horas en alta de curso
 - Ordenar por nombre en consulta por maestro
 - Ortografia
--~~Verificar traslape en alta de curso~~
+- ~~Verificar traslape en alta de curso~~
 - ~~Separar nombre y apellidos en alta de Docente~~
 - ~~Nuevo atributo de Profesores Asig/TC~~
 - ~~Eliminar plan de estudio~~
