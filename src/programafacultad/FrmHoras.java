@@ -1,6 +1,7 @@
 package programafacultad;
 
 import conexion.*;
+import java.awt.Component;
 import javax.swing.JOptionPane;
 
 /**
@@ -25,24 +26,30 @@ public class FrmHoras extends javax.swing.JDialog {
      * Calcula las horas totales de asignatura y clase
      */
     private void calcularHoras() {
-        //Crea el objeto que se comunica con la tabla Curso
-        CursoDAO dao = new CursoDAO();
-        //Abre la conexión SSH
-        dao.abrirSSH();
-        //Abre la conexión con la BD
-        dao.abrirConexion();
-        try {
-            hA.setText(dao.devolverSuma("hrsAsig") + " Horas");
-            hC.setText(dao.devolverSuma("hrsTC") + " Horas");
-        } catch (Exception e) {
-            //Mensaje de error
-            System.out.println(e.toString());
-            JOptionPane.showMessageDialog(this, "ERROR\n" + e.getMessage(), "ERROR",
-                    JOptionPane.ERROR_MESSAGE);
-        } finally {
-            //Cierra la conexión SSH
-            dao.cerrarSSH();
-        }
+        MensajeEspera mensaje = new MensajeEspera(this) {
+            @Override
+            public void accion(Component cmp) {
+                //Crea el objeto que se comunica con la tabla Curso
+                CursoDAO dao = new CursoDAO();
+                //Abre la conexión SSH
+                dao.abrirSSH();
+                //Abre la conexión con la BD
+                dao.abrirConexion();
+                try {
+                    hA.setText(dao.devolverSuma("hrsAsig") + " Horas");
+                    hC.setText(dao.devolverSuma("hrsTC") + " Horas");
+                } catch (Exception e) {
+                    //Mensaje de error
+                    System.out.println(e.toString());
+                    JOptionPane.showMessageDialog(cmp, "ERROR\n" + e.getMessage(), "ERROR",
+                            JOptionPane.ERROR_MESSAGE);
+                } finally {
+                    //Cierra la conexión SSH
+                    dao.cerrarSSH();
+                }
+            }
+        };
+        mensaje.mostrarMensaje();
     }
 
     @SuppressWarnings("unchecked")
