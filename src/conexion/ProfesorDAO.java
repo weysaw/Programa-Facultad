@@ -7,7 +7,7 @@ import java.sql.*;
  * Es la profesor que se comunica con la base de datos
  *
  * @author Ornelas Munguía Axel Leonardo
- * @version 03.12.2020
+ * @version 11.12.2020
  */
 public class ProfesorDAO extends ConexionBD {
 
@@ -20,8 +20,8 @@ public class ProfesorDAO extends ConexionBD {
             + ES_TIEMPO_COMPLETO +") VALUES(?,?,?);";
     private static final String SQL_READ = "SELECT*FROM " + TABLA + " WHERE " + NUM_EMPLEADO + " = ?;";
     private static final String SQL_DELETE = "DELETE  FROM " + TABLA + " WHERE " + NUM_EMPLEADO + " = ?;";
-    private static final String SQL_UPDATE = "UPDATE " + TABLA + " SET " + NOM + " = ? WHERE " + NUM_EMPLEADO + " = ?, "+
-            ES_TIEMPO_COMPLETO + "= ?;";
+    private static final String SQL_UPDATE = "UPDATE " + TABLA + " SET " 
+            + NOM + " = ?, " + ES_TIEMPO_COMPLETO +" = ? WHERE " + NUM_EMPLEADO + " = ?;"; 
     private static final String SQL_DELETE_ALL = "DELETE FROM " + TABLA;
     /**
      * Constructor de la clase
@@ -87,8 +87,8 @@ public class ProfesorDAO extends ConexionBD {
         ps = conexion.prepareStatement(SQL_UPDATE);
         //Les asigna los valores que deben tener los ?
         ps.setString(1, dto.getNom());
-        ps.setString(2, dto.getNumEmpleado());
-        ps.setBoolean(3, dto.isEsTiempoCompleto());
+        ps.setBoolean(2, dto.isEsTiempoCompleto());
+        ps.setString(3, dto.getNumEmpleado());
         //Ejecuta el comando y actualiza
         datosModificados = ps.executeUpdate() > 0;
         //Cierra la conexión
@@ -168,5 +168,5 @@ public class ProfesorDAO extends ConexionBD {
      */
     private Profesor getObject(ResultSet rs) throws Exception {
         return new Profesor(rs.getString(NUM_EMPLEADO), rs.getString(NOM), rs.getBoolean(ES_TIEMPO_COMPLETO));
-    } 
+    }    
 }
