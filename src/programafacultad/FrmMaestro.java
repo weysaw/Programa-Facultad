@@ -1,20 +1,18 @@
-
 package programafacultad;
+
 import conexion.CursoHorario;
 import conexion.CursoHorarioDAO;
-import conexion.Materia;
-import conexion.MateriaDAO;
 import conexion.Profesor;
 import conexion.ProfesorDAO;
-import java.sql.Time;
+import java.awt.Component;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
  * Muestra los horarios y materias de un maestro
- * 
- * @author Leslie Vidal, Ornelas Munguía Axel Leonardo 
+ *
+ * @author Leslie Vidal, Ornelas Munguía Axel Leonardo
  * @version 03.12.2020
  */
 public class FrmMaestro extends javax.swing.JFrame {
@@ -34,7 +32,7 @@ public class FrmMaestro extends javax.swing.JFrame {
     private final byte VIERNES = 7;
     private final byte SABADO = 8;
     private final byte TOTAL_HORAS = 9;
-    
+
     /**
      * Constructor de la clase
      */
@@ -43,7 +41,13 @@ public class FrmMaestro extends javax.swing.JFrame {
         this.principal = principal;
         setLocationRelativeTo(principal);
         dao = new CursoHorarioDAO();
-        construyeLista();
+        MensajeEspera mensaje = new MensajeEspera(principal) {
+            @Override
+            public void accion(Component cmp) {
+                construyeLista();
+            }
+        };
+        mensaje.mostrarMensaje();
     }
 
     @SuppressWarnings("unchecked")
@@ -242,67 +246,75 @@ public class FrmMaestro extends javax.swing.JFrame {
         cerrarVentana();
     }//GEN-LAST:event_regresarActionPerformed
 
-    
+
     private void docentesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_docentesActionPerformed
-        String docente, materiaNom, grupo, tipo, dia, hrInicio, hrFin;
-        int materiaNum, fila, horasTotales = 0;
-        
-        //Obtén solo la clave del docente del comboBox
-        docente = docentes.getSelectedItem().toString();
-        docente = docente.substring(0, docente.indexOf(' '));
-        //Abre las conexiones
-        dao.abrirSSH();
-        dao.abrirConexion();
-        //Remueve las filas de la tabla
-        removerFilas();
-        try {
-            //Lee los cursos que tengan al docente especificado
-            cursos = dao.readProfesor("'" + docente + "'");
-            
-            //Recorre todo el arreglo y agrega los datos a la tabla
-            for (CursoHorario curso : cursos) {
-                materiaNum = curso.getCurso().getMateria().getClaveMateria();
-                materiaNom = curso.getCurso().getMateria().getNom();
-                grupo = curso.getCurso().getGrupo();
-                tipo = curso.getCurso().getTipo();
-                dia = curso.getHorario().getDia();
-                hrInicio = curso.getHorario().getHrInicio().toString();
-                hrFin = curso.getHorario().getHrFin().toString();
-                
-                //Agrega cada registro a la fila
-                DefaultTableModel modelo = (DefaultTableModel) datosDocente.getModel();
-                fila = modelo.getRowCount();
-                if (fila == 0) {
-                    //Siempre agrega el primer registro como la primera fila
-                    horasTotales += agregarFila(materiaNum + " " + materiaNom,
-                            grupo, tipo, dia, hrInicio, hrFin, modelo);
-                } else {
-                    fila--;
-                    /* Si el registro actual es del mismo curso que el registro anterior
+        MensajeEspera mensaje = new MensajeEspera(this) {
+            @Override
+            public void accion(Component cmp) {
+                String docente, materiaNom, grupo, tipo, dia, hrInicio, hrFin;
+                int materiaNum, fila, hrsTotales = 0;
+
+                //Obtén solo la clave del docente del comboBox
+                docente = docentes.getSelectedItem().toString();
+                docente = docente.substring(0, docente.indexOf(' '));
+                //Abre las conexiones
+                dao.abrirSSH();
+                dao.abrirConexion();
+                //Remueve las filas de la tabla
+                removerFilas();
+                try {
+                    //Lee los cursos que tengan al docente especificado
+                    cursos = dao.readProfesor("'" + docente + "'");
+
+                    //Recorre todo el arreglo y agrega los datos a la tabla
+                    for (CursoHorario curso : cursos) {
+                        materiaNum = curso.getCurso().getMateria().getClaveMateria();
+                        materiaNom = curso.getCurso().getMateria().getNom();
+                        grupo = curso.getCurso().getGrupo();
+                        tipo = curso.getCurso().getTipo();
+                        dia = curso.getHorario().getDia();
+                        hrInicio = curso.getHorario().getHrInicio().toString();
+                        hrFin = curso.getHorario().getHrFin().toString();
+
+                        //Agrega cada registro a la fila
+                        DefaultTableModel modelo = (DefaultTableModel) datosDocente.getModel();
+                        fila = modelo.getRowCount();
+                        if (fila == 0) {
+                            //Siempre agrega el primer registro como la primera fila
+                            hrsTotales += agregarFila(materiaNum + " " + materiaNom,
+                                    grupo, tipo, dia, hrInicio, hrFin, modelo);
+                        } else {
+                            fila--;
+                            /* Si el registro actual es del mismo curso que el registro anterior
                        pero con un dia y hora diferente, agrega la hora a la columna del
                        día indicado del renglón del registro anterior.
                        Como puede haber varios profesores con el mismo nombre completo,
                        es necesario compararlos por sus números de empleado.
-                    */
-                    if (modelo.getValueAt(fila, MATERIA).equals(materiaNum + " " + materiaNom) &&
-                            modelo.getValueAt(fila, GRUPO).equals(grupo) &&
-                            modelo.getValueAt(fila, TIPO).equals(tipo)) {
-                        horasTotales += actualizarFila(dia, hrInicio, hrFin, modelo);
-                    } else {
-                        horasTotales += agregarFila(materiaNum + " " + materiaNom,
-                                grupo, tipo, dia, hrInicio, hrFin, modelo);
+                             */
+                            if (modelo.getValueAt(fila, MATERIA).equals(materiaNum + " " + materiaNom)
+                                    && modelo.getValueAt(fila, GRUPO).equals(grupo)
+                                    && modelo.getValueAt(fila, TIPO).equals(tipo)) {
+                                hrsTotales += actualizarFila(dia, hrInicio, hrFin, modelo);
+                            } else {
+                                hrsTotales += agregarFila(materiaNum + " " + materiaNom,
+                                        grupo, tipo, dia, hrInicio, hrFin, modelo);
+                            }
+                        }
                     }
+                } catch (Exception e) {
+                    //Mensaje de error
+                    JOptionPane.showMessageDialog(cmp, "No se pudo leer la base de datos\n" + e.getMessage(),
+                            "ERROR", JOptionPane.ERROR_MESSAGE);
+                } finally {
+                    //Cierra la conexión
+                    dao.cerrarSSH();
+                    horasTotales.setText("" + hrsTotales);
                 }
             }
-        } catch (Exception e) {
-            //Mensaje de error
-            JOptionPane.showMessageDialog(this, "No se pudo leer la base de datos\n" + e.getMessage(),
-                    "ERROR", JOptionPane.ERROR_MESSAGE);
-        } finally {
-            //Cierra la conexión
-            dao.cerrarSSH();
-            this.horasTotales.setText("" + horasTotales);
-        }
+        };
+        mensaje.mostrarMensaje();
+
+
     }//GEN-LAST:event_docentesActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -322,11 +334,11 @@ public class FrmMaestro extends javax.swing.JFrame {
      * @return Las horas impartidas en el horario
      */
     private int agregarFila(String materia, String grupo, String tipo, String dia,
-                                String hrInicio, String hrFin, DefaultTableModel modelo) {
+            String hrInicio, String hrFin, DefaultTableModel modelo) {
         modelo.addRow(new Object[]{materia, grupo, tipo, "", "", "", "", "", "", 0});
         return actualizarFila(dia, hrInicio, hrFin, modelo);
     }
-    
+
     /**
      * Actualiza la fila más reciente de la tabla
      *
@@ -339,44 +351,44 @@ public class FrmMaestro extends javax.swing.JFrame {
     private int actualizarFila(String dia, String hrInicio, String hrFin,
             DefaultTableModel modelo) {
         //Quita los segundos de las horas, ej: 08:00:00 -> 08:00
-        hrInicio = hrInicio.substring(0, hrInicio.length()-3);
-        hrFin = hrFin.substring(0, hrFin.length()-3);
+        hrInicio = hrInicio.substring(0, hrInicio.length() - 3);
+        hrFin = hrFin.substring(0, hrFin.length() - 3);
         //Consigue la diferencia de horas
-        int horas = Integer.parseInt(hrFin.substring(0, hrFin.indexOf(':'))) -
-                Integer.parseInt(hrInicio.substring(0, hrInicio.indexOf(':')));
-        
+        int horas = Integer.parseInt(hrFin.substring(0, hrFin.indexOf(':')))
+                - Integer.parseInt(hrInicio.substring(0, hrInicio.indexOf(':')));
+
         switch (dia) {
             case "LUNES":
                 //modelo.getValueAt(modelo.getRowCount()-1, LUNES);
-                modelo.setValueAt(hrInicio+"-"+hrFin, modelo.getRowCount()-1, LUNES);
+                modelo.setValueAt(hrInicio + "-" + hrFin, modelo.getRowCount() - 1, LUNES);
                 break;
             case "MARTES":
-                modelo.setValueAt(hrInicio+"-"+hrFin, modelo.getRowCount()-1, MARTES);
+                modelo.setValueAt(hrInicio + "-" + hrFin, modelo.getRowCount() - 1, MARTES);
                 break;
             case "MIERCOLES":
-                modelo.setValueAt(hrInicio+"-"+hrFin, modelo.getRowCount()-1, MIERCOLES);
+                modelo.setValueAt(hrInicio + "-" + hrFin, modelo.getRowCount() - 1, MIERCOLES);
                 break;
             case "JUEVES":
-                modelo.setValueAt(hrInicio+"-"+hrFin, modelo.getRowCount()-1, JUEVES);
+                modelo.setValueAt(hrInicio + "-" + hrFin, modelo.getRowCount() - 1, JUEVES);
                 break;
             case "VIERNES":
-                modelo.setValueAt(hrInicio+"-"+hrFin, modelo.getRowCount()-1, VIERNES);
+                modelo.setValueAt(hrInicio + "-" + hrFin, modelo.getRowCount() - 1, VIERNES);
                 break;
             case "SABADO":
-                modelo.setValueAt(hrInicio+"-"+hrFin, modelo.getRowCount()-1, SABADO);
+                modelo.setValueAt(hrInicio + "-" + hrFin, modelo.getRowCount() - 1, SABADO);
                 break;
         }
         //Suma las horas de diferencia al total de horas impartidas del curso
-        modelo.setValueAt((int)(modelo.getValueAt(modelo.getRowCount()-1, TOTAL_HORAS)) + horas,
-                modelo.getRowCount()-1, TOTAL_HORAS);
+        modelo.setValueAt((int) (modelo.getValueAt(modelo.getRowCount() - 1, TOTAL_HORAS)) + horas,
+                modelo.getRowCount() - 1, TOTAL_HORAS);
         return horas;
     }
-    
+
     //Agrega los docentes registrados a la lista de docentes
     private void construyeLista() {
         /* Desactiva el listener temporalmente para evitar que corra el evento
            al agregar nuevos objetos al comboBox
-        */
+         */
         docentes.removeActionListener(docentes.getActionListeners()[0]);
         //Abre las conexiones
         ProfesorDAO dao = new ProfesorDAO();
@@ -399,21 +411,19 @@ public class FrmMaestro extends javax.swing.JFrame {
             dao.cerrarSSH();
         }
         //Reactiva el listener
-        docentes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                docentesActionPerformed(evt);
-            }
+        docentes.addActionListener((java.awt.event.ActionEvent evt) -> {
+            docentesActionPerformed(evt);
         });
     }
-    
-     /**
+
+    /**
      * Cierra la ventana y muestra la principal
      */
     private void cerrarVentana() {
         principal.setVisible(true);
         dispose();
     }
-    
+
     /**
      * Remueve todas las filas de la tabla
      */
