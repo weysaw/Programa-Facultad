@@ -20,7 +20,7 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
-    <Property name="title" type="java.lang.String" value="Programa Consultas"/>
+    <Property name="title" type="java.lang.String" value="Planta academica FIM"/>
     <Property name="resizable" type="boolean" value="false"/>
   </Properties>
   <SyntheticProperties>
@@ -146,7 +146,7 @@
                   <Font name="Tahoma" size="18" style="1"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
-                <Property name="text" type="java.lang.String" value="&lt;Titulo del programa&gt;"/>
+                <Property name="text" type="java.lang.String" value="Planta academica FIM"/>
               </Properties>
             </Component>
           </SubComponents>

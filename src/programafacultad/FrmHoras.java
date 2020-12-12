@@ -1,6 +1,7 @@
 package programafacultad;
 
 import conexion.*;
+import java.awt.Component;
 import javax.swing.JOptionPane;
 
 /**
@@ -25,24 +26,30 @@ public class FrmHoras extends javax.swing.JDialog {
      * Calcula las horas totales de asignatura y clase
      */
     private void calcularHoras() {
-        //Crea el objeto que se comunica con la tabla Curso
-        CursoDAO dao = new CursoDAO();
-        //Abre la conexión SSH
-        dao.abrirSSH();
-        //Abre la conexión con la BD
-        dao.abrirConexion();
-        try {
-            hA.setText(dao.devolverSuma("hrsAsig") + " Horas");
-            hC.setText(dao.devolverSuma("hrsTC") + " Horas");
-        } catch (Exception e) {
-            //Mensaje de error
-            System.out.println(e.toString());
-            JOptionPane.showMessageDialog(this, "ERROR\n" + e.getMessage(), "ERROR",
-                    JOptionPane.ERROR_MESSAGE);
-        } finally {
-            //Cierra la conexión SSH
-            dao.cerrarSSH();
-        }
+        MensajeEspera mensaje = new MensajeEspera(this) {
+            @Override
+            public void accion(Component cmp) {
+                //Crea el objeto que se comunica con la tabla Curso
+                CursoDAO dao = new CursoDAO();
+                //Abre la conexión SSH
+                dao.abrirSSH();
+                //Abre la conexión con la BD
+                dao.abrirConexion();
+                try {
+                    hA.setText(dao.devolverSuma("hrsAsig") + " Horas");
+                    hC.setText(dao.devolverSuma("hrsTC") + " Horas");
+                } catch (Exception e) {
+                    //Mensaje de error
+                    System.out.println(e.toString());
+                    JOptionPane.showMessageDialog(cmp, "ERROR\n" + e.getMessage(), "ERROR",
+                            JOptionPane.ERROR_MESSAGE);
+                } finally {
+                    //Cierra la conexión SSH
+                    dao.cerrarSSH();
+                }
+            }
+        };
+        mensaje.mostrarMensaje();
     }
 
     @SuppressWarnings("unchecked")
@@ -115,15 +122,6 @@ public class FrmHoras extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(consultaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(consultaLayout.createSequentialGroup()
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(consultaLayout.createSequentialGroup()
-                        .addGroup(consultaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
-                            .addComponent(hC, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(consultaLayout.createSequentialGroup()
                         .addGroup(consultaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(consultaLayout.createSequentialGroup()
                                 .addComponent(jLabel1)
@@ -135,7 +133,15 @@ public class FrmHoras extends javax.swing.JDialog {
                                 .addComponent(jLabel2)
                                 .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
                                 .addComponent(hA, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(consultaLayout.createSequentialGroup()
+                        .addGroup(consultaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(consultaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel3)
+                                .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
+                                .addComponent(hC, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, consultaLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(regresar)
@@ -176,7 +182,7 @@ public class FrmHoras extends javax.swing.JDialog {
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText("<Titulo del programa>");
+        jLabel9.setText("Planta academica FIM");
 
         javax.swing.GroupLayout TituloLayout = new javax.swing.GroupLayout(Titulo);
         Titulo.setLayout(TituloLayout);

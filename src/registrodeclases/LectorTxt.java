@@ -72,6 +72,9 @@ public class LectorTxt {
                                 for (Profesor profesor : profesores) {
                                     if (profesor.getNom().equals(empleado[1])) {
                                         profesor.setNumEmpleado(empleado[0]);
+                                        if(Integer.parseInt(empleado[2])!=0){//Si el numero es distinto a 0, quiere decir que es TC
+                                            profesor.setEsTiempoCompleto(true);
+                                        }
                                         break;
                                     }
                                 }
@@ -248,7 +251,7 @@ public class LectorTxt {
                             hrsTC = Integer.parseInt(sublinea[3]);
                             hrsAsig = Integer.parseInt(sublinea[4]);
 
-                            Curso curso = new Curso(asignarProfesor(maestro), new Materia(clave, materia, null), grupo, tipo, hrsTC, hrsAsig); //Se crea el curso con los datos que ya se tienen
+                            Curso curso = new Curso(asignarProfesor(maestro), new Materia(clave, materia), grupo, tipo, hrsTC, hrsAsig); //Se crea el curso con los datos que ya se tienen
 
                             //procesado de horas
                             //para separar los dias de las horas, se necesita saber en que caracter inician las horas
@@ -318,7 +321,7 @@ public class LectorTxt {
                             hrsTC = Integer.parseInt(sublinea[3]);
                             hrsAsig = Integer.parseInt(sublinea[4]);
 
-                            Curso curso = new Curso(asignarProfesor(maestro), new Materia(clave, materia, null), grupo, tipo, hrsTC, hrsAsig); //Se crea el curso con los datos que ya se tienen
+                            Curso curso = new Curso(asignarProfesor(maestro), new Materia(clave, materia), grupo, tipo, hrsTC, hrsAsig); //Se crea el curso con los datos que ya se tienen
 
                             //procesado de horas
                             //para separar los dias de las horas, se necesita saber en que caracter inician las horas
@@ -396,7 +399,7 @@ public class LectorTxt {
                 return profesor;
             }
         }
-        return new Profesor(null,nombre);
+        return new Profesor(null,nombre, false);
     }
     
     /**

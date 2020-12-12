@@ -9,10 +9,12 @@ package conexion;
 public class Profesor {
     private String numEmpleado;
     private String nom;
+    private boolean esTiempoCompleto;
 
-    public Profesor(String numEmpleado, String nom) {
+    public Profesor(String numEmpleado, String nom, boolean esTiempoCompleto) {
         this.numEmpleado = numEmpleado;
         this.nom = nom;
+        this.esTiempoCompleto = esTiempoCompleto;
     }
 
     public String getNumEmpleado() {
@@ -31,9 +33,17 @@ public class Profesor {
         this.nom = nom;
     }
 
+    public boolean isEsTiempoCompleto() {
+        return esTiempoCompleto;
+    }
+
+    public void setEsTiempoCompleto(boolean esTiempoCompleto) {
+        this.esTiempoCompleto = esTiempoCompleto;
+    }
+    
     @Override
     public String toString() {
-        return "Profesor{" + "numEmpleado=" + numEmpleado + ", nom=" + nom + "}\n";
+        return "Profesor{" + "numEmpleado=" + numEmpleado + ", nom=" + nom + " esTiempoCompleto = "+ esTiempoCompleto +"}\n";
     }
     
     

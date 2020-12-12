@@ -1,6 +1,7 @@
 package programafacultad;
 
 import conexion.*;
+import java.awt.Component;
 import java.sql.Connection;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -67,7 +68,7 @@ public class Principal extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTextArea1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Programa Consultas");
+        setTitle("Planta academica FIM");
         setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -78,7 +79,7 @@ public class Principal extends javax.swing.JFrame {
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("<Titulo del programa>");
+        jLabel6.setText("Planta academica FIM");
 
         javax.swing.GroupLayout TituloLayout = new javax.swing.GroupLayout(Titulo);
         Titulo.setLayout(TituloLayout);
@@ -390,121 +391,16 @@ public class Principal extends javax.swing.JFrame {
                     JOptionPane.ERROR_MESSAGE);
             //Si el archivo no esta vacio lee los datos
         } else {
-            //Crear el objeto de profesor
-            ProfesorDAO profesorDAO = new ProfesorDAO();
-            //Se crea el objeto que comunica con la tabla
-            MateriaDAO materiaDAO = new MateriaDAO();
-            //Se crea el objeto que comunica con la tabla
-            HorarioDAO horarioDAO = new HorarioDAO();
-            //Se crea el objeto que comunica con la tabla
-            CursoHorarioDAO cursoHorarioDAO = new CursoHorarioDAO();
-            //Abre la conexión ssh
-            profesorDAO.abrirSSH();
-            //Abre la conexión a la base de datos
-            profesorDAO.abrirConexion();
-            try {
-                Connection conexion = profesorDAO.getConexionBD();
-                //Borra todos los elementos de la tabla
-                profesorDAO.deleteAll();
-                System.out.println("DATOS ELIMINADOS PROFESOR");
-                //Recorre todo el arreglo del archivo que manda
-                for (Profesor profesor : lector.getProfesor()) {
-                    //Ingresa la información a la base de datos
-                    profesorDAO.append(profesor);
-                    //System.out.println("Agregado ---> " + profesor);
+            //Crea el mensaje 
+            MensajeEspera mensaje = new MensajeEspera(this) {
+                //Sobrescribe el método y le indica que debe mostrar
+                @Override
+                public void accion(Component cmp) {
+                    agregarCursos(lector);
                 }
-                //Abre la conexión a la base de datos
-                materiaDAO.setConexion(conexion);
-                try {
-                    //Borra todos los elementos de la tabla
-                    materiaDAO.deleteAll();
-                    System.out.println("DATOS ELIMINADOS MATERIA");
-                    //Recorre todo el arreglo del archivo que manda
-                    for (Materia materia : lector.getMateria()) {
-                        //Ingresa la información a la base de datos
-                        materiaDAO.append(materia);
-                        //System.out.println("Agregado ---> " + materia);
-                    }
-                    //Abre la conexión a la base de datos
-                    //horarioDAO.abrirConexion();
-                    horarioDAO.setConexion(conexion);
-                    try {
-                        //Borra todos los elementos de la tabla
-                        horarioDAO.deleteAll();
-                        System.out.println("DATOS ELIMINADOS HORARIOS");
-                        //Recorre todo el arreglo del archivo que manda
-                        for (Horario horario : lector.getHorario()) {
-                            //Ingresa la información a la base de datos
-                            horarioDAO.append(horario);
-                            //System.out.println("Agregado ---> " + horario);
-                        }
-                        //Se crea el objeto que comunica con la tabla
-                        CursoDAO cursoDAO = new CursoDAO();
-                        //Abre la conexión a la base de datos
-                        //cursoDAO.abrirConexion();
-                        cursoDAO.setConexion(conexion);
-                        try {
-                            //Borra todos los elementos de la tabla
-                            cursoDAO.deleteAll();
-                            System.out.println("DATOS ELIMINADOS CURSO");
-                            //Recorre todo el arreglo del archivo que manda
-                            for (Curso curso : lector.getCurso()) {
-                                //Ingresa la información a la base de datos
-                                cursoDAO.append(curso);
-                                //System.out.println("Agregado ---> " + curso);
-                            }
-                            //Abre la conexión a la base de datos
-                            //horarioDAO.abrirConexion();
-                            horarioDAO.setConexion(conexion);
-                            //Abre la conexión a la base de datos
-                            //cursoHorarioDAO.abrirConexion();
-                            cursoHorarioDAO.setConexion(conexion);
-                            try {
-                                //Borra todos los elementos de la tabla
-                                cursoHorarioDAO.deleteAll();
-                                System.out.println("DATOS ELIMINADOS CURSO_HORARIO");
-                                //Recorre todo el arreglo del archivo que manda
-                                for (CursoHorario cursoHorario : lector.getCursoHorario()) {
-                                    cursoHorario.setHorario(horarioDAO.read(cursoHorario.getHorario()));
-                                    //Ingresa la información a la base de datos
-                                    cursoHorarioDAO.append(cursoHorario);
-                                    //System.out.println("Agregado ---> " + cursoHorario);
-                                }
-                            } catch (Exception e) {
-                                //Muestra los mensajes de error
-                                System.out.println(e.toString());
-                                JOptionPane.showMessageDialog(this, "ERROR CURSO_HORARIO\n" + e.getMessage(), "ERROR",
-                                        JOptionPane.ERROR_MESSAGE);
-                            }
-                            JOptionPane.showMessageDialog(this, "SE HAN AGREGADO LOS DATOS", "DATOS AGREGADOS",
-                                    JOptionPane.INFORMATION_MESSAGE);
-                        } catch (Exception e) {
-                            //Muestra los mensajes de error
-                            System.out.println(e.toString());
-                            JOptionPane.showMessageDialog(this, "ERROR CURSO BD\n" + e.getMessage(), "ERROR",
-                                    JOptionPane.ERROR_MESSAGE);
-                        }
-                    } catch (Exception e) {
-                        //Muestra los mensajes de error
-                        System.out.println(e.toString());
-                        JOptionPane.showMessageDialog(this, "ERROR LEER BASE DE DATOS\n" + e.getMessage(), "ERROR",
-                                JOptionPane.ERROR_MESSAGE);
-                    }
-                } catch (Exception e) {
-                    //Muestra los mensajes de error
-                    System.out.println(e.toString());
-                    JOptionPane.showMessageDialog(this, "ERROR LEER BASE DE DATOS\n" + e.getMessage(), "ERROR",
-                            JOptionPane.ERROR_MESSAGE);
-                }
-            } catch (Exception e) {
-                //Muestra los mensajes de error
-                System.out.println(e.toString());
-                JOptionPane.showMessageDialog(this, "ERROR BASE DE DATOS\n" + e.getMessage(), "ERROR",
-                        JOptionPane.ERROR_MESSAGE);
-            } finally {
-                //Cierra la conexion con el SSH
-                profesorDAO.cerrarSSH();
-            }
+            };
+            //Realiza la accion y muestra el mensaje
+            mensaje.mostrarMensaje();           
         }
     }//GEN-LAST:event_leerArchivoActionPerformed
 
@@ -569,6 +465,129 @@ public class Principal extends javax.swing.JFrame {
         modificar.setVisible(true);
         setVisible(false);
     }//GEN-LAST:event_modificarDocenteActionPerformed
+
+    /**
+     * Agrega los datos a la base de datos dependiendo del archivo leido
+     * 
+     * @param lector Lee los datos 
+     */
+    private void agregarCursos(LectorTxt lector) {
+        //Crear el objeto de profesor
+        ProfesorDAO profesorDAO = new ProfesorDAO();
+        //Se crea el objeto que comunica con la tabla
+        MateriaDAO materiaDAO = new MateriaDAO();
+        //Se crea el objeto que comunica con la tabla
+        HorarioDAO horarioDAO = new HorarioDAO();
+        //Se crea el objeto que comunica con la tabla
+        CursoHorarioDAO cursoHorarioDAO = new CursoHorarioDAO();
+        //Abre la conexión ssh
+        profesorDAO.abrirSSH();
+        //Abre la conexión a la base de datos
+        profesorDAO.abrirConexion();
+        try {
+            Connection conexion = profesorDAO.getConexionBD();
+            //Borra todos los elementos de la tabla
+            profesorDAO.deleteAll();
+            System.out.println("DATOS ELIMINADOS PROFESOR");
+            //Recorre todo el arreglo del archivo que manda
+            for (Profesor profesor : lector.getProfesor()) {
+                //Ingresa la información a la base de datos
+                profesorDAO.append(profesor);
+                //System.out.println("Agregado ---> " + profesor);
+            }
+            //Abre la conexión a la base de datos
+            materiaDAO.setConexion(conexion);
+            try {
+                //Borra todos los elementos de la tabla
+                materiaDAO.deleteAll();
+                System.out.println("DATOS ELIMINADOS MATERIA");
+                //Recorre todo el arreglo del archivo que manda
+                for (Materia materia : lector.getMateria()) {
+                    //Ingresa la información a la base de datos
+                    materiaDAO.append(materia);
+                    //System.out.println("Agregado ---> " + materia);
+                }
+                //Abre la conexión a la base de datos
+                //horarioDAO.abrirConexion();
+                horarioDAO.setConexion(conexion);
+                try {
+                    //Borra todos los elementos de la tabla
+                    horarioDAO.deleteAll();
+                    System.out.println("DATOS ELIMINADOS HORARIOS");
+                    //Recorre todo el arreglo del archivo que manda
+                    for (Horario horario : lector.getHorario()) {
+                        //Ingresa la información a la base de datos
+                        horarioDAO.append(horario);
+                        //System.out.println("Agregado ---> " + horario);
+                    }
+                    //Se crea el objeto que comunica con la tabla
+                    CursoDAO cursoDAO = new CursoDAO();
+                    //Abre la conexión a la base de datos
+                    //cursoDAO.abrirConexion();
+                    cursoDAO.setConexion(conexion);
+                    try {
+                        //Borra todos los elementos de la tabla
+                        cursoDAO.deleteAll();
+                        System.out.println("DATOS ELIMINADOS CURSO");
+                        //Recorre todo el arreglo del archivo que manda
+                        for (Curso curso : lector.getCurso()) {
+                            //Ingresa la información a la base de datos
+                            cursoDAO.append(curso);
+                            //System.out.println("Agregado ---> " + curso);
+                        }
+                        //Abre la conexión a la base de datos
+                        //horarioDAO.abrirConexion();
+                        horarioDAO.setConexion(conexion);
+                        //Abre la conexión a la base de datos
+                        //cursoHorarioDAO.abrirConexion();
+                        cursoHorarioDAO.setConexion(conexion);
+                        try {
+                            //Borra todos los elementos de la tabla
+                            cursoHorarioDAO.deleteAll();
+                            System.out.println("DATOS ELIMINADOS CURSO_HORARIO");
+                            //Recorre todo el arreglo del archivo que manda
+                            for (CursoHorario cursoHorario : lector.getCursoHorario()) {
+                                cursoHorario.setHorario(horarioDAO.read(cursoHorario.getHorario()));
+                                //Ingresa la información a la base de datos
+                                cursoHorarioDAO.append(cursoHorario);
+                                //System.out.println("Agregado ---> " + cursoHorario);
+                            }
+                        } catch (Exception e) {
+                            //Muestra los mensajes de error
+                            System.out.println(e.toString());
+                            JOptionPane.showMessageDialog(this, "ERROR CURSO_HORARIO\n" + e.getMessage(), "ERROR",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
+                        JOptionPane.showMessageDialog(this, "SE HAN AGREGADO LOS DATOS", "DATOS AGREGADOS",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    } catch (Exception e) {
+                        //Muestra los mensajes de error
+                        System.out.println(e.toString());
+                        JOptionPane.showMessageDialog(this, "ERROR CURSO BD\n" + e.getMessage(), "ERROR",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (Exception e) {
+                    //Muestra los mensajes de error
+                    System.out.println(e.toString());
+                    JOptionPane.showMessageDialog(this, "ERROR LEER BASE DE DATOS\n" + e.getMessage(), "ERROR",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (Exception e) {
+                //Muestra los mensajes de error
+                System.out.println(e.toString());
+                JOptionPane.showMessageDialog(this, "ERROR LEER BASE DE DATOS\n" + e.getMessage(), "ERROR",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            //Muestra los mensajes de error
+            System.out.println(e.toString());
+            JOptionPane.showMessageDialog(this, "ERROR BASE DE DATOS\n" + e.getMessage(), "ERROR",
+                    JOptionPane.ERROR_MESSAGE);
+        } finally {
+            //Cierra la conexion con el SSH
+            profesorDAO.cerrarSSH();
+        }
+    }
 
     /**
      * Ejecución del programa

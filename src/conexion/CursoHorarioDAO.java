@@ -74,7 +74,7 @@ public class CursoHorarioDAO extends ConexionBD {
         //Manda al comando
         ps = conexion.prepareStatement("SELECT*FROM " + TABLA
                 + " WHERE claveHorario IN (SELECT claveHorario FROM HORARIO WHERE dia = " + dia
-                + " AND hrInicio = " + hora + ") AND tipo = "+ clase +";");
+                + " AND hrInicio = " + hora + ") AND tipo = " + clase + ";");
         //Ejecuta el comando y devuelve el resultado del comando
         rs = ps.executeQuery();
         //Recorre por todos los resultados
@@ -86,10 +86,10 @@ public class CursoHorarioDAO extends ConexionBD {
         cerrar(rs);
         return result;
     }
-    
+
     /**
-     * Regresa los CursoHorarios de la materia especificada, ordenados 
-     * de forma ascendiente por numEmpleado, grupo, tipo y claveHorario.
+     * Regresa los CursoHorarios de la materia especificada, ordenados de forma
+     * ascendiente por numEmpleado, grupo, tipo y claveHorario.
      *
      * @param materia La claveMateria de los CursoHorarios a obtener
      * @return El ArrayList de CursoHorario
@@ -116,12 +116,13 @@ public class CursoHorarioDAO extends ConexionBD {
         cerrar(rs);
         return result;
     }
-    
+
     /**
-     * Regresa los CursoHorarios del profesor especificado, ordenados 
-     * de forma ascendiente por claveMateria, grupo, tipo y claveHorario.
+     * Regresa los CursoHorarios del profesor especificado, ordenados de forma
+     * ascendiente por claveMateria, grupo, tipo y claveHorario.
      *
-     * @param numEmpleado El número de empleado del profesor de los CursoHorarios a obtener
+     * @param numEmpleado El número de empleado del profesor de los
+     * CursoHorarios a obtener
      * @return El ArrayList de CursoHorario
      * @throws Exception Devuelve error
      */
@@ -135,6 +136,44 @@ public class CursoHorarioDAO extends ConexionBD {
                 + NUM_EMPLEADO + " = " + numEmpleado + " ORDER BY " + CLAVE_MATERIA
                 + " ASC, " + GRUPO + " ASC, " + TIPO + " ASC, " + CLAVE_HORARIO
                 + " ASC;");
+        //Ejecuta el comando y devuelve el resultado del comando
+        rs = ps.executeQuery();
+        //Recorre por todos los resultados
+        while (rs.next()) {
+            result.add(getObject(rs));
+        }
+        //Cierra las conexiones
+        cerrar(ps);
+        cerrar(rs);
+        return result;
+    }
+
+    /**
+     * Devuelve los cursos horarios indicado por el día y la hora
+     * 
+     * @param dia Indica el día a buscar
+     * @param hrInicio Indica la hrInicio a buscar
+     * @param hrFin Indica la hrFin a buscar
+     * @param numEmpleado Indica la numEmpleado a buscar
+     * @return Devuelve el resultado de cursos
+     * @throws Exception Lanza error
+     */
+    public ArrayList<CursoHorario> readHrIntervaloProfe(String dia, String hrInicio, String hrFin, String numEmpleado) throws Exception {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        //Se utilza para almacenar los objetos
+        ArrayList<CursoHorario> result = new ArrayList();
+        //Manda al comando
+        ps = conexion.prepareStatement("SELECT*FROM " + TABLA
+                + " WHERE claveHorario "
+                + "IN (SELECT claveHorario "
+                + "FROM HORARIO WHERE dia = '" + dia + "' "
+                + "AND ((hrInicio > '" + hrInicio + "' AND hrInicio < '" + hrFin + "') "
+                + "OR (hrFin > '" + hrInicio + "' AND hrFin < '" + hrFin + "') "
+                + "OR ('" + hrInicio + "' > hrInicio AND  '" + hrInicio + "'< hrFin) "
+                + "OR ('" + hrFin + "' > hrInicio AND  '" + hrFin + "'< hrFin ) "
+                + "OR (hrInicio = '" + hrInicio + "' AND '" + hrFin + "' = hrFin ))) "
+                + "AND numEmpleado = " + numEmpleado + ";");
         //Ejecuta el comando y devuelve el resultado del comando
         rs = ps.executeQuery();
         //Recorre por todos los resultados
@@ -267,25 +306,21 @@ public class CursoHorarioDAO extends ConexionBD {
         CursoDAO cursoDAO = new CursoDAO();
         //Se crea el horario para buscar el objeto
         HorarioDAO horarioDAO = new HorarioDAO();
-        Profesor profesor = null;
-        Materia materia = null;
-        Curso curso = null;
-        Horario horario = null;
 
         profesorDAO.setConexion(conexion);
         //Se busca el profesor con el numero de empleado indicado
-        profesor = profesorDAO.read(new Profesor(numEmpleado, null));
+        Profesor profesor = profesorDAO.read(new Profesor(numEmpleado, null, false));
         materiaDAO.setConexion(conexion);
         //Se busca la materia con la clave de la materia indicado
-        materia = materiaDAO.read(new Materia(claveMateria, null, null));
+        Materia materia = materiaDAO.read(new Materia(claveMateria, null));
         cursoDAO.setConexion(conexion);
         //Se busca el curso con los objetos indicados
-        curso = cursoDAO.read(new Curso(profesor, materia, grupo, tipo, 0, 0));
+        Curso curso = cursoDAO.read(new Curso(profesor, materia, grupo, tipo, 0, 0));
 
         horarioDAO.setConexion(conexion);
 
         //Se busca el horario con la clave horario indicado
-        horario = horarioDAO.readClave(new Horario(claveHorario, null, null, null, null));
+        Horario horario = horarioDAO.readClave(new Horario(claveHorario, null, null, null, null));
 
         //Devuelve el curso horario
         return new CursoHorario(curso, horario);
