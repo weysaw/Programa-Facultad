@@ -28,9 +28,9 @@ public abstract class MensajeEspera {
         dialog.setModal(true);
         dialog.setResizable(false);
         dialog.setContentPane(mensajeEspera);
-        dialog.setLocationRelativeTo(cmp);
         dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
         dialog.pack();
+        dialog.setLocationRelativeTo(cmp);//Es importante que esta orden este despues de pack() para que funcione
     }
 
     /**
