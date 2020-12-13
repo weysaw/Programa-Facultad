@@ -76,13 +76,13 @@ public class FrmMateria extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel4.setText("Facultad De Ingenieria Campus Mexicali ");
+        jLabel4.setText("Facultad de Ingeniería Campus Mexicali");
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/graficos/uabc.png"))); // NOI18N
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("Planta academica FIM");
+        jLabel6.setText("Planta Académica FIM");
 
         javax.swing.GroupLayout TituloLayout = new javax.swing.GroupLayout(Titulo);
         Titulo.setLayout(TituloLayout);
@@ -114,7 +114,7 @@ public class FrmMateria extends javax.swing.JFrame {
         semestreActual.setText("20XX-X");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel2.setText("Materias Facultad de Ingenieria");
+        jLabel2.setText("Materias Facultad de Ingeniería");
 
         jLabel3.setText("Semestre Actual: ");
 
@@ -133,7 +133,7 @@ public class FrmMateria extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Docente", "Grupo", "Tipo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"
+                "Docente", "Grupo", "Tipo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"
             }
         ) {
             boolean[] canEdit = new boolean [] {

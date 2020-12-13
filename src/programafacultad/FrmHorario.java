@@ -64,7 +64,7 @@ public class FrmHorario extends javax.swing.JFrame {
         });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel1.setText("Horarios Facultad de Ingenieria");
+        jLabel1.setText("Horarios Facultad de Ingeniería");
 
         regresar.setText("Regresar");
         regresar.addActionListener(new java.awt.event.ActionListener() {
@@ -102,9 +102,9 @@ public class FrmHorario extends javax.swing.JFrame {
         datosHorarios.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(datosHorarios);
 
-        jLabel3.setText("Dia:");
+        jLabel3.setText("Día:");
 
-        jLabel4.setText("Hora Inicio:");
+        jLabel4.setText("Hora de Inicio:");
 
         jLabel5.setText("Tipo:");
 
@@ -156,7 +156,7 @@ public class FrmHorario extends javax.swing.JFrame {
                                 .addComponent(jLabel5)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(tipoClase, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 53, Short.MAX_VALUE))
+                        .addGap(0, 39, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, consultasLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(regresar)))
@@ -188,13 +188,13 @@ public class FrmHorario extends javax.swing.JFrame {
 
         jLabel6.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel6.setText("Facultad De Ingenieria Campus Mexicali ");
+        jLabel6.setText("Facultad de Ingeniería Campus Mexicali");
 
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/graficos/uabc.png"))); // NOI18N
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setText("Planta academica FIM");
+        jLabel8.setText("Planta Académica FIM");
 
         javax.swing.GroupLayout TituloLayout = new javax.swing.GroupLayout(Titulo);
         Titulo.setLayout(TituloLayout);
