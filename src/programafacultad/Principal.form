@@ -130,7 +130,7 @@
                   <Font name="Arial" size="12" style="1"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="2"/>
-                <Property name="text" type="java.lang.String" value="Facultad De Ingenieria Campus Mexicali "/>
+                <Property name="text" type="java.lang.String" value="Facultad de Ingenier&#xed;a Campus Mexicali"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel5">
@@ -146,7 +146,7 @@
                   <Font name="Tahoma" size="18" style="1"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
-                <Property name="text" type="java.lang.String" value="Planta academica FIM"/>
+                <Property name="text" type="java.lang.String" value="Planta Acad&#xe9;mica FIM"/>
               </Properties>
             </Component>
           </SubComponents>
@@ -217,7 +217,7 @@
             </Component>
             <Component class="javax.swing.JButton" name="consultaMaestro">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Consulta por Maestro"/>
+                <Property name="text" type="java.lang.String" value="Consulta por Docente"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="consultaMaestroActionPerformed"/>
@@ -386,7 +386,7 @@
                     <Font component="altaMateria" property="font" relativeSize="false" size="11"/>
                   </FontInfo>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Alta de  Materia"/>
+                <Property name="text" type="java.lang.String" value="Alta de Materia"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="altaMateriaActionPerformed"/>
@@ -475,7 +475,7 @@
             </Component>
             <Component class="javax.swing.JButton" name="leerArchivo">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Leer Cursos, Horarios y Docentes"/>
+                <Property name="text" type="java.lang.String" value="Leer Cursos, Horarios y Docentes de txts"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="leerArchivoActionPerformed"/>

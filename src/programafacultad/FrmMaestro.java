@@ -100,7 +100,7 @@ public class FrmMaestro extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Materia", "Grupo", "Tipo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Total Horas"
+                "Materia", "Grupo", "Tipo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Total de hrs."
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -185,13 +185,13 @@ public class FrmMaestro extends javax.swing.JFrame {
 
         jLabel5.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel5.setText("Facultad De Ingenieria Campus Mexicali ");
+        jLabel5.setText("Facultad de Ingeniería Campus Mexicali");
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/graficos/uabc.png"))); // NOI18N
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setText("Planta academica FIM");
+        jLabel7.setText("Planta Académica FIM");
 
         javax.swing.GroupLayout TituloLayout = new javax.swing.GroupLayout(Titulo);
         Titulo.setLayout(TituloLayout);

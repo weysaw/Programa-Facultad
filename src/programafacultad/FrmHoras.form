@@ -64,10 +64,10 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="semestre" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel5" alignment="0" pref="430" max="32767" attributes="0"/>
-                                  <Component id="hA" alignment="0" max="32767" attributes="0"/>
+                              <Component id="hA" alignment="0" min="-2" pref="430" max="-2" attributes="0"/>
+                              <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                                  <Component id="jLabel5" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jLabel2" alignment="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
@@ -160,7 +160,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Dialog" size="18" style="0"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="programadas por asignatura :"/>
+            <Property name="text" type="java.lang.String" value="programadas por asignatura:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="hA">
@@ -254,7 +254,7 @@
               <Font name="Arial" size="12" style="1"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="2"/>
-            <Property name="text" type="java.lang.String" value="Facultad De Ingenieria Campus Mexicali "/>
+            <Property name="text" type="java.lang.String" value="Facultad de Ingenier&#xed;a Campus Mexicali"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel8">
@@ -270,7 +270,7 @@
               <Font name="Tahoma" size="18" style="1"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" value="Planta academica FIM"/>
+            <Property name="text" type="java.lang.String" value="Planta Acad&#xe9;mica FIM"/>
           </Properties>
         </Component>
       </SubComponents>

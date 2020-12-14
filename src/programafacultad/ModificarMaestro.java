@@ -101,7 +101,7 @@ public class ModificarMaestro extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setText("Modificar Docente");
 
-        jLabel2.setText("Selecione el número de empleado a modificar:");
+        jLabel2.setText("Seleccione el número de empleado a modificar:");
 
         numDocente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -178,13 +178,13 @@ public class ModificarMaestro extends javax.swing.JFrame {
 
         jLabel11.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel11.setText("Facultad De Ingenieria Campus Mexicali ");
+        jLabel11.setText("Facultad de Ingeniería Campus Mexicali");
 
         jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/graficos/uabc.png"))); // NOI18N
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel13.setText("Planta academica FIM");
+        jLabel13.setText("Planta Académica FIM");
 
         javax.swing.GroupLayout TituloLayout = new javax.swing.GroupLayout(Titulo);
         Titulo.setLayout(TituloLayout);

@@ -90,7 +90,7 @@ public class FrmHoras extends javax.swing.JDialog {
         jLabel4.setText("Semestre Actual: ");
 
         jLabel5.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jLabel5.setText("programadas por asignatura :");
+        jLabel5.setText("programadas por asignatura:");
 
         hA.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         hA.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -129,10 +129,10 @@ public class FrmHoras extends javax.swing.JDialog {
                                 .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(semestre))
-                            .addGroup(consultaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel2)
-                                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
-                                .addComponent(hA, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(hA, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(consultaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(consultaLayout.createSequentialGroup()
                         .addGroup(consultaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -176,13 +176,13 @@ public class FrmHoras extends javax.swing.JDialog {
 
         jLabel6.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel6.setText("Facultad De Ingenieria Campus Mexicali ");
+        jLabel6.setText("Facultad de Ingeniería Campus Mexicali");
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/graficos/uabc.png"))); // NOI18N
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText("Planta academica FIM");
+        jLabel9.setText("Planta Académica FIM");
 
         javax.swing.GroupLayout TituloLayout = new javax.swing.GroupLayout(Titulo);
         Titulo.setLayout(TituloLayout);
