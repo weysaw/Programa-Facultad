@@ -163,11 +163,11 @@
                     <Column editable="false" title="Tipo" type="java.lang.Object"/>
                     <Column editable="false" title="Lunes" type="java.lang.Object"/>
                     <Column editable="false" title="Martes" type="java.lang.Object"/>
-                    <Column editable="false" title="Miercoles" type="java.lang.Object"/>
+                    <Column editable="false" title="Mi&#xe9;rcoles" type="java.lang.Object"/>
                     <Column editable="false" title="Jueves" type="java.lang.Object"/>
                     <Column editable="false" title="Viernes" type="java.lang.Object"/>
-                    <Column editable="false" title="Sabado" type="java.lang.Object"/>
-                    <Column editable="false" title="Total Horas" type="java.lang.Object"/>
+                    <Column editable="false" title="S&#xe1;bado" type="java.lang.Object"/>
+                    <Column editable="false" title="Total de hrs." type="java.lang.Object"/>
                   </Table>
                 </Property>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -303,7 +303,7 @@
               <Font name="Arial" size="12" style="1"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="2"/>
-            <Property name="text" type="java.lang.String" value="Facultad De Ingenieria Campus Mexicali "/>
+            <Property name="text" type="java.lang.String" value="Facultad de Ingenier&#xed;a Campus Mexicali"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel6">
@@ -319,7 +319,7 @@
               <Font name="Tahoma" size="18" style="1"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" value="Planta academica FIM"/>
+            <Property name="text" type="java.lang.String" value="Planta Acad&#xe9;mica FIM"/>
           </Properties>
         </Component>
       </SubComponents>

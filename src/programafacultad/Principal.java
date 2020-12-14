@@ -73,13 +73,13 @@ public class Principal extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel1.setText("Facultad De Ingenieria Campus Mexicali ");
+        jLabel1.setText("Facultad de Ingeniería Campus Mexicali");
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/graficos/uabc.png"))); // NOI18N
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("Planta academica FIM");
+        jLabel6.setText("Planta Académica FIM");
 
         javax.swing.GroupLayout TituloLayout = new javax.swing.GroupLayout(Titulo);
         Titulo.setLayout(TituloLayout);
@@ -111,7 +111,7 @@ public class Principal extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel4.setText("Consultas");
 
-        consultaMaestro.setText("Consulta por Maestro");
+        consultaMaestro.setText("Consulta por Docente");
         consultaMaestro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 consultaMaestroActionPerformed(evt);
@@ -238,7 +238,7 @@ public class Principal extends javax.swing.JFrame {
         );
 
         altaMateria.setFont(altaMateria.getFont().deriveFont((float)11));
-        altaMateria.setText("Alta de  Materia");
+        altaMateria.setText("Alta de Materia");
         altaMateria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 altaMateriaActionPerformed(evt);
@@ -305,7 +305,7 @@ public class Principal extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel3.setText("Leer Archivos");
 
-        leerArchivo.setText("Leer Cursos, Horarios y Docentes");
+        leerArchivo.setText("Leer Cursos, Horarios y Docentes de txts");
         leerArchivo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 leerArchivoActionPerformed(evt);

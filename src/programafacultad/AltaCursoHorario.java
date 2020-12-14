@@ -274,13 +274,13 @@ public class AltaCursoHorario extends javax.swing.JFrame {
 
         jLabel11.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel11.setText("Facultad De Ingenieria Campus Mexicali ");
+        jLabel11.setText("Facultad de Ingeniería Campus Mexicali");
 
         jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/graficos/uabc.png"))); // NOI18N
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel13.setText("Planta academica FIM");
+        jLabel13.setText("Planta Académica FIM");
 
         javax.swing.GroupLayout TituloLayout = new javax.swing.GroupLayout(Titulo);
         Titulo.setLayout(TituloLayout);
@@ -359,7 +359,7 @@ public class AltaCursoHorario extends javax.swing.JFrame {
         horario.setLayout(new java.awt.GridLayout(7, 3, 5, 5));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel6.setText("Dia");
+        jLabel6.setText("Día");
         horario.add(jLabel6);
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N

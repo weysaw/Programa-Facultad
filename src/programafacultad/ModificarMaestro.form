@@ -151,7 +151,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Selecione el n&#xfa;mero de empleado a modificar:"/>
+            <Property name="text" type="java.lang.String" value="Seleccione el n&#xfa;mero de empleado a modificar:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JComboBox" name="numDocente">
@@ -240,7 +240,7 @@
               <Font name="Arial" size="12" style="1"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="2"/>
-            <Property name="text" type="java.lang.String" value="Facultad De Ingenieria Campus Mexicali "/>
+            <Property name="text" type="java.lang.String" value="Facultad de Ingenier&#xed;a Campus Mexicali"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel12">
@@ -256,7 +256,7 @@
               <Font name="Tahoma" size="18" style="1"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" value="Planta academica FIM"/>
+            <Property name="text" type="java.lang.String" value="Planta Acad&#xe9;mica FIM"/>
           </Properties>
         </Component>
       </SubComponents>
