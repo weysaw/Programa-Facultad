@@ -118,6 +118,40 @@ public class CursoHorarioDAO extends ConexionBD {
     }
 
     /**
+     * Devuelve los cursos horarios indicados por los parametros
+     * 
+     * @param materia Busca por la materia indicado
+     * @param numEmpleado Busca por el numero de empleado
+     * @param tipo Busca por el tipo de clase
+     * @param grupo Busca por el grupo
+     * @return Retorna los objetos encontrados
+     * @throws Exception Lanza el error 
+     */
+    public ArrayList<CursoHorario> readEspecifico(String materia, String numEmpleado, String tipo, String grupo) throws Exception {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        //Se utilza para almacenar los objetos
+        ArrayList<CursoHorario> result = new ArrayList();
+        //Manda al comando
+        ps = conexion.prepareStatement("SELECT * FROM " + TABLA
+                + " WHERE " + CLAVE_MATERIA + " = " + materia  
+                + " AND " + NUM_EMPLEADO + " = " + numEmpleado + " AND "+ TIPO +" = "
+                + tipo +" AND "+ GRUPO +" = "+ grupo +";" );
+        //Ejecuta el comando y devuelve el resultado del comando
+        rs = ps.executeQuery();
+        //Recorre por todos los resultados
+        while (rs.next()) {
+            result.add(getObject(rs));
+        }
+        //Cierra las conexiones
+        cerrar(ps);
+        cerrar(rs);
+        return result;
+    }
+
+    
+    
+    /**
      * Regresa los CursoHorarios del profesor especificado, ordenados de forma
      * ascendiente por claveMateria, grupo, tipo y claveHorario.
      *
@@ -185,6 +219,46 @@ public class CursoHorarioDAO extends ConexionBD {
         cerrar(rs);
         return result;
     }
+    
+   /**
+     * Devuelve los cursos horarios indicado por el día y la hora
+     * 
+     * @param dia Indica el día a buscar
+     * @param hrInicio Indica la hrInicio a buscar
+     * @param hrFin Indica la hrFin a buscar
+     * @param numEmpleado Indica la numEmpleado a buscar
+     * @return Devuelve el resultado de cursos
+     * @throws Exception Lanza error
+     */
+    public ArrayList<CursoHorario> readHrIntervaloModificar(String dia, String hrInicio, String hrFin, String hrInicioVieja, String hrFinVieja , String numEmpleado) throws Exception {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        //Se utilza para almacenar los objetos
+        ArrayList<CursoHorario> result = new ArrayList();
+        //Manda al comando
+        ps = conexion.prepareStatement("SELECT*FROM " + TABLA
+                + " WHERE claveHorario "
+                + "IN (SELECT claveHorario "
+                + "FROM HORARIO WHERE dia = '" + dia + "' "
+                + "AND ((hrInicio > '" + hrInicio + "' AND hrInicio < '" + hrFin + "') "
+                + "OR (hrFin > '" + hrInicio + "' AND hrFin < '" + hrFin + "') "
+                + "OR ('" + hrInicio + "' > hrInicio AND  '" + hrInicio + "'< hrFin) "
+                + "OR ('" + hrFin + "' > hrInicio AND  '" + hrFin + "'< hrFin ) "
+                + "OR (hrInicio = '" + hrInicio + "' AND '" + hrFin + "' = hrFin )) "
+                + "AND (hrInicio != '"+ hrInicioVieja +"' AND hrFin != '"+ hrFinVieja +"'))"
+                + "AND numEmpleado = " + numEmpleado + ";");
+        //Ejecuta el comando y devuelve el resultado del comando
+        rs = ps.executeQuery();
+        //Recorre por todos los resultados
+        while (rs.next()) {
+            result.add(getObject(rs));
+        }
+        //Cierra las conexiones
+        cerrar(ps);
+        cerrar(rs);
+        return result;
+    }
+ 
 
     /**
      * Ingresa los datos a la tabla
