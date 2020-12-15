@@ -32,10 +32,11 @@ public class FrmMateria extends javax.swing.JFrame {
     /**
      * Constructor de la clase
      */
-    public FrmMateria(Principal principal) {
+    public FrmMateria(Principal principal,String semestre) {
         initComponents();
         this.principal = principal;
         setLocationRelativeTo(principal);
+        semestreActual.setText(semestre);//se actualiza la linea con el semestre actual
         dao = new CursoHorarioDAO();
         MensajeEspera mensaje = new MensajeEspera(principal) {
             @Override

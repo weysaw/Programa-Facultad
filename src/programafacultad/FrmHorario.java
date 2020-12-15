@@ -24,11 +24,12 @@ public class FrmHorario extends javax.swing.JFrame {
     /**
      * Constructor de la clase horario
      */
-    public FrmHorario(Principal principal) {
+    public FrmHorario(Principal principal, String semestre) {
         initComponents();
         this.principal = principal;
         setLocationRelativeTo(principal);
         dao = new CursoHorarioDAO();
+        semestreActual.setText(semestre);//se actualiza la linea con el semestre actual
     }
 
     @SuppressWarnings("unchecked")
