@@ -7,3 +7,5 @@ Características:
 - Consulta por materia: muestra todos los grupos y sus respectivos horarios en los que se imparte una materia
 - Consulta por docente: muestra todas las clases impartidas por un determinado docente y las horas impartidas
 - Consulta hrs TC y hrs Asig: muestra el total de horas tiempo completo y horas asignatura impartidas por todos los maestros
+- Modificaciones: Permite modificar o borrar cualquier maestro, materia o curso a la base de datos
+- Altas: Permite añadir nuevos maestros, materias o cursos a la base de datos
