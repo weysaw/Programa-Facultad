@@ -15,11 +15,12 @@ public class FrmHoras extends javax.swing.JDialog {
     /**
      * Constructor de la clase
      */
-    public FrmHoras(java.awt.Frame parent, boolean modal) {
+    public FrmHoras(java.awt.Frame parent, boolean modal,String semestre) {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(parent);
         calcularHoras();
+        semestreActual.setText(semestre);//se actualiza la linea con el semestre actual
     }
 
     /**
@@ -67,7 +68,7 @@ public class FrmHoras extends javax.swing.JDialog {
         regresar = new javax.swing.JButton();
         hC = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        semestre = new javax.swing.JLabel();
+        semestreActual = new javax.swing.JLabel();
         Titulo = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -111,8 +112,8 @@ public class FrmHoras extends javax.swing.JDialog {
         hC.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         hC.setText("0");
 
-        semestre.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        semestre.setText("20XX-X");
+        semestreActual.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        semestreActual.setText("20XX-X");
 
         javax.swing.GroupLayout consultaLayout = new javax.swing.GroupLayout(consulta);
         consulta.setLayout(consultaLayout);
@@ -128,7 +129,7 @@ public class FrmHoras extends javax.swing.JDialog {
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(semestre))
+                                .addComponent(semestreActual))
                             .addComponent(hA, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(consultaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -154,7 +155,7 @@ public class FrmHoras extends javax.swing.JDialog {
                 .addGroup(consultaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(semestre))
+                    .addComponent(semestreActual))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -254,6 +255,6 @@ public class FrmHoras extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JButton regresar;
-    private javax.swing.JLabel semestre;
+    private javax.swing.JLabel semestreActual;
     // End of variables declaration//GEN-END:variables
 }
