@@ -457,7 +457,9 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_modificarMateriaActionPerformed
 
     private void modificarCursoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificarCursoActionPerformed
-
+        ModificarCursoHorario modificar = new ModificarCursoHorario(this);
+        modificar.setVisible(true);
+        setVisible(false);
     }//GEN-LAST:event_modificarCursoActionPerformed
 
     private void modificarDocenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificarDocenteActionPerformed
