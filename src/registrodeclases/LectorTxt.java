@@ -21,6 +21,7 @@ public class LectorTxt {
 
     private final ArrayList<CursoHorario> clases;
     private File carpeta;
+    private String semestreActual;
 
     //Constructor de la clase
     public LectorTxt() {
@@ -159,6 +160,16 @@ public class LectorTxt {
     public ArrayList<CursoHorario> getCursoHorario() {
         return clases;
     }
+    
+    /**
+     * Despues de recuperar los datos de los txt, permite obtener el semestre
+     *
+     * @return String con semestre
+     */
+    public String getSemestre() {
+        return semestreActual;
+    }
+    
 
     /**
      * Valida si todos los archivos coinciden al mismo semestre, si encuentra
@@ -167,7 +178,7 @@ public class LectorTxt {
      *
      * @return true si coinciden los semestres
      */
-    public String validarSemestre() {
+    public boolean validarSemestre() {
         String semestre = null;
         int n = 0;//contador para saber el numero de iteraciones
         boolean valido = true;
@@ -195,10 +206,10 @@ public class LectorTxt {
                     }
                 }
             }
-            return (valido) ? semestre + "" : "0";
+            return valido;
         } else {
             System.out.println("No se han seleccionado datos");
-            return "0";
+            return false;
         }
     }
 
@@ -211,7 +222,6 @@ public class LectorTxt {
     private void lecturaIndividual(File archivo) {
         int clave;
         String materia = null;
-        String semestre;
         String grupo;
         String tipo;
         int hrsTC;
@@ -231,7 +241,7 @@ public class LectorTxt {
                         if (Pattern.matches("^MATERIA:.*", line)) {//Si es la linea que contiene la materia
                             materia = line.split(" ", 2)[1];
                         } else if (Pattern.matches("^SEMESTRE.*", line)) {//Si es la linea que contiene el semestre
-                            semestre = line.split(" ", 2)[1];
+                            semestreActual = line.split(" ", 2)[1];
                         } else if (Pattern.matches("^MAESTRO.*", line))//Si es la ultima linea del encabezado, pasa a la siguiente seccion
                         {
                             seccion = 1;
