@@ -382,12 +382,8 @@ public class FrmHorario extends javax.swing.JFrame {
                     //Cierra la conexión
                     dao.cerrarSSH();
                 }
-                horas.addActionListener((e) -> {
-                    horasActionPerformed(e);
-                });
-                tipoClase.addActionListener((e) -> {
-                    tipoClaseActionPerformed(e);
-                });
+                horas.addActionListener((e) -> horasActionPerformed(e));
+                tipoClase.addActionListener((e) -> tipoClaseActionPerformed(e));
             }
         };
         //Realiza la accion y muestra el mensaje

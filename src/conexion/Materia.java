@@ -1,7 +1,6 @@
 
 package conexion;
 
-import java.io.Serializable;
 
 /**
  * Describe como es una materia
@@ -9,7 +8,7 @@ import java.io.Serializable;
  * @author Ornelas Munguía Axel Leonardo
  * @version 28.11.2020
  */
-public class Materia implements Serializable {
+public class Materia {
     
     private int claveMateria;
     private String nom;

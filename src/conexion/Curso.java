@@ -1,7 +1,6 @@
 
 package conexion;
 
-import java.io.Serializable;
 
 /**
  * Describe el curso de la facultad
@@ -9,7 +8,7 @@ import java.io.Serializable;
  * @author Ornelas Munguía Axel Leonardo
  * @version 27.11.2020
  */
-public class Curso implements Serializable {
+public class Curso  {
     
     private Profesor profesor;
     private Materia materia;

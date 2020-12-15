@@ -2,21 +2,23 @@ package programafacultad;
 
 import conexion.Materia;
 import conexion.MateriaDAO;
+import java.awt.Component;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
- * Modifica la materia 
- * 
+ * Modifica la materia
+ *
  * @author Leslie Vidal, Ornelas Munguía Axel Leonardo
  * @version 11.12.2020
  */
 public class ModificarMateria extends javax.swing.JFrame {
 
-     private final Principal principal;
-     private ArrayList<Materia> materiaDAO;
-     private int numMateria;
+    private final Principal principal;
+    private ArrayList<Materia> materiaDAO;
+    private int numMateria;
+
     /**
      * Creates new form ModificarMateria
      */
@@ -25,29 +27,35 @@ public class ModificarMateria extends javax.swing.JFrame {
         this.principal = principal;
         setLocationRelativeTo(principal);
         materiaDAO = new ArrayList();
-        informacion();
+        MensajeEspera mensaje = new MensajeEspera(this) {
+            @Override
+            public void accion(Component cmp) {
+                informacion();
+            }
+        };
+        mensaje.mostrarMensaje();
     }
 
-     /* Método que trae la información de las materias para
+    /* Método que trae la información de las materias para
       los comboBox correspondientes*/
-    public final void informacion(){
-         MateriaDAO materia = new MateriaDAO();
-         materia.abrirSSH();
-         materia.abrirConexion();
-         try {
-             materiaDAO = new ArrayList();
-             materiaDAO = materia.readAll();
-             for(int i=0; i <materiaDAO.size(); i++){
-                 materias.addItem(materiaDAO.get(i).getClaveMateria()+" "+materiaDAO.get(i).getNom());
-             }
-         } catch (Exception ex) {
-             JOptionPane.showMessageDialog(this, "ERROR\n" + ex.getMessage(),"ERROR",JOptionPane.ERROR_MESSAGE);
-         } finally {
-             materia.cerrarSSH();
-             dispose();
-         }
+    public final void informacion() {
+        MateriaDAO materia = new MateriaDAO();
+        materia.abrirSSH();
+        materia.abrirConexion();
+        try {
+            materiaDAO = new ArrayList();
+            materiaDAO = materia.readAll();
+            for (int i = 0; i < materiaDAO.size(); i++) {
+                materias.addItem(materiaDAO.get(i).getClaveMateria() + " " + materiaDAO.get(i).getNom());
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "ERROR\n" + ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            materia.cerrarSSH();
+            dispose();
+        }
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -210,9 +218,9 @@ public class ModificarMateria extends javax.swing.JFrame {
         // Se llenan los jText con la informacion de la materia
         String nombreMateria;
         for (int i = 0; i < materiaDAO.size(); i++) {
-            nombreMateria= materiaDAO.get(i).getClaveMateria()+" "+materiaDAO.get(i).getNom();
-            if(materias.getSelectedItem().equals(nombreMateria)){
-                numMateria= materiaDAO.get(i).getClaveMateria();
+            nombreMateria = materiaDAO.get(i).getClaveMateria() + " " + materiaDAO.get(i).getNom();
+            if (materias.getSelectedItem().equals(nombreMateria)) {
+                numMateria = materiaDAO.get(i).getClaveMateria();
                 nomMateria.setText(materiaDAO.get(i).getNom());
             }
         }
@@ -233,27 +241,27 @@ public class ModificarMateria extends javax.swing.JFrame {
             matDAO.abrirSSH();
             matDAO.abrirConexion();
             try {
-                Materia materia = new Materia(numMateria,nomMateria.getText());
+                Materia materia = new Materia(numMateria, nomMateria.getText());
                 matDAO.update(materia);
                 JOptionPane.showMessageDialog(this, "Se ha modificado con exito", "EXITO", JOptionPane.INFORMATION_MESSAGE);
-            }  catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
-            JOptionPane.showMessageDialog(this, "Ya existe una Materia registrada con este número de Materia\n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
+            } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
+                JOptionPane.showMessageDialog(this, "Ya existe una Materia registrada con este número de Materia\n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
             } catch (Exception ex) { //Error en general
-            JOptionPane.showMessageDialog(this, "ERROR \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "ERROR \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
             } finally { //Cierra el ssh
                 matDAO.cerrarSSH();
             }
-        } 
+        }
     }//GEN-LAST:event_aceptarActionPerformed
 
-          /**
+    /**
      * Cierra la ventana y muestra la principal
      */
     private void cerrrarVentana() {
         principal.setVisible(true);
         dispose();
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Titulo;
     private javax.swing.JButton aceptar;

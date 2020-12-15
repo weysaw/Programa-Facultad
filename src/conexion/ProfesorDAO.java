@@ -15,7 +15,7 @@ public class ProfesorDAO extends ConexionBD {
     private static final String NUM_EMPLEADO = "numEmpleado";
     private static final String NOM = "nom";
     private static final String ES_TIEMPO_COMPLETO = "esTiempoCompleto";
-    private static final String SQL_SELECT_ALL = "SELECT * FROM " + TABLA+";";
+    private static final String SQL_SELECT_ALL = "SELECT * FROM " + TABLA+" ORDER BY "+ NOM +";";
     private static final String SQL_INSERT = "INSERT INTO " + TABLA + "(" + NUM_EMPLEADO + "," + NOM + ","
             + ES_TIEMPO_COMPLETO +") VALUES(?,?,?);";
     private static final String SQL_READ = "SELECT*FROM " + TABLA + " WHERE " + NUM_EMPLEADO + " = ?;";
