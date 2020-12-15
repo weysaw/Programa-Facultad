@@ -123,10 +123,10 @@ public class AltaCursoHorario extends javax.swing.JFrame {
 
     /**
      * Agrega el curso horario indicado por los parametros indicados
-     * 
+     *
      * @param cursos Agrega el curso
      * @param hrInicioDia Agrega la hr inicio dia
-     * @param hrFinDia Agrega la hr fin del día 
+     * @param hrFinDia Agrega la hr fin del día
      * @param dia Agrega el día
      */
     private void agregarCursoHorario(Curso cursos, JComboBox<String> hrInicioDia, JComboBox<String> hrFinDia, JCheckBox dia) {
@@ -164,7 +164,6 @@ public class AltaCursoHorario extends javax.swing.JFrame {
             CursoHorarioDAO cursoHDAO = new CursoHorarioDAO();
             //Pone la conexión al Curso Horario
             cursoHDAO.setConexion(horarioDAO.getConexionBD());
-            
             try {
                 //Agrega el curso horario
                 cursoHDAO.append(cursoH);
@@ -181,7 +180,7 @@ public class AltaCursoHorario extends javax.swing.JFrame {
 
     /**
      * Asigna el horario dependiendo de los check seleccionados
-     * 
+     *
      * @param cursos Es el curso agrega
      */
     private void asignarHorario(Curso cursos) {
@@ -195,7 +194,7 @@ public class AltaCursoHorario extends javax.swing.JFrame {
 
     /**
      * Valida si el horario no se ha traslapado
-     * 
+     *
      * @param dia Es el dia que se verifica
      * @param numEmpleado Es el numEmpleado a que se verifica
      * @return Devuelve true si no esta en la lista y false no no esta
@@ -207,15 +206,19 @@ public class AltaCursoHorario extends javax.swing.JFrame {
         try {
             //Busca el horario en la base de datos con el Queary indicado
             curso = dao.readHrIntervaloProfe(dia, hrInicio, hrFin, docente.getNumEmpleado());
+            if (curso.isEmpty()) {
+                return true;
+            }
+            String diaTexto;
+            //Devuelve en donde hay traslape
             for (CursoHorario cursoHorario : curso) {
                 System.out.println(cursoHorario.getHorario());
+                diaTexto = cursoHorario.getHorario().getDia();
+                JOptionPane.showMessageDialog(this, "Hay un traslape en:\nDía: " + diaTexto);
             }
         } catch (Exception e) {
             System.out.println(e.toString());
             return false;
-        }
-        if (curso.isEmpty()) {
-            return true;
         }
         return false;
     }
@@ -572,18 +575,16 @@ public class AltaCursoHorario extends javax.swing.JFrame {
                     cursos = new Curso(docente, materia, grupo.getText(), tipo.getSelectedItem().toString().toUpperCase(), 0, 0);
                     //Agrega el curso
                     cursoDAO.append(cursos);
+                    // Agregamos los horarios junto con el curso horario a la base de datos por dias
+                    asignarHorario(cursos);
                 } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
                     JOptionPane.showMessageDialog(this, "Ya existe un curso registrado \n" + ex.toString(),
                             "INFORMANDO", JOptionPane.INFORMATION_MESSAGE);
                 } catch (Exception ex) { //Error en general
                     JOptionPane.showMessageDialog(this, "ERROR \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
                 } finally {
-                    // Agregamos los horarios junto con el curso horario a la base de datos por dias
-                    asignarHorario(cursos);
                     cursoDAO.cerrarSSH();
                 }
-            } else {
-                System.out.println("XD");
             }
         }
     }//GEN-LAST:event_registrarActionPerformed
