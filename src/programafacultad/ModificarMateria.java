@@ -5,6 +5,7 @@ import conexion.MateriaDAO;
 import java.awt.Component;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
 /**
@@ -34,6 +35,7 @@ public class ModificarMateria extends javax.swing.JFrame {
             }
         };
         mensaje.mostrarMensaje();
+        materias.setSelectedIndex(-1);
     }
 
     /* Método que trae la información de las materias para
@@ -52,7 +54,6 @@ public class ModificarMateria extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "ERROR\n" + ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
         } finally {
             materia.cerrarSSH();
-            dispose();
         }
     }
 
@@ -62,7 +63,7 @@ public class ModificarMateria extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         regresar = new javax.swing.JButton();
-        aceptar = new javax.swing.JButton();
+        botonModificar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         nomMateria = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -72,6 +73,7 @@ public class ModificarMateria extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
+        eliminar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Modificar materia");
@@ -89,15 +91,16 @@ public class ModificarMateria extends javax.swing.JFrame {
             }
         });
 
-        aceptar.setText("Aceptar");
-        aceptar.addActionListener(new java.awt.event.ActionListener() {
+        botonModificar.setText("Modificar");
+        botonModificar.setEnabled(false);
+        botonModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                aceptarActionPerformed(evt);
+                botonModificarActionPerformed(evt);
             }
         });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel1.setText("Modificar Materia");
+        jLabel1.setText("Modificar/Eliminar Materia");
 
         jLabel2.setText("Seleccione la materia a modificar:");
 
@@ -124,7 +127,7 @@ public class ModificarMateria extends javax.swing.JFrame {
                             .addComponent(materias, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(nomMateria)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(aceptar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(botonModificar, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
                                 .addGap(18, 18, 18)
                                 .addComponent(regresar))
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -149,7 +152,7 @@ public class ModificarMateria extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(regresar)
-                    .addComponent(aceptar))
+                    .addComponent(botonModificar))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -163,6 +166,14 @@ public class ModificarMateria extends javax.swing.JFrame {
         jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel13.setText("Planta Académica FIM");
 
+        eliminar.setText("Eliminar");
+        eliminar.setEnabled(false);
+        eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eliminarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout TituloLayout = new javax.swing.GroupLayout(Titulo);
         Titulo.setLayout(TituloLayout);
         TituloLayout.setHorizontalGroup(
@@ -175,6 +186,10 @@ public class ModificarMateria extends javax.swing.JFrame {
                     .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(17, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, TituloLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(eliminar)
+                .addContainerGap())
         );
         TituloLayout.setVerticalGroup(
             TituloLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -187,7 +202,8 @@ public class ModificarMateria extends javax.swing.JFrame {
                         .addComponent(jLabel13)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGap(29, 29, 29)
+                .addComponent(eliminar))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -215,6 +231,15 @@ public class ModificarMateria extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void materiasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_materiasActionPerformed
+        if (materias.getSelectedIndex() == -1) {
+            nomMateria.setText("");
+            eliminar.setEnabled(false);
+            botonModificar.setEnabled(false);
+            return;
+        } else {
+            eliminar.setEnabled(true);
+            botonModificar.setEnabled(true);
+        }
         // Se llenan los jText con la informacion de la materia
         String nombreMateria;
         for (int i = 0; i < materiaDAO.size(); i++) {
@@ -234,25 +259,76 @@ public class ModificarMateria extends javax.swing.JFrame {
         cerrrarVentana();
     }//GEN-LAST:event_formWindowClosing
 
-    private void aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarActionPerformed
+    private void botonModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonModificarActionPerformed
+        if (nomMateria.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Introduzca un nombre", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
         int reply = JOptionPane.showConfirmDialog(null, "¿Seguro que desea registrar esta información?", "Confirmación", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
-            MateriaDAO matDAO = new MateriaDAO();
-            matDAO.abrirSSH();
-            matDAO.abrirConexion();
-            try {
-                Materia materia = new Materia(numMateria, nomMateria.getText());
-                matDAO.update(materia);
-                JOptionPane.showMessageDialog(this, "Se ha modificado con exito", "EXITO", JOptionPane.INFORMATION_MESSAGE);
-            } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
-                JOptionPane.showMessageDialog(this, "Ya existe una Materia registrada con este número de Materia\n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
-            } catch (Exception ex) { //Error en general
-                JOptionPane.showMessageDialog(this, "ERROR \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
-            } finally { //Cierra el ssh
-                matDAO.cerrarSSH();
-            }
+            MensajeEspera mensaje = new MensajeEspera(this) {
+                @Override
+                public void accion(Component cmp) {
+                MateriaDAO matDAO = new MateriaDAO();
+                matDAO.abrirSSH();
+                matDAO.abrirConexion();
+                try {
+                    Materia materia = new Materia(numMateria, nomMateria.getText());
+                    matDAO.update(materia);
+                    //Actualiza la materia en el ArrayList
+                    int i = materias.getSelectedIndex();
+                    materiaDAO.set(i, materia);
+                    //Actualiza el combobox
+                    DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+                    for (Materia m : materiaDAO) {
+                        model.addElement(m.getClaveMateria() + " " + m.getNom());
+                    }
+                    materias.setModel(model);
+                    materias.setSelectedIndex(-1);
+                    JOptionPane.showMessageDialog(cmp, "Se ha modificado con exito", "EXITO", JOptionPane.INFORMATION_MESSAGE);
+                } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
+                    JOptionPane.showMessageDialog(cmp, "Ya existe una Materia registrada con este número de Materia\n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception ex) { //Error en general
+                    JOptionPane.showMessageDialog(cmp, "ERROR \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
+                } finally { //Cierra el ssh
+                    matDAO.cerrarSSH();
+                }
+                }
+            };
+            mensaje.mostrarMensaje();
         }
-    }//GEN-LAST:event_aceptarActionPerformed
+    }//GEN-LAST:event_botonModificarActionPerformed
+
+    private void eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarActionPerformed
+        int reply = JOptionPane.showConfirmDialog(this, "¿Seguro que desea eliminar a esta materia?", "Confirmación", JOptionPane.YES_NO_OPTION);
+        if (reply == JOptionPane.YES_OPTION) {
+            MensajeEspera mensaje = new MensajeEspera(this) {
+                @Override
+                public void accion(Component cmp) {
+                MateriaDAO matDAO = new MateriaDAO();
+                matDAO.abrirSSH();
+                matDAO.abrirConexion();
+                try {
+                    //Obtiene la materia a eliminar
+                    int i = materias.getSelectedIndex();
+                    Materia materia = materiaDAO.get(i);
+                    matDAO.delete(materia);
+                    //Elimina la materia del ArrayList
+                    materiaDAO.remove(materia);
+                    //La elimina también del combobox
+                    materias.removeItem(materia.getClaveMateria() + " " + materia.getNom());
+                    materias.setSelectedIndex(-1);
+                    JOptionPane.showMessageDialog(cmp, "Eliminado exitosamente.", "EXITO", JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception ex) { //Error en general
+                    JOptionPane.showMessageDialog(cmp, "ERROR \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
+                } finally { //Cierra el ssh
+                    matDAO.cerrarSSH();
+                }
+                }
+            };
+            mensaje.mostrarMensaje();
+        }
+    }//GEN-LAST:event_eliminarActionPerformed
 
     /**
      * Cierra la ventana y muestra la principal
@@ -264,7 +340,8 @@ public class ModificarMateria extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Titulo;
-    private javax.swing.JButton aceptar;
+    private javax.swing.JButton botonModificar;
+    private javax.swing.JButton eliminar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;

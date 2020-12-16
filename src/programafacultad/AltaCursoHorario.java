@@ -548,6 +548,21 @@ public class AltaCursoHorario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void registrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarActionPerformed
+        String grp = grupo.getText();
+        if (grp.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Introduzca un grupo.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        for (int i = 0; i < grp.length(); i++) {
+            if (!(Character.isDigit(grp.charAt(i))) && grp.charAt(i) != '-') {
+                JOptionPane.showMessageDialog(this, "El grupo sólo puede tener números y guión.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+        }
+        if (!lunes.isSelected() && !martes.isSelected() && !miercoles.isSelected() && !jueves.isSelected() && !viernes.isSelected() && !sabado.isSelected()) {
+            JOptionPane.showMessageDialog(this, "Seleccione al menos un día.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
         //Pregunta si quiere ingresar el dato
         int reply = JOptionPane.showConfirmDialog(this, "¿Seguro que desea registrar esta información?", "Confirmación", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
@@ -564,7 +579,7 @@ public class AltaCursoHorario extends javax.swing.JFrame {
                     String dia = checkDias.get(i).getText().toUpperCase();
                     String hrInicio = inicios.get(i).getSelectedItem().toString() + ":00";
                     String hrFin = fines.get(i).getSelectedItem().toString() + ":00";
-                    validar = validarTraslape(dia, hrInicio, hrFin);
+                    if (!(validarTraslape(dia, hrInicio, hrFin))) return;
                 }
             }
             System.out.println(validar);
@@ -572,11 +587,12 @@ public class AltaCursoHorario extends javax.swing.JFrame {
             if (validar || docente.getNumEmpleado().equals("000000")) {
                 try {
                     //Se necesita corregir
-                    cursos = new Curso(docente, materia, grupo.getText(), tipo.getSelectedItem().toString().toUpperCase(), 0, 0);
+                    cursos = new Curso(docente, materia, grp, tipo.getSelectedItem().toString().toUpperCase(), 0, 0);
                     //Agrega el curso
                     cursoDAO.append(cursos);
                     // Agregamos los horarios junto con el curso horario a la base de datos por dias
                     asignarHorario(cursos);
+                    JOptionPane.showMessageDialog(this, "Registrado con éxito.", "EXITO", JOptionPane.INFORMATION_MESSAGE);
                 } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
                     JOptionPane.showMessageDialog(this, "Ya existe un curso registrado \n" + ex.toString(),
                             "INFORMANDO", JOptionPane.INFORMATION_MESSAGE);
