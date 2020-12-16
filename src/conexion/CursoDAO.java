@@ -23,8 +23,8 @@ public class CursoDAO extends ConexionBD {
             + GRUPO + ", " + TIPO + ", " + HRS_TC + ", " + HRS_ASIG + ") VALUES(?,?,?,?,?,?);";
     private static final String SQL_READ = "SELECT*FROM " + TABLA + " WHERE " + NUM_EMPLEADO + " = ? AND "
             + CLAVE_MATERIA + "= ? AND " + GRUPO + "= ? AND " + TIPO + "= ?;";
-    private static final String SQL_DELETE = "DELETE  FROM " + TABLA + "WHERE " + NUM_EMPLEADO + " = ? AND "
-            + CLAVE_MATERIA + "= ? AND " + GRUPO + "= ? AND " + TIPO + "= ?;";
+    private static final String SQL_DELETE = "DELETE FROM " + TABLA + " WHERE " + NUM_EMPLEADO + "=? AND "
+            + CLAVE_MATERIA + "=? AND " + GRUPO + "=? AND " + TIPO + "=?;";
     private static final String SQL_UPDATE = "UPDATE " + TABLA + " SET " + HRS_TC + " = ?, "
             + HRS_ASIG + " = ? WHERE " + NUM_EMPLEADO + " = ? AND "
             + CLAVE_MATERIA + "= ? AND " + GRUPO + "= ? AND " + TIPO + "= ?;";
@@ -132,6 +132,32 @@ public class CursoDAO extends ConexionBD {
         return datosModificados;
     }
 
+    /**
+     * Borra un dato de la tabla
+     *
+     * @param numEmpleado Número del empleado que da el curso a eliminar
+     * @param claveMateria Clave de la materia que se imparte en el curso a eliminar
+     * @param grupo Grupo del curso a eliminar
+     * @param tipo Tipo del curso a eliminar
+     * @throws Exception Devuelve error
+     */
+    public boolean delete(String numEmpleado, int claveMateria, String grupo, String tipo) throws Exception {
+        PreparedStatement ps = null;
+        boolean datosModificados;
+        //Manda el comando
+        ps = conexion.prepareStatement(SQL_DELETE);
+        //Les asigna los valores que deben tener los ?
+        ps.setString(1, numEmpleado);
+        ps.setInt(2, claveMateria);
+        ps.setString(3, grupo);
+        ps.setString(4, tipo);
+        //Ejecuta el comando y actualiza
+        datosModificados = ps.executeUpdate() > 0;
+        //Cierra la conexión
+        cerrar(ps);
+        return datosModificados;
+    }
+    
     /**
      * Borra un dato de la tabla
      *
