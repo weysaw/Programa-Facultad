@@ -397,7 +397,7 @@ public class FrmMaestro extends javax.swing.JFrame {
         dao.abrirConexion();
         //Consigue la lista
         try {
-            ArrayList<Profesor> listaDocentes = dao.readAll();
+            ArrayList<Profesor> listaDocentes = dao.readAllOrdered();
             //Recorre el arreglo y agrega cada materia a la lista
             for (Profesor docente : listaDocentes) {
                 docentes.addItem(docente.getNumEmpleado() + " " + docente.getNom());
