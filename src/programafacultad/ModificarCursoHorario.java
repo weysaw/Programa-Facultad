@@ -92,6 +92,7 @@ public class ModificarCursoHorario extends javax.swing.JFrame {
         materiaConexion.abrirSSH();
         materiaConexion.abrirConexion();
         materias.removeActionListener(materias.getActionListeners()[0]);
+        materias.removeAllItems();
         try {
             ArrayList<Materia> materiaDAO = materiaConexion.readAll();
             for (Materia materia1 : materiaDAO) {
@@ -107,6 +108,7 @@ public class ModificarCursoHorario extends javax.swing.JFrame {
         } finally { // Cierra la conexión SSH
             materiaConexion.cerrarSSH();
             materias.addActionListener((e) -> materiasActionPerformed(e));
+            materias.setSelectedIndex(-1);
         }
     }
 
@@ -240,7 +242,7 @@ public class ModificarCursoHorario extends javax.swing.JFrame {
         materias = new javax.swing.JComboBox<>();
         tipo = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
-        registrar = new javax.swing.JButton();
+        botonModificar = new javax.swing.JButton();
         regresar = new javax.swing.JButton();
         grupo = new javax.swing.JComboBox<>();
         horario = new javax.swing.JPanel();
@@ -265,6 +267,7 @@ public class ModificarCursoHorario extends javax.swing.JFrame {
         sabado = new javax.swing.JCheckBox();
         inicioSabado = new javax.swing.JComboBox<>();
         finSabado = new javax.swing.JComboBox<>();
+        eliminar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Modificar cursos");
@@ -313,7 +316,7 @@ public class ModificarCursoHorario extends javax.swing.JFrame {
         );
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel1.setText("Modificar Cursos");
+        jLabel1.setText("Modificar/Eliminar Cursos");
 
         jLabel3.setText("Docente:");
 
@@ -343,12 +346,12 @@ public class ModificarCursoHorario extends javax.swing.JFrame {
 
         jLabel2.setText("Grupo:");
 
-        registrar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        registrar.setText("Registrar");
-        registrar.setEnabled(false);
-        registrar.addActionListener(new java.awt.event.ActionListener() {
+        botonModificar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        botonModificar.setText("Modificar");
+        botonModificar.setEnabled(false);
+        botonModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                registrarActionPerformed(evt);
+                botonModificarActionPerformed(evt);
             }
         });
 
@@ -483,6 +486,14 @@ public class ModificarCursoHorario extends javax.swing.JFrame {
         finSabado.setEnabled(false);
         horario.add(finSabado);
 
+        eliminar.setText("Eliminar");
+        eliminar.setEnabled(false);
+        eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eliminarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout AltaLayout = new javax.swing.GroupLayout(Alta);
         Alta.setLayout(AltaLayout);
         AltaLayout.setHorizontalGroup(
@@ -491,8 +502,9 @@ public class ModificarCursoHorario extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(AltaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(AltaLayout.createSequentialGroup()
-                        .addGap(184, 184, 184)
-                        .addComponent(registrar, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(eliminar)
+                        .addGap(111, 111, 111)
+                        .addComponent(botonModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(regresar))
                     .addGroup(AltaLayout.createSequentialGroup()
@@ -542,8 +554,9 @@ public class ModificarCursoHorario extends javax.swing.JFrame {
                 .addComponent(horario, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(40, 40, 40)
                 .addGroup(AltaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(registrar)
-                    .addComponent(regresar))
+                    .addComponent(botonModificar)
+                    .addComponent(regresar)
+                    .addComponent(eliminar))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -573,67 +586,77 @@ public class ModificarCursoHorario extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void registrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarActionPerformed
+    private void botonModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonModificarActionPerformed
+        if (!lunes.isSelected() && !martes.isSelected() && !miercoles.isSelected() && !jueves.isSelected() && !viernes.isSelected() && !sabado.isSelected()) {
+            JOptionPane.showMessageDialog(this, "Seleccione al menos un día.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
         //Pregunta si quiere ingresar el dato
         int reply = JOptionPane.showConfirmDialog(this, "¿Seguro que desea registrar esta información?", "Confirmación", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
-            Curso cursos = null;
-            // Agregamos el curso a la base de datos
-            CursoDAO cursoDAO = new CursoDAO();
-            //Abre las conexiones
-            cursoDAO.abrirSSH();
-            cursoDAO.abrirConexion();
-            boolean validar = true;
-            String hrInicioVieja = null, hrFinVieja = null;
-            //Busca por si estan checkado los dias y los manda a validar
-            for (int i = 0; i < checkDias.size() && validar; i++) {
-                if (checkDias.get(i).isSelected()) {
-                    for (CursoHorario cursosHorariosActuale : cursosHorariosActuales) {
-                        if (cursosHorariosActuale.getHorario().getDia().equals(checkDias.get(i).getText().toUpperCase())) {
-                            hrInicioVieja = cursosHorariosActuale.getHorario().getHrInicio().getHours() + ":00";
-                            hrFinVieja = cursosHorariosActuale.getHorario().getHrFin().getHours() + ":00";
+            MensajeEspera mensaje = new MensajeEspera(this) {
+                @Override
+                public void accion(Component cmp) {
+                Curso cursos = null;
+                // Agregamos el curso a la base de datos
+                CursoDAO cursoDAO = new CursoDAO();
+                //Abre las conexiones
+                cursoDAO.abrirSSH();
+                cursoDAO.abrirConexion();
+                boolean validar = true;
+                String hrInicioVieja = null, hrFinVieja = null;
+                //Busca por si estan checkado los dias y los manda a validar
+                for (int i = 0; i < checkDias.size() && validar; i++) {
+                    if (checkDias.get(i).isSelected()) {
+                        for (CursoHorario cursosHorariosActuale : cursosHorariosActuales) {
+                            if (cursosHorariosActuale.getHorario().getDia().equals(checkDias.get(i).getText().toUpperCase())) {
+                                hrInicioVieja = cursosHorariosActuale.getHorario().getHrInicio().getHours() + ":00";
+                                hrFinVieja = cursosHorariosActuale.getHorario().getHrFin().getHours() + ":00";
+                            }
                         }
+                        String dia = checkDias.get(i).getText().toUpperCase();
+                        String hrInicio = inicios.get(i).getSelectedItem().toString();
+                        String hrFin = fines.get(i).getSelectedItem().toString();
+                        validar = validarTraslape(dia, hrInicio, hrFin, hrInicioVieja, hrFinVieja);
                     }
-                    String dia = checkDias.get(i).getText().toUpperCase();
-                    String hrInicio = inicios.get(i).getSelectedItem().toString();
-                    String hrFin = fines.get(i).getSelectedItem().toString();
-                    validar = validarTraslape(dia, hrInicio, hrFin, hrInicioVieja, hrFinVieja);
                 }
-            }
-            System.out.println(validar);
+                System.out.println(validar);
 
-            //Si no es valido o el vacante ingresa el horario
-            String numEmpleado = getProfeSel();
-            int claveMateria = getClaveMateria();
-            if (validar || numEmpleado.equals("000000")) {
-                try {
-                    MateriaDAO leerMateriaDAO = new MateriaDAO();
-                    ProfesorDAO leerProfesorDAO = new ProfesorDAO();
-                    leerMateriaDAO.setConexion(cursoDAO.getConexionBD());
-                    leerProfesorDAO.setConexion(cursoDAO.getConexionBD());
-                    Materia materia = leerMateriaDAO.read(new Materia(claveMateria, null));
-                    Profesor docente = leerProfesorDAO.read(new Profesor(numEmpleado, null, false));
+                //Si no es valido o el vacante ingresa el horario
+                String numEmpleado = getProfeSel();
+                int claveMateria = getClaveMateria();
+                if (validar || numEmpleado.equals("000000")) {
+                    try {
+                        MateriaDAO leerMateriaDAO = new MateriaDAO();
+                        ProfesorDAO leerProfesorDAO = new ProfesorDAO();
+                        leerMateriaDAO.setConexion(cursoDAO.getConexionBD());
+                        leerProfesorDAO.setConexion(cursoDAO.getConexionBD());
+                        Materia materia = leerMateriaDAO.read(new Materia(claveMateria, null));
+                        Profesor docente = leerProfesorDAO.read(new Profesor(numEmpleado, null, false));
 
-                    cursos = new Curso(docente, materia, grupo.getSelectedItem().toString(),
-                            tipo.getSelectedItem().toString().toUpperCase(), 0, 0);
+                        cursos = new Curso(docente, materia, grupo.getSelectedItem().toString(),
+                                tipo.getSelectedItem().toString().toUpperCase(), 0, 0);
 
-                    // Agregamos los horarios junto con el curso horario a la base de datos por dias
-                    asignarHorario(cursos);
-                    System.out.println(cursos.toString());
-                } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
-                    JOptionPane.showMessageDialog(this, "Ya existe un curso registrado \n" + ex.toString(),
-                            "INFORMANDO", JOptionPane.INFORMATION_MESSAGE);
-                } catch (Exception ex) { //Error en general
-                    JOptionPane.showMessageDialog(this, "ERROR \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
-                } finally {
+                        // Agregamos los horarios junto con el curso horario a la base de datos por dias
+                        asignarHorario(cursos);
+                        System.out.println(cursos.toString());
+                    } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
+                        JOptionPane.showMessageDialog(cmp, "Ya existe un curso registrado \n" + ex.toString(),
+                                "INFORMANDO", JOptionPane.INFORMATION_MESSAGE);
+                    } catch (Exception ex) { //Error en general
+                        JOptionPane.showMessageDialog(cmp, "ERROR \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
+                    } finally {
+                        cursoDAO.cerrarSSH();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(cmp, "Hay un traslape en el horario", "Traslape", JOptionPane.INFORMATION_MESSAGE);
                     cursoDAO.cerrarSSH();
                 }
-            } else {
-                JOptionPane.showMessageDialog(this, "Hay un traslape en el horario", "Traslape", JOptionPane.INFORMATION_MESSAGE);
-                cursoDAO.cerrarSSH();
-            }
+                }
+            };
+            mensaje.mostrarMensaje();
         }
-    }//GEN-LAST:event_registrarActionPerformed
+    }//GEN-LAST:event_botonModificarActionPerformed
 
     private void regresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regresarActionPerformed
         cerrarVentana();
@@ -706,6 +729,13 @@ public class ModificarCursoHorario extends javax.swing.JFrame {
     }//GEN-LAST:event_viernesActionPerformed
 
     private void materiasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_materiasActionPerformed
+        if (materias.getSelectedIndex() == -1) {
+            eliminar.setEnabled(false);
+            botonModificar.setEnabled(false);
+            docentes.setEnabled(false);
+            docentes.setSelectedIndex(-1);
+            return;
+        }
         MensajeEspera mensaje = new MensajeEspera(this) {
             @Override
             public void accion(Component cmp) {
@@ -727,7 +757,8 @@ public class ModificarCursoHorario extends javax.swing.JFrame {
                     tipo.setEnabled(false);
                     grupo.setEnabled(false);
                     //Desactiva el boton
-                    registrar.setEnabled(false);
+                    botonModificar.setEnabled(false);
+                    eliminar.setEnabled(false);
                     //Desactiva los indicadores de las horas
                     desactivarHoras();
                     //Leer la clave de la materia
@@ -775,6 +806,11 @@ public class ModificarCursoHorario extends javax.swing.JFrame {
     }//GEN-LAST:event_materiasActionPerformed
 
     private void docentesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_docentesActionPerformed
+        if (docentes.getSelectedIndex() == -1) {
+            tipo.setEnabled(false);
+            tipo.setSelectedIndex(-1);
+            return;
+        }
         MensajeEspera mensaje = new MensajeEspera(this) {
             @Override
             public void accion(Component cmp) {
@@ -790,7 +826,8 @@ public class ModificarCursoHorario extends javax.swing.JFrame {
                 grupo.removeAllItems();
                 tipo.removeAllItems();
                 //Desactiva el boton de registrar
-                registrar.setEnabled(false);
+                botonModificar.setEnabled(false);
+                eliminar.setEnabled(false);
                 desactivarHoras();
                 try {
                     //Obtiene los datos
@@ -829,6 +866,11 @@ public class ModificarCursoHorario extends javax.swing.JFrame {
     }//GEN-LAST:event_docentesActionPerformed
 
     private void tipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tipoActionPerformed
+        if (tipo.getSelectedIndex() == -1) {
+            grupo.setEnabled(false);
+            grupo.setSelectedIndex(-1);
+            return;
+        }
         MensajeEspera mensaje = new MensajeEspera(this) {
             @Override
             public void accion(Component cmp) {
@@ -841,7 +883,8 @@ public class ModificarCursoHorario extends javax.swing.JFrame {
                 //Quita todos los itemtas
                 grupo.removeAllItems();
                 //Desactiva el boton 
-                registrar.setEnabled(false);
+                botonModificar.setEnabled(false);
+                eliminar.setEnabled(false);
                 desactivarHoras();
                 try {
                     //Obtiene los datos necesarios
@@ -881,6 +924,16 @@ public class ModificarCursoHorario extends javax.swing.JFrame {
     }//GEN-LAST:event_tipoActionPerformed
 
     private void grupoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_grupoActionPerformed
+        if (grupo.getSelectedIndex() == -1) {
+            lunes.setEnabled(false);
+            martes.setEnabled(false);
+            miercoles.setEnabled(false);
+            jueves.setEnabled(false);
+            viernes.setEnabled(false);
+            sabado.setEnabled(false);
+            bloqueo();
+            return;
+        }
         MensajeEspera mensaje = new MensajeEspera(this) {
             @Override
             public void accion(Component cmp) {
@@ -889,7 +942,8 @@ public class ModificarCursoHorario extends javax.swing.JFrame {
                 CHdao.abrirSSH();
                 CHdao.abrirConexion();
                 try {
-                    registrar.setEnabled(true);
+                    botonModificar.setEnabled(true);
+                    eliminar.setEnabled(true);
                     //Obtiene los datos
                     String claveMateria = getClaveMateria() + "";
                     String numEmpleado = getProfeSel();
@@ -934,6 +988,39 @@ public class ModificarCursoHorario extends javax.swing.JFrame {
         };
         mensaje.mostrarMensaje();
     }//GEN-LAST:event_grupoActionPerformed
+
+    private void eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarActionPerformed
+        int reply = JOptionPane.showConfirmDialog(this, "¿Seguro que desea eliminar este curso?", "Confirmación", JOptionPane.YES_NO_OPTION);
+        if (reply == JOptionPane.YES_OPTION) {
+            MensajeEspera mensaje = new MensajeEspera(this) {
+                @Override
+                public void accion(Component cmp) {
+                CursoDAO cursoDAO = new CursoDAO();
+                cursoDAO.abrirSSH();
+                cursoDAO.abrirConexion();
+                try {
+                    //Obtiene los parámetros del curso a eliminar.
+                    String numEmpleado = (String)docentes.getSelectedItem();
+                    numEmpleado = numEmpleado.substring(0, numEmpleado.indexOf(' '));
+                    String claveMateriaS = (String)materias.getSelectedItem();
+                    claveMateriaS = claveMateriaS.substring(0, claveMateriaS.indexOf(' '));
+                    int claveMateria = Integer.parseInt(claveMateriaS);
+                    String grp = (String)grupo.getSelectedItem();
+                    String tpo = (String)tipo.getSelectedItem();
+                    cursoDAO.delete(numEmpleado, claveMateria, grp, tpo);
+                    JOptionPane.showMessageDialog(cmp, "Eliminado exitosamente.", "EXITO", JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception ex) { //Error en general
+                    JOptionPane.showMessageDialog(cmp, "ERROR \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
+                } finally { //Cierra el ssh
+                    cursoDAO.cerrarSSH();
+                    //Re-obtiene la información de los cursos registrados
+                    informacion();
+                }
+                }
+            };
+            mensaje.mostrarMensaje();
+        }
+    }//GEN-LAST:event_eliminarActionPerformed
 
     /**
      * Cierra la ventana y muestra la principal
@@ -985,7 +1072,9 @@ public class ModificarCursoHorario extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Alta;
     private javax.swing.JPanel Titulo;
+    private javax.swing.JButton botonModificar;
     private javax.swing.JComboBox<String> docentes;
+    private javax.swing.JButton eliminar;
     private javax.swing.JComboBox<String> finJueves;
     private javax.swing.JComboBox<String> finLunes;
     private javax.swing.JComboBox<String> finMartes;
@@ -1016,7 +1105,6 @@ public class ModificarCursoHorario extends javax.swing.JFrame {
     private javax.swing.JCheckBox martes;
     private javax.swing.JComboBox<String> materias;
     private javax.swing.JCheckBox miercoles;
-    private javax.swing.JButton registrar;
     private javax.swing.JButton regresar;
     private javax.swing.JCheckBox sabado;
     private javax.swing.JComboBox<String> tipo;

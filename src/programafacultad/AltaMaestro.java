@@ -229,19 +229,24 @@ public class AltaMaestro extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void registrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarActionPerformed
-        //Se crea el objeto se registra
+        //Se crea el objeto que se registra
         ProfesorDAO profeDAO = new ProfesorDAO();
         profeDAO.abrirSSH();
         profeDAO.abrirConexion();
         //Agrega el profesor agarrando sus datos.
         try {
+            String numEmp = numeroEmpleado.getText();
             String apellidos = apellidoP.getText() + " " + apellidoM.getText();
             String nombres = nombreDocente.getText();
-            
-            Profesor profesor = new Profesor(numeroEmpleado.getText()
-                    , apellidos + " " + nombres, completo.isSelected());
-            profeDAO.append(profesor);
-            JOptionPane.showMessageDialog(this, "Registrado con exito", "EXITO", JOptionPane.INFORMATION_MESSAGE);
+            //Valida que no haya campos vacíos
+            if (!numEmp.isEmpty() && !nombres.isEmpty() && !apellidos.isEmpty()){
+                Profesor profesor = new Profesor(numEmp,
+                    apellidos + " " + nombres, completo.isSelected());
+                profeDAO.append(profesor);
+                JOptionPane.showMessageDialog(this, "Registrado con éxito.", "EXITO", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+            JOptionPane.showMessageDialog(this, "Faltan datos para el registro.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+           }
         } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
             JOptionPane.showMessageDialog(this, "Ya existe un docente registrado con este número de Empleado\n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) { //Error en general
@@ -249,7 +254,6 @@ public class AltaMaestro extends javax.swing.JFrame {
         } finally { //Cierra el ssh
             profeDAO.cerrarSSH();
         }
-        dispose();
     }//GEN-LAST:event_registrarActionPerformed
 
     private void regresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regresarActionPerformed
