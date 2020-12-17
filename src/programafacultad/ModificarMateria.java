@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
  * Modifica la materia
  *
  * @author Leslie Vidal, Ornelas Munguía Axel Leonardo
- * @version 11.12.2020
+ * @version 16.12.2020
  */
 public class ModificarMateria extends javax.swing.JFrame {
 
@@ -28,10 +28,10 @@ public class ModificarMateria extends javax.swing.JFrame {
         this.principal = principal;
         setLocationRelativeTo(principal);
         materiaDAO = new ArrayList();
-        MensajeEspera mensaje = new MensajeEspera(this) {
+        MensajeEspera mensaje = new MensajeEspera(principal) {
             @Override
             public void accion(Component cmp) {
-                informacion();
+                informacion(cmp);
             }
         };
         mensaje.mostrarMensaje();
@@ -40,7 +40,7 @@ public class ModificarMateria extends javax.swing.JFrame {
 
     /* Método que trae la información de las materias para
       los comboBox correspondientes*/
-    public final void informacion() {
+    public final void informacion(Component cmp) {
         MateriaDAO materia = new MateriaDAO();
         materia.abrirSSH();
         materia.abrirConexion();
@@ -51,7 +51,7 @@ public class ModificarMateria extends javax.swing.JFrame {
                 materias.addItem(materiaDAO.get(i).getClaveMateria() + " " + materiaDAO.get(i).getNom());
             }
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "ERROR\n" + ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(cmp, "ERROR\n" + ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
         } finally {
             materia.cerrarSSH();
         }
