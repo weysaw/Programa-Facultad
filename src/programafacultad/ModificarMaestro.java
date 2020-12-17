@@ -28,10 +28,10 @@ public class ModificarMaestro extends javax.swing.JFrame {
         this.principal = principal;
         setLocationRelativeTo(principal);
         profesor = new ArrayList();
-        MensajeEspera mensaje = new MensajeEspera(this) {
+        MensajeEspera mensaje = new MensajeEspera(principal) {
             @Override
             public void accion(Component cmp) {
-                informacion();
+                informacion(cmp);
             }
         };
         mensaje.mostrarMensaje();
@@ -40,7 +40,7 @@ public class ModificarMaestro extends javax.swing.JFrame {
 
     /* Método que trae la información de los profesores para
       los comboBox correspondientes*/
-    public final void informacion() {
+    public final void informacion(Component cmp) {
         ProfesorDAO profeDAO = new ProfesorDAO();
         profeDAO.abrirSSH();
         profeDAO.abrirConexion();
@@ -51,7 +51,7 @@ public class ModificarMaestro extends javax.swing.JFrame {
                 numDocente.addItem(profesor.get(i).getNumEmpleado() + " " + profesor.get(i).getNom());
             }
         } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(ModificarMaestro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(cmp, "ERROR\n" + ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
         } finally {
             profeDAO.cerrarSSH();
         }
