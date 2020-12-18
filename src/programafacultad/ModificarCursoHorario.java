@@ -8,7 +8,11 @@ import java.sql.Time;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import java.awt.Component;
+import java.io.IOException;
 import java.util.HashSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 
 /**
  * Da de alta los cursos y los usuarios
@@ -28,6 +32,11 @@ public class ModificarCursoHorario extends javax.swing.JFrame {
      * Constructor de la clase
      */
     public ModificarCursoHorario(Principal principal) {
+        try {
+            setIconImage(ImageIO.read(getClass().getResource("/graficos/uabc.png"))); //Icono del programa
+        } catch (IOException ex) {
+            Logger.getLogger(ModificarMateria.class.getName()).log(Level.SEVERE, null, ex);
+        }
         initComponents();
         this.principal = principal;
         setLocationRelativeTo(principal);

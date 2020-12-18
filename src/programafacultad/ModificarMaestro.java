@@ -3,8 +3,12 @@ package programafacultad;
 import conexion.Profesor;
 import conexion.ProfesorDAO;
 import java.awt.Component;
+import java.io.IOException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
@@ -24,6 +28,11 @@ public class ModificarMaestro extends javax.swing.JFrame {
      * Constructor de la clase 
      */
     public ModificarMaestro(Principal principal) {
+        try {
+            setIconImage(ImageIO.read(getClass().getResource("/graficos/uabc.png"))); //Icono del programa
+        } catch (IOException ex) {
+            Logger.getLogger(ModificarMateria.class.getName()).log(Level.SEVERE, null, ex);
+        }
         initComponents();
         this.principal = principal;
         setLocationRelativeTo(principal);

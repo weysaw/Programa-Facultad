@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.*;
 import java.awt.Component;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 
 /**
  * Muestra la información de la materia
@@ -33,6 +37,11 @@ public class FrmMateria extends javax.swing.JFrame {
      * Constructor de la clase
      */
     public FrmMateria(Principal principal,String semestre) {
+        try {
+            setIconImage(ImageIO.read(getClass().getResource("/graficos/uabc.png"))); //Icono del programa
+        } catch (IOException ex) {
+            Logger.getLogger(ModificarMateria.class.getName()).log(Level.SEVERE, null, ex);
+        }
         initComponents();
         this.principal = principal;
         setLocationRelativeTo(principal);
