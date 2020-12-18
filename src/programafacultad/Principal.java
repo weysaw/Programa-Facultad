@@ -4,8 +4,6 @@ import conexion.*;
 import java.awt.Component;
 import java.io.IOException;
 import java.sql.Connection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -15,8 +13,8 @@ import registrodeclases.LectorTxt;
 /**
  * La clase principal del programa
  *
- * @author Leslie Vidal
- * @version 03.12.2020
+ * @author Todo el equipo
+ * @version 17.12.2020
  */
 public class Principal extends javax.swing.JFrame {
 
@@ -29,10 +27,8 @@ public class Principal extends javax.swing.JFrame {
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");//Aspecto general del programa
             setIconImage(ImageIO.read(getClass().getResource("/graficos/uabc.png"))); //Icono del programa
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException | IOException ex) {
             System.out.println(ex.toString());
-        } catch (IOException ex) {
-            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
         initComponents();
 
@@ -537,14 +533,12 @@ public class Principal extends javax.swing.JFrame {
                 cursoHorarioDAO.deleteAll();
                 System.out.println("DATOS ELIMINADOS CURSO_HORARIO");
                 //Abre la conexión a la base de datos
-                //horarioDAO.abrirConexion();
                 horarioDAO.setConexion(conexion);
                     try {
                     //Borra todos los elementos de la tabla
                     horarioDAO.deleteAll();
                     System.out.println("DATOS ELIMINADOS HORARIOS");
                     //Abre la conexión a la base de datos
-                    //cursoDAO.abrirConexion();
                     cursoDAO.setConexion(conexion);
                     try {
                         //Borra todos los elementos de la tabla
@@ -566,32 +560,27 @@ public class Principal extends javax.swing.JFrame {
                                 for (Profesor profesor : lector.getProfesor()) {
                                     //Ingresa la información a la base de datos
                                     profesorDAO.append(profesor);
-                                    //System.out.println("Agregado ---> " + profesor);
                                 }
                                 //Recorre todo el arreglo del archivo que manda
                                 for (Materia materia : lector.getMateria()) {
                                     //Ingresa la información a la base de datos
                                     materiaDAO.append(materia);
-                                    //System.out.println("Agregado ---> " + materia);
                                 }
                                 //Recorre todo el arreglo del archivo que manda
                                 for (Curso curso : lector.getCurso()) {
                                     //Ingresa la información a la base de datos
                                     cursoDAO.append(curso);
-                                    //System.out.println("Agregado ---> " + curso);
                                 }
                                 //Recorre todo el arreglo del archivo que manda
                                 for (Horario horario : lector.getHorario()) {
                                     //Ingresa la información a la base de datos
                                     horarioDAO.append(horario);
-                                    //System.out.println("Agregado ---> " + horario);
                                 }
                                 //Recorre todo el arreglo del archivo que manda
                                 for (CursoHorario cursoHorario : lector.getCursoHorario()) {
                                     cursoHorario.setHorario(horarioDAO.read(cursoHorario.getHorario()));
                                     //Ingresa la información a la base de datos
                                     cursoHorarioDAO.append(cursoHorario);
-                                    //System.out.println("Agregado ---> " + cursoHorario);
                                 }
                             } catch (Exception e) {
                                 //Muestra los mensajes de error

@@ -90,7 +90,6 @@ public class FrmHorario extends javax.swing.JFrame {
         jScrollPane1.setToolTipText("");
 
         datosHorarios.setAutoCreateRowSorter(true);
-        datosHorarios.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         datosHorarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 

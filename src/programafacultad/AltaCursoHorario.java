@@ -9,8 +9,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import java.awt.Component;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 /**
@@ -37,7 +35,7 @@ public class AltaCursoHorario extends javax.swing.JFrame {
         try {
             setIconImage(ImageIO.read(getClass().getResource("/graficos/uabc.png"))); //Icono del programa
         } catch (IOException ex) {
-            Logger.getLogger(ModificarMateria.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
         }
         initComponents();
         this.principal = principal;
