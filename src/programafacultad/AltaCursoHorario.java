@@ -112,7 +112,7 @@ public class AltaCursoHorario extends javax.swing.JFrame {
             }
             profesor.setConexion(materiaConexion.getConexionBD());
             try {
-                profeDAO = profesor.readAll();
+                profeDAO = profesor.readAllOrdered();
                 for (Profesor profesor1 : profeDAO) {
                     docentes.addItem(profesor1.getNumEmpleado() + " " + profesor1.getNom());
                 }
