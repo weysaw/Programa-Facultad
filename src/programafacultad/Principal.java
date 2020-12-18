@@ -202,23 +202,23 @@ public class Principal extends javax.swing.JFrame {
         );
 
         jLabel7.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jLabel7.setText("Modificaciones");
+        jLabel7.setText("Modificaciones/Eliminaciones");
 
-        modificarDocente.setText("Modificar Docente");
+        modificarDocente.setText("Modif/Elim Docente");
         modificarDocente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 modificarDocenteActionPerformed(evt);
             }
         });
 
-        modificarMateria.setText("Modificar Materia");
+        modificarMateria.setText("Modif/Elim Materia");
         modificarMateria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 modificarMateriaActionPerformed(evt);
             }
         });
 
-        modificarCurso.setText("Modificar Curso");
+        modificarCurso.setText("Modif/Elim Curso");
         modificarCurso.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 modificarCursoActionPerformed(evt);
@@ -485,7 +485,9 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_modificarMateriaActionPerformed
 
     private void modificarCursoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificarCursoActionPerformed
-
+        ModificarCursoHorario modificar = new ModificarCursoHorario(this);
+        modificar.setVisible(true);
+        setVisible(false);
     }//GEN-LAST:event_modificarCursoActionPerformed
 
     private void modificarDocenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificarDocenteActionPerformed

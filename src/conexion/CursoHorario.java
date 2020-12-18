@@ -1,7 +1,6 @@
 
 package conexion;
 
-import java.io.Serializable;
 
 /**
  * Describe el horario de la facultad
@@ -9,7 +8,7 @@ import java.io.Serializable;
  * @author Ornelas Munguía Axel Leonardo
  * @version 28.11.2020
  */
-public class CursoHorario implements Serializable {
+public class CursoHorario  {
     
     private Curso curso;
     private Horario horario;

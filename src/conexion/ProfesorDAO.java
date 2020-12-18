@@ -15,7 +15,8 @@ public class ProfesorDAO extends ConexionBD {
     private static final String NUM_EMPLEADO = "numEmpleado";
     private static final String NOM = "nom";
     private static final String ES_TIEMPO_COMPLETO = "esTiempoCompleto";
-    private static final String SQL_SELECT_ALL = "SELECT * FROM " + TABLA+";";
+    private static final String SQL_SELECT_ALL = "SELECT * FROM " + TABLA + ";";
+    private static final String SQL_SELECT_ALL_ORDERED = "SELECT * FROM " + TABLA+" ORDER BY "+ NOM +";";
     private static final String SQL_INSERT = "INSERT INTO " + TABLA + "(" + NUM_EMPLEADO + "," + NOM + ","
             + ES_TIEMPO_COMPLETO +") VALUES(?,?,?);";
     private static final String SQL_READ = "SELECT*FROM " + TABLA + " WHERE " + NUM_EMPLEADO + " = ?;";
@@ -43,6 +44,31 @@ public class ProfesorDAO extends ConexionBD {
         ArrayList<Profesor> result = new ArrayList();
         //Manda al comando
         ps = conexion.prepareStatement(SQL_SELECT_ALL);
+        //Ejecuta el comando y devuelve el resultado del comando
+        rs = ps.executeQuery();
+        //Recorre por todos los resultados
+        while (rs.next()) {
+            result.add(getObject(rs));
+        }
+        //Cierra las conexiones
+        cerrar(ps);
+        cerrar(rs);
+        return result;
+    }
+    
+    /**
+     * Devuelve un arreglo de los datos ordenados por nombre
+     *
+     * @return El arreglo de objetos
+     * @throws Exception Devuelve error
+     */
+    public ArrayList<Profesor> readAllOrdered() throws Exception {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        //Se utilza para almacenar los objetos
+        ArrayList<Profesor> result = new ArrayList();
+        //Manda al comando
+        ps = conexion.prepareStatement(SQL_SELECT_ALL_ORDERED);
         //Ejecuta el comando y devuelve el resultado del comando
         rs = ps.executeQuery();
         //Recorre por todos los resultados

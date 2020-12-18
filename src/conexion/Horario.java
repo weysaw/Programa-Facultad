@@ -1,7 +1,6 @@
 
 package conexion;
 
-import java.io.Serializable;
 import java.sql.Time;
 
 /**
@@ -10,7 +9,7 @@ import java.sql.Time;
  * @author Ornelas Munguía Axel Leonardo
  * @version 28.11.2020
  */
-public class Horario implements Serializable {
+public class Horario {
     
     private int claveHorario;
     private String dia;

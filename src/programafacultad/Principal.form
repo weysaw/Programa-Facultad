@@ -301,12 +301,12 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Dialog" size="18" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Modificaciones"/>
+                <Property name="text" type="java.lang.String" value="Modificaciones/Eliminaciones"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="modificarDocente">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Modificar Docente"/>
+                <Property name="text" type="java.lang.String" value="Modif/Elim Docente"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="modificarDocenteActionPerformed"/>
@@ -314,7 +314,7 @@
             </Component>
             <Component class="javax.swing.JButton" name="modificarMateria">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Modificar Materia"/>
+                <Property name="text" type="java.lang.String" value="Modif/Elim Materia"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="modificarMateriaActionPerformed"/>
@@ -322,7 +322,7 @@
             </Component>
             <Component class="javax.swing.JButton" name="modificarCurso">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Modificar Curso"/>
+                <Property name="text" type="java.lang.String" value="Modif/Elim Curso"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="modificarCursoActionPerformed"/>
