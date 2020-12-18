@@ -2,7 +2,11 @@ package programafacultad;
 
 import conexion.*;
 import java.awt.Component;
+import java.io.IOException;
 import java.sql.Connection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -23,9 +27,12 @@ public class Principal extends javax.swing.JFrame {
      */
     public Principal() {
         try {
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");//Aspecto general del programa
+            setIconImage(ImageIO.read(getClass().getResource("/graficos/uabc.png"))); //Icono del programa
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ex) {
             System.out.println(ex.toString());
+        } catch (IOException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
         initComponents();
 
@@ -202,23 +209,23 @@ public class Principal extends javax.swing.JFrame {
         );
 
         jLabel7.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jLabel7.setText("Modificaciones/Eliminaciones");
+        jLabel7.setText("Modificaciones/Bajas");
 
-        modificarDocente.setText("Modif/Elim Docente");
+        modificarDocente.setText("Docente");
         modificarDocente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 modificarDocenteActionPerformed(evt);
             }
         });
 
-        modificarMateria.setText("Modif/Elim Materia");
+        modificarMateria.setText(" Materia");
         modificarMateria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 modificarMateriaActionPerformed(evt);
             }
         });
 
-        modificarCurso.setText("Modif/Elim Curso");
+        modificarCurso.setText("Curso");
         modificarCurso.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 modificarCursoActionPerformed(evt);
@@ -259,7 +266,7 @@ public class Principal extends javax.swing.JFrame {
         );
 
         altaMateria.setFont(altaMateria.getFont().deriveFont((float)11));
-        altaMateria.setText("Alta de Materia");
+        altaMateria.setText("Materia");
         altaMateria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 altaMateriaActionPerformed(evt);
@@ -270,7 +277,7 @@ public class Principal extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel2.setText("Altas");
 
-        altaMaestro.setText("Alta de Docente");
+        altaMaestro.setText("Docente");
         altaMaestro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 altaMaestroActionPerformed(evt);
@@ -278,7 +285,7 @@ public class Principal extends javax.swing.JFrame {
         });
 
         altaCursoHorario.setFont(altaCursoHorario.getFont().deriveFont((float)11));
-        altaCursoHorario.setText("Alta de Curso");
+        altaCursoHorario.setText("Curso");
         altaCursoHorario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 altaCursoHorarioActionPerformed(evt);
@@ -326,7 +333,7 @@ public class Principal extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel3.setText("Leer Archivos");
 
-        leerArchivo.setText("Leer Cursos, Horarios y Docentes de txts");
+        leerArchivo.setText("Abrir carpeta con archivos txt");
         leerArchivo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 leerArchivoActionPerformed(evt);

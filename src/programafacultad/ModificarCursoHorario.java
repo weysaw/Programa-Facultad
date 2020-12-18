@@ -8,7 +8,11 @@ import java.sql.Time;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import java.awt.Component;
+import java.io.IOException;
 import java.util.HashSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 
 /**
  * Da de alta los cursos y los usuarios
@@ -28,6 +32,11 @@ public class ModificarCursoHorario extends javax.swing.JFrame {
      * Constructor de la clase
      */
     public ModificarCursoHorario(Principal principal) {
+        try {
+            setIconImage(ImageIO.read(getClass().getResource("/graficos/uabc.png"))); //Icono del programa
+        } catch (IOException ex) {
+            Logger.getLogger(ModificarMateria.class.getName()).log(Level.SEVERE, null, ex);
+        }
         initComponents();
         this.principal = principal;
         setLocationRelativeTo(principal);
@@ -316,7 +325,7 @@ public class ModificarCursoHorario extends javax.swing.JFrame {
         );
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel1.setText("Modificar/Eliminar Cursos");
+        jLabel1.setText("Modificar/Baja Cursos");
 
         jLabel3.setText("Docente:");
 
@@ -502,16 +511,16 @@ public class ModificarCursoHorario extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(AltaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(AltaLayout.createSequentialGroup()
-                        .addComponent(eliminar)
-                        .addGap(111, 111, 111)
-                        .addComponent(botonModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(regresar))
-                    .addGroup(AltaLayout.createSequentialGroup()
                         .addComponent(materias, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(tipo, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(AltaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, AltaLayout.createSequentialGroup()
+                            .addComponent(eliminar)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(botonModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(regresar))
                         .addComponent(horario, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, AltaLayout.createSequentialGroup()
                             .addGroup(AltaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

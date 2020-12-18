@@ -2,7 +2,11 @@ package programafacultad;
 
 import javax.swing.JOptionPane;
 import conexion.*;
+import java.io.IOException;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 
 /**
  * Da de alta maestros
@@ -18,6 +22,11 @@ public class AltaMaestro extends javax.swing.JFrame {
      * Constructor de la clase
      */
     public AltaMaestro(Principal principal) {
+        try {
+            setIconImage(ImageIO.read(getClass().getResource("/graficos/uabc.png"))); //Icono del programa
+        } catch (IOException ex) {
+            Logger.getLogger(ModificarMateria.class.getName()).log(Level.SEVERE, null, ex);
+        }
         initComponents();
         this.principal = principal;
         setLocationRelativeTo(principal);
