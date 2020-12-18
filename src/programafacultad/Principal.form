@@ -301,12 +301,12 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Dialog" size="18" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Modificaciones/Eliminaciones"/>
+                <Property name="text" type="java.lang.String" value="Modificaciones/Bajas"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="modificarDocente">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Modif/Elim Docente"/>
+                <Property name="text" type="java.lang.String" value="Docente"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="modificarDocenteActionPerformed"/>
@@ -314,7 +314,7 @@
             </Component>
             <Component class="javax.swing.JButton" name="modificarMateria">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Modif/Elim Materia"/>
+                <Property name="text" type="java.lang.String" value=" Materia"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="modificarMateriaActionPerformed"/>
@@ -322,7 +322,7 @@
             </Component>
             <Component class="javax.swing.JButton" name="modificarCurso">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Modif/Elim Curso"/>
+                <Property name="text" type="java.lang.String" value="Curso"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="modificarCursoActionPerformed"/>
@@ -386,7 +386,7 @@
                     <Font component="altaMateria" property="font" relativeSize="false" size="11"/>
                   </FontInfo>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Alta de Materia"/>
+                <Property name="text" type="java.lang.String" value="Materia"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="altaMateriaActionPerformed"/>
@@ -405,7 +405,7 @@
             </Component>
             <Component class="javax.swing.JButton" name="altaMaestro">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Alta de Docente"/>
+                <Property name="text" type="java.lang.String" value="Docente"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="altaMaestroActionPerformed"/>
@@ -420,7 +420,7 @@
                     <Font component="altaCursoHorario" property="font" relativeSize="false" size="11"/>
                   </FontInfo>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Alta de Curso"/>
+                <Property name="text" type="java.lang.String" value="Curso"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="altaCursoHorarioActionPerformed"/>
@@ -475,7 +475,7 @@
             </Component>
             <Component class="javax.swing.JButton" name="leerArchivo">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Leer Cursos, Horarios y Docentes de txts"/>
+                <Property name="text" type="java.lang.String" value="Abrir carpeta con archivos txt"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="leerArchivoActionPerformed"/>
