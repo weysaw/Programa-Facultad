@@ -2,10 +2,14 @@ package programafacultad;
 
 import conexion.*;
 import java.awt.Component;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.table.*;
 import java.util.HashSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 /**
@@ -25,6 +29,11 @@ public class FrmHorario extends javax.swing.JFrame {
      * Constructor de la clase horario
      */
     public FrmHorario(Principal principal, String semestre) {
+        try {
+            setIconImage(ImageIO.read(getClass().getResource("/graficos/uabc.png"))); //Icono del programa
+        } catch (IOException ex) {
+            Logger.getLogger(ModificarMateria.class.getName()).log(Level.SEVERE, null, ex);
+        }
         initComponents();
         this.principal = principal;
         setLocationRelativeTo(principal);

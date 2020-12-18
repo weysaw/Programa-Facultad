@@ -2,6 +2,10 @@ package programafacultad;
 
 import conexion.*;
 import java.awt.Component;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 /**
@@ -17,6 +21,11 @@ public class FrmHoras extends javax.swing.JDialog {
      */
     public FrmHoras(java.awt.Frame parent, boolean modal,String semestre) {
         super(parent, modal);
+        try {
+            setIconImage(ImageIO.read(getClass().getResource("/graficos/uabc.png"))); //Icono del programa
+        } catch (IOException ex) {
+            Logger.getLogger(ModificarMateria.class.getName()).log(Level.SEVERE, null, ex);
+        }
         initComponents();
         setLocationRelativeTo(parent);
         calcularHoras();
