@@ -32,7 +32,6 @@ public class Principal extends javax.swing.JFrame {
         }
         initComponents();
 
-        
         AuxDAO auxDAO = new AuxDAO();
         //Abre la conexión ssh
         auxDAO.abrirSSH();
@@ -48,6 +47,7 @@ public class Principal extends javax.swing.JFrame {
                     JOptionPane.ERROR_MESSAGE);
         } finally {
             auxDAO.cerrarSSH();
+            dispose();
         }
 
     }
@@ -437,28 +437,28 @@ public class Principal extends javax.swing.JFrame {
 
     private void consultaMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaMateriaActionPerformed
         //Hace visible la consulta por materia
-        FrmMateria materia = new FrmMateria(this,semestre);
+        FrmMateria materia = new FrmMateria(this, semestre);
         materia.setVisible(true);
         setVisible(false);
     }//GEN-LAST:event_consultaMateriaActionPerformed
 
     private void consultaHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaHorarioActionPerformed
         //Hace visible la consulta por horario
-        FrmHorario horario = new FrmHorario(this,semestre);
+        FrmHorario horario = new FrmHorario(this, semestre);
         horario.setVisible(true);
         setVisible(false);
     }//GEN-LAST:event_consultaHorarioActionPerformed
 
     private void consultaMaestroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaMaestroActionPerformed
         //Hace visible la consulta por maestro
-        FrmMaestro maestro = new FrmMaestro(this,semestre);
+        FrmMaestro maestro = new FrmMaestro(this, semestre);
         maestro.setVisible(true);
         setVisible(false);
     }//GEN-LAST:event_consultaMaestroActionPerformed
 
     private void consultaHorasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaHorasActionPerformed
         //Hace visible la consulta por horas
-        FrmHoras hora = new FrmHoras(this, true,semestre);
+        FrmHoras hora = new FrmHoras(this, true, semestre);
         hora.setVisible(true);
     }//GEN-LAST:event_consultaHorasActionPerformed
 
@@ -519,7 +519,7 @@ public class Principal extends javax.swing.JFrame {
         AuxDAO auxDAO = new AuxDAO();
         //Abre la conexión ssh
         cursoHorarioDAO.abrirSSH();
-        
+
         //Abre la conexión a la base de datos
         cursoHorarioDAO.abrirConexion();
         try {
@@ -534,7 +534,7 @@ public class Principal extends javax.swing.JFrame {
                 System.out.println("DATOS ELIMINADOS CURSO_HORARIO");
                 //Abre la conexión a la base de datos
                 horarioDAO.setConexion(conexion);
-                    try {
+                try {
                     //Borra todos los elementos de la tabla
                     horarioDAO.deleteAll();
                     System.out.println("DATOS ELIMINADOS HORARIOS");
@@ -582,6 +582,8 @@ public class Principal extends javax.swing.JFrame {
                                     //Ingresa la información a la base de datos
                                     cursoHorarioDAO.append(cursoHorario);
                                 }
+                                //Vuelve a activar el trigger y se actualiza el semestre
+                                auxDAO.update(new AuxDTO(true, lector.getSemestre()), "1");
                             } catch (Exception e) {
                                 //Muestra los mensajes de error
                                 System.out.println(e.toString());
@@ -614,8 +616,6 @@ public class Principal extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "ERROR CURSO_HORARIO\n" + e.getMessage(), "ERROR",
                         JOptionPane.ERROR_MESSAGE);
             }
-            //Vuelve a activar el trigger y se actualiza el semestre
-            auxDAO.update(new AuxDTO(true, lector.getSemestre()), "1");
         } catch (Exception e) {
             //Muestra los mensajes de error
             System.out.println(e.toString());
@@ -633,6 +633,7 @@ public class Principal extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+        ConexionBD.leerConfig();
         Principal principal = new Principal();
         principal.setVisible(true);
     }
