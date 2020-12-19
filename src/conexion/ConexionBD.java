@@ -6,6 +6,7 @@ import com.jcraft.jsch.Session;
 import java.sql.*;
 import java.util.Properties;
 import javax.swing.JOptionPane;
+import registrodeclases.LectorConfig;
 
 /**
  * Se encarga de conectar la base de datos con el programa.
@@ -21,21 +22,24 @@ public class ConexionBD {
     private static final String BD = "profesorMateria";
     //Se encarga de la zona del tiempo
     private static final String TIMEZONE = "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+    //Es el puerto
+    private static String puerto;
     //Es el url de la base de datos
-    private static final String URL = "jdbc:mysql://localhost:5050/" + BD + TIMEZONE;
+    private static String url = "jdbc:mysql://";
     //Indica el driver que se debe usar
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
     //Indicia el usuario
-    private static final String USERBD = "ORNELAS.AXEL";
+    private static String userBD;
     //Es la contraseña del usuario
-    private static final String PASSWORDBD = "62682";
+    private static String passwordBD;
     //Es el usuario de la conexión SSH
-    private static final String USERSSH = "ornelas.axel";
+    private static String userSSH;
     //Es la contraseña de la conexión ssh
-    private static final String PASSSSH = "Holamundo1324";
+    private static String passSSH;
     //El servidor de la conexión ssh
-    private static final String SERVERSSH = "148.231.82.5";
-
+    private static String direccionSSH;
+    private static boolean esSSH;
+            
     //Constructor de la clase
     public ConexionBD() {
         conexion = null;
@@ -46,37 +50,40 @@ public class ConexionBD {
      * Abre la conexión de base de SSH
      */
     public void abrirSSH() {
-        try {
-            //Crea las propiedades de la conexión
-            Properties config = new Properties();
-            //Indica las propiedades
-            config.put("StrictHostKeyChecking", "no");
-            //Crea el objeto de la conexión
-            JSch jsch = new JSch();
-            //Asigna a donde debe conectar
-            session = jsch.getSession(USERSSH, SERVERSSH, 22);
-            //Asigna la contraseña de la conexión
-            session.setPassword(PASSSSH);
-            //Asigna la configuración
-            session.setConfig(config);
-            //Realiza la conexión ssh
-            session.connect();
-            //Asigna el puerto de la conexión ssh a otro
-            session.setPortForwardingL(5050, "localhost", 3306);
-        } catch (JSchException ex) {
-            JOptionPane.showMessageDialog(null, "ERROR DE CONEXIÓN SSH:\n" + ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
-            cerrarSSH();
+        if (esSSH) {
+            try {
+                //Crea las propiedades de la conexión
+                Properties config = new Properties();
+                //Indica las propiedades
+                config.put("StrictHostKeyChecking", "no");
+                //Crea el objeto de la conexión
+                JSch jsch = new JSch();
+                //Asigna a donde debe conectar
+                session = jsch.getSession(userSSH, direccionSSH, 22);
+                //Asigna la contraseña de la conexión
+                session.setPassword(passSSH);
+                //Asigna la configuración
+                session.setConfig(config);
+                //Realiza la conexión ssh
+                session.connect();
+                //Asigna el puerto de la conexión ssh a otro
+                session.setPortForwardingL(5050, "localhost", 3306);
+            } catch (JSchException ex) {
+                JOptionPane.showMessageDialog(null, "ERROR DE CONEXIÓN SSH:\n" + ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+                cerrarSSH();
+            }
         }
     }
+
     /**
-     * Se conecta con la base de datos 
+     * Se conecta con la base de datos
      */
     public void abrirConexion() {
         try {
             //Busca el driver de la base de datos
             Class.forName(DRIVER);
             //Intenta conectarse
-            conexion = DriverManager.getConnection(URL, USERBD, PASSWORDBD);
+            conexion = DriverManager.getConnection(url + puerto +"/"+ BD + TIMEZONE, userBD, passwordBD);
             //Si hay una conexión se lo indica
             if (conexion != null) {
                 System.out.println("Conexión establecida...");
@@ -93,18 +100,18 @@ public class ConexionBD {
      * @return Devuelve la conexión
      */
     public Connection getConexionBD() {
-        return  conexion;
+        return conexion;
     }
+
     /**
-     * Se indica la conexión 
-     * 
+     * Se indica la conexión
+     *
      * @param conexion Es la conexion que se indica
      */
     public void setConexion(Connection conexion) {
         this.conexion = conexion;
     }
 
-    
     /**
      * Cierra la conexión de comandos de mysql
      *
@@ -139,4 +146,19 @@ public class ConexionBD {
             session.disconnect();
         }
     }
+    /**
+     * Lee la configuracion del archivo de texto
+     */
+    public static void leerConfig() {
+        LectorConfig lector = new LectorConfig();
+        //Asigna la información de cada uno
+        puerto = ":" + lector.getPuerto();
+        url += lector.getDireccion();
+        esSSH = lector.isEsRemoto();
+        userSSH = lector.getUsuarioSSH();
+        passSSH = lector.getContrasenaSSH();
+        userBD = lector.getUsuarioMySQL();
+        passwordBD = lector.getContrasenaMySQL();
+    }
+    
 }
