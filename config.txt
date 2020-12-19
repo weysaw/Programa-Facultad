@@ -1,0 +1,23 @@
+##------------------------------------------------------------------
+## Configuración de programa Planta Académica
+## 
+## Si cambia algun valor no agregue espacios entre el igual y el dato
+##------------------------------------------------------------------
+## Direcccion de la base de datos
+
+	direccion=localhost
+	puerto=3306
+
+## Si la base de datos esta en un servidor remoto, marque la opcion como "true"
+
+	remoto=false
+
+## Usuario y contraseña de MySQL
+
+	usuarioMySQL=root
+	contraseñaMySQL=1234
+
+## Si la conexion es remota es necesario un usuario y contraseña con acceso SSH
+
+	usuarioSSH=####
+	contraseñaSSH=###
