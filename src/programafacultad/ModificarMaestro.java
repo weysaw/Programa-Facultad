@@ -261,10 +261,10 @@ public class ModificarMaestro extends javax.swing.JFrame {
 
     private void botonModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonModificarActionPerformed
         if (nombre.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Introduzca un nombre.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Introduzca un nombre para el docente.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        int reply = JOptionPane.showConfirmDialog(this, "¿Seguro que desea registrar esta información?", "Confirmación", JOptionPane.YES_NO_OPTION);
+        int reply = JOptionPane.showConfirmDialog(this, "¿Seguro que desea modificar esta información?", "Confirmación", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
             MensajeEspera mensaje = new MensajeEspera(this) {
                 @Override
@@ -316,15 +316,15 @@ public class ModificarMaestro extends javax.swing.JFrame {
         }
         // Se llenan los jText con la informacion del numero de empleado
         String numeroDocente, num;
-        if (numDocente.getSelectedIndex() != -1) {
-            num = numDocente.getSelectedItem().toString();
-            num = num.substring(0, num.indexOf(" "));
-            for (int i = 0; i < profesor.size(); i++) {
-                numeroDocente = profesor.get(i).getNumEmpleado();
-                if (num.equals(numeroDocente)) {
-                    numEmpleado = profesor.get(i).getNumEmpleado();
-                    nombre.setText(profesor.get(i).getNom());
-                }
+        num = numDocente.getSelectedItem().toString();
+        num = num.substring(0, num.indexOf(" "));
+        for (int i = 0; i < profesor.size(); i++) {
+            numeroDocente = profesor.get(i).getNumEmpleado();
+            if (num.equals(numeroDocente)) {
+                numEmpleado = profesor.get(i).getNumEmpleado();
+                nombre.setText(profesor.get(i).getNom());
+                completo.setSelected(profesor.get(i).isEsTiempoCompleto());
+                asignatura.setSelected(!profesor.get(i).isEsTiempoCompleto());
             }
         }
     }//GEN-LAST:event_numDocenteActionPerformed
@@ -349,6 +349,8 @@ public class ModificarMaestro extends javax.swing.JFrame {
                     numDocente.removeItem(prof.getNumEmpleado() + " " + prof.getNom());
                     numDocente.setSelectedIndex(-1);
                     JOptionPane.showMessageDialog(cmp, "Eliminado exitosamente.", "EXITO", JOptionPane.INFORMATION_MESSAGE);
+                } catch (SQLIntegrityConstraintViolationException ex) {
+                    JOptionPane.showMessageDialog(cmp, "Este docente está impartiendo un curso, no puede ser eliminado\n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
                 } catch (Exception ex) { //Error en general
                     JOptionPane.showMessageDialog(cmp, "ERROR \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
                 } finally { //Cierra el ssh
