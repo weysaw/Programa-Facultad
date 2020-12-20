@@ -595,13 +595,66 @@ public class ModificarCursoHorario extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Verifica que las horas de inicio y fin de un día no sean iguales,
+     * ni que la hora de inicio sea después que la de fin
+     * @param dia El día cuyas horas verificar
+     * @param horaInicio La hora de inicio
+     * @param horaFin La hora de fin
+     * @return false si no hay problemas con las horas, true si hay algún problema
+    */
+    private boolean verificarHoras(JCheckBox dia, JComboBox horaInicio, JComboBox horaFin) {
+        //Verifica que las horas de inicio y fin de un día no sean iguales, ni que la hora de inicio sea después que la de fin
+        if (dia.isSelected()) {
+            String inicioS = horaInicio.getSelectedItem().toString();
+            inicioS = inicioS.substring(0, inicioS.indexOf(':'));
+            int inicioI = Integer.parseInt(inicioS);
+            String finS = horaFin.getSelectedItem().toString();
+            finS = finS.substring(0, finS.indexOf(':'));
+            int finI = Integer.parseInt(finS);
+            if (inicioI == finI || inicioI > finI)
+                return true;
+        }
+        return false;
+    }
+    
     private void botonModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonModificarActionPerformed
         if (!lunes.isSelected() && !martes.isSelected() && !miercoles.isSelected() && !jueves.isSelected() && !viernes.isSelected() && !sabado.isSelected()) {
             JOptionPane.showMessageDialog(this, "Seleccione al menos un día.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
+        
+        //Verificar que las horas de inicio sean antes que las horas de fin
+        boolean error = false;
+        if (verificarHoras(lunes, inicioLunes, finLunes)) {
+            JOptionPane.showMessageDialog(this, "LUNES: la hora de inicio debe ser antes que la de fin.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+            error = true;
+        }
+        if (verificarHoras(martes, inicioMartes, finMartes)) {
+            JOptionPane.showMessageDialog(this, "MARTES: la hora de inicio debe ser antes que la de fin.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+            error = true;
+        }
+        if (verificarHoras(miercoles, inicioMiercoles, finMiercoles)) {
+            JOptionPane.showMessageDialog(this, "MIÉRCOLES: la hora de inicio debe ser antes que la de fin.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+            error = true;
+        }
+        if (verificarHoras(jueves, inicioJueves, finJueves)) {
+            JOptionPane.showMessageDialog(this, "JUEVES: la hora de inicio debe ser antes que la de fin.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+            error = true;
+        }
+        if (verificarHoras(viernes, inicioViernes, finViernes)) {
+            JOptionPane.showMessageDialog(this, "VIERNES: la hora de inicio debe ser antes que la de fin.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+            error = true;
+        }
+        if (verificarHoras(sabado, inicioSabado, finSabado)) {
+            JOptionPane.showMessageDialog(this, "SÁBADO: la hora de inicio debe ser antes que la de fin.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+            error = true;
+        }
+        
+        if (error) return;
+        
         //Pregunta si quiere ingresar el dato
-        int reply = JOptionPane.showConfirmDialog(this, "¿Seguro que desea registrar esta información?", "Confirmación", JOptionPane.YES_NO_OPTION);
+        int reply = JOptionPane.showConfirmDialog(this, "¿Seguro que desea modificar esta información?", "Confirmación", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
             MensajeEspera mensaje = new MensajeEspera(this) {
                 @Override
@@ -648,7 +701,7 @@ public class ModificarCursoHorario extends javax.swing.JFrame {
 
                         // Agregamos los horarios junto con el curso horario a la base de datos por dias
                         asignarHorario(cursos);
-                        System.out.println(cursos.toString());
+                        JOptionPane.showMessageDialog(cmp, "Modificado con éxito.", "EXITO", JOptionPane.INFORMATION_MESSAGE);
                     } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
                         JOptionPane.showMessageDialog(cmp, "Ya existe un curso registrado \n" + ex.toString(),
                                 "INFORMANDO", JOptionPane.INFORMATION_MESSAGE);
