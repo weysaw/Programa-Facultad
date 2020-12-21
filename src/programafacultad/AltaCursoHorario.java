@@ -554,12 +554,36 @@ public class AltaCursoHorario extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Verifica que las horas de inicio y fin de un día no sean iguales,
+     * ni que la hora de inicio sea después que la de fin
+     * @param dia El día cuyas horas verificar
+     * @param horaInicio La hora de inicio
+     * @param horaFin La hora de fin
+     * @return false si no hay problemas con las horas, true si hay algún problema
+    */
+    private boolean verificarHoras(JCheckBox dia, JComboBox horaInicio, JComboBox horaFin) {
+        //Verifica que las horas de inicio y fin de un día no sean iguales, ni que la hora de inicio sea después que la de fin
+        if (dia.isSelected()) {
+            String inicioS = horaInicio.getSelectedItem().toString();
+            inicioS = inicioS.substring(0, inicioS.indexOf(':'));
+            int inicioI = Integer.parseInt(inicioS);
+            String finS = horaFin.getSelectedItem().toString();
+            finS = finS.substring(0, finS.indexOf(':'));
+            int finI = Integer.parseInt(finS);
+            if (inicioI == finI || inicioI > finI)
+                return true;
+        }
+        return false;
+    }
+    
     private void registrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarActionPerformed
         String grp = grupo.getText();
         if (grp.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Introduzca un grupo.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
+        //Verifica que el grupo sólo tiene números y guiones
         for (int i = 0; i < grp.length(); i++) {
             if (!(Character.isDigit(grp.charAt(i))) && grp.charAt(i) != '-') {
                 JOptionPane.showMessageDialog(this, "El grupo sólo puede tener números y guión.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
@@ -570,6 +594,35 @@ public class AltaCursoHorario extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Seleccione al menos un día.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
+        //Verificar que las horas de inicio sean antes que las horas de fin
+        boolean error = false;
+        if (verificarHoras(lunes, inicioLunes, finLunes)) {
+            JOptionPane.showMessageDialog(this, "LUNES: la hora de inicio debe ser antes que la de fin.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+            error = true;
+        }
+        if (verificarHoras(martes, inicioMartes, finMartes)) {
+            JOptionPane.showMessageDialog(this, "MARTES: la hora de inicio debe ser antes que la de fin.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+            error = true;
+        }
+        if (verificarHoras(miercoles, inicioMiercoles, finMiercoles)) {
+            JOptionPane.showMessageDialog(this, "MIÉRCOLES: la hora de inicio debe ser antes que la de fin.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+            error = true;
+        }
+        if (verificarHoras(jueves, inicioJueves, finJueves)) {
+            JOptionPane.showMessageDialog(this, "JUEVES: la hora de inicio debe ser antes que la de fin.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+            error = true;
+        }
+        if (verificarHoras(viernes, inicioViernes, finViernes)) {
+            JOptionPane.showMessageDialog(this, "VIERNES: la hora de inicio debe ser antes que la de fin.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+            error = true;
+        }
+        if (verificarHoras(sabado, inicioSabado, finSabado)) {
+            JOptionPane.showMessageDialog(this, "SÁBADO: la hora de inicio debe ser antes que la de fin.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+            error = true;
+        }
+        
+        if (error) return;
+
         //Pregunta si quiere ingresar el dato
         int reply = JOptionPane.showConfirmDialog(this, "¿Seguro que desea registrar esta información?", "Confirmación", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {

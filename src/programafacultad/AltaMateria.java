@@ -209,12 +209,12 @@ public class AltaMateria extends javax.swing.JFrame {
                 matDAO.append(materia);
                 JOptionPane.showMessageDialog(this, "Registrado con éxito.", "EXITO", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(this, "Faltan datos para el registro.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Introduzca un nombre para la materia.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
             JOptionPane.showMessageDialog(this, "Ya existe una materia con esta clave\n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
         } catch (NumberFormatException ex) { //El parseInt lanza esta excepción si el string que se le pasó está vacío o tiene algo que no es dígito
-            JOptionPane.showMessageDialog(this, "Faltan datos para el registro.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Introduzca una clave para la materia.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception ex) { //Error en general
             JOptionPane.showMessageDialog(this, "ERROR \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
         } finally { //Cierra el ssh

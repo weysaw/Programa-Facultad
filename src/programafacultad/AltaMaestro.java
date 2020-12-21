@@ -238,6 +238,10 @@ public class AltaMaestro extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void registrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarActionPerformed
+        if (numeroEmpleado.getText().isEmpty() || nombreDocente.getText().isEmpty() || (apellidoM.getText().isEmpty() && apellidoP.getText().isEmpty())) {
+            JOptionPane.showMessageDialog(this, "Debe introducir número de empleado, nombre y por lo menos un apellido.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
         //Se crea el objeto que se registra
         ProfesorDAO profeDAO = new ProfesorDAO();
         profeDAO.abrirSSH();
@@ -245,17 +249,18 @@ public class AltaMaestro extends javax.swing.JFrame {
         //Agrega el profesor agarrando sus datos.
         try {
             String numEmp = numeroEmpleado.getText();
-            String apellidos = apellidoP.getText() + " " + apellidoM.getText();
+            String apellidos = apellidoP.getText();
             String nombres = nombreDocente.getText();
-            //Valida que no haya campos vacíos
-            if (!numEmp.isEmpty() && !nombres.isEmpty() && !apellidos.isEmpty()){
-                Profesor profesor = new Profesor(numEmp,
+            //Verifica si están los dos apellidos, o sólo uno
+            if (apellidos.isEmpty())
+                apellidos = apellidoM.getText();
+            else if (!(apellidoM.getText().isEmpty()))
+                apellidos += " " + apellidoM.getText();
+
+            Profesor profesor = new Profesor(numEmp,
                     apellidos + " " + nombres, completo.isSelected());
-                profeDAO.append(profesor);
-                JOptionPane.showMessageDialog(this, "Registrado con éxito.", "EXITO", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-            JOptionPane.showMessageDialog(this, "Faltan datos para el registro.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
-           }
+            profeDAO.append(profesor);
+            JOptionPane.showMessageDialog(this, "Registrado con éxito.", "EXITO", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLIntegrityConstraintViolationException ex) { //Si hay error se los indica
             JOptionPane.showMessageDialog(this, "Ya existe un docente registrado con este número de Empleado\n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) { //Error en general

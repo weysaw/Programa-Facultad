@@ -267,10 +267,10 @@ public class ModificarMateria extends javax.swing.JFrame {
 
     private void botonModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonModificarActionPerformed
         if (nomMateria.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Introduzca un nombre", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Introduzca un nombre para la materia.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        int reply = JOptionPane.showConfirmDialog(null, "¿Seguro que desea registrar esta información?", "Confirmación", JOptionPane.YES_NO_OPTION);
+        int reply = JOptionPane.showConfirmDialog(null, "¿Seguro que desea modificar esta información?", "Confirmación", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
             MensajeEspera mensaje = new MensajeEspera(this) {
                 @Override
@@ -325,6 +325,8 @@ public class ModificarMateria extends javax.swing.JFrame {
                     materias.removeItem(materia.getClaveMateria() + " " + materia.getNom());
                     materias.setSelectedIndex(-1);
                     JOptionPane.showMessageDialog(cmp, "Eliminado exitosamente.", "EXITO", JOptionPane.INFORMATION_MESSAGE);
+                } catch (SQLIntegrityConstraintViolationException ex) {
+                    JOptionPane.showMessageDialog(cmp, "Esta materia está siendo impartida en un curso, no puede ser eliminada\n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
                 } catch (Exception ex) { //Error en general
                     JOptionPane.showMessageDialog(cmp, "ERROR \n" + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
                 } finally { //Cierra el ssh
