@@ -25,7 +25,7 @@ public class ConexionBD {
     //Es el puerto
     private static String puerto;
     //Es el url de la base de datos
-    private static String url = "jdbc:mysql://";
+    private static final String URL = "jdbc:mysql://localhost";
     //Indica el driver que se debe usar
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
     //Indicia el usuario
@@ -83,7 +83,7 @@ public class ConexionBD {
             //Busca el driver de la base de datos
             Class.forName(DRIVER);
             //Intenta conectarse
-            conexion = DriverManager.getConnection(url + puerto +"/"+ BD + TIMEZONE, userBD, passwordBD);
+            conexion = DriverManager.getConnection(URL + puerto +"/"+ BD + TIMEZONE, userBD, passwordBD);
             //Si hay una conexión se lo indica
             if (conexion != null) {
                 System.out.println("Conexión establecida...");
@@ -146,15 +146,16 @@ public class ConexionBD {
             session.disconnect();
         }
     }
+    
     /**
      * Lee la configuracion del archivo de texto
      */
     public static void leerConfig() {
         LectorConfig lector = new LectorConfig();
         //Asigna la información de cada uno
-        puerto = ":" + lector.getPuerto();
-        url += lector.getDireccion();
         esSSH = lector.isEsRemoto();
+        puerto = esSSH ? ":5050": ":3306";
+        direccionSSH = lector.getDireccion();
         userSSH = lector.getUsuarioSSH();
         passSSH = lector.getContrasenaSSH();
         userBD = lector.getUsuarioMySQL();

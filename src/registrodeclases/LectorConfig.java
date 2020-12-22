@@ -71,9 +71,6 @@ public class LectorConfig {
                     if (Pattern.matches(".*direccion.+", line)) //si es la direccion
                     {
                         direccion = campos[1];
-                    } else if (Pattern.matches(".*puerto.+", line)) //si es el puerto
-                    {
-                        puerto = campos[1];
                     } else if (Pattern.matches(".*remoto.+", line)) //si es remoto
                     {
                         esRemoto = campos[1].equals("true");
